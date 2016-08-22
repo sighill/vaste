@@ -23,6 +23,7 @@ urlpatterns = [
     url(r'^pnj/$', views.pnj_index),
     url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
     url('^', include('django.contrib.auth.urls'),{'template_name': 'admin/login.html'}),
+    url(r'^account', views.account),
 ]
 
 '''

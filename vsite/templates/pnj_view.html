@@ -13,18 +13,15 @@
     <body>
 
         <div id="wrapper">
-            <div class="container">
-                <div class="block" id="char_dropdown">
-                    <h3>Navigation</h3>
-                    <div id="char_dropdown_content">
-                        <a href="/"><h4>Accueil</h4></a>
-                        <a href="/pnj_index"><h4>Index des personnages</h4></a>
-                        <h4>{{ current_user |safe }}</h4>
-                        <h3>Personnages :</h3>
-                        {% for char in content %}
-                        <a href="/pnj/{{char.pk}}"><h4>{{char.name}}</h4></a>
-                        {% endfor %}
-                    </div>
+        
+            <img src="{% static main_img %}" alt="main img" id="main_img"/>
+
+            <div class="navbar_container">
+                <div class="navbar_block">
+                    <a href="/"><img class="navbar_img" src="{% static navbar_icon_home %}"></a>
+                </div>
+                <div class="navbar_block">
+                    {{navbar_user_icon | safe}}
                 </div>
             </div>
   

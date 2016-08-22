@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>Vaste :: Index des pnj</title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static style %}" />
+        <link rel="favicon" href="{%  static favicon %}">
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+            
+            <img src="{% static main_img %}" alt="main img" id="main_img"/>
+
+            <div class="container">
+                <div class="block" id="char_dropdown">
+                    <h3>Navigation</h3>
+                    <div id="char_dropdown_content">
+                        <h4>{{ current_user |safe }}</h4>
+                        <a href="/"><h4>Accueil</h4></a>
+                    </div>
+                </div>
+            </div>
+  
+            <div class="container">
+                {% for character in content %}
+                    <div class="block">
+                        <a href="view/{{character.pk}}">
+                            <h4>{{character.name}}</h4>
+                            <img class ="avatar_index" src="{% static character.img_id %}" alt = "{{character.name}}"/>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div> <!-- block end --> 
+
+        </div> <!-- wrapper end -->
+    </body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>Vaste :: Accueil</title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static style %}" />
+        <link rel="favicon" href="{%  static favicon %}">
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+            <img src="{% static main_img %}" alt="main img" id="main_img"/>
+
+            <div class="container">
+
+                <div class="block">
+                    <a href="login">
+                        <h4>Se connecter</h4>
+                        <img class="mainpage_link_img" src="{% static main_profile %}">
+                    </a>
+                </div>
+
+                <div class="block">
+                    <a href="/pnj">
+                        <h4>Voir les personnages</h4>
+                        <img class="mainpage_link_img" src="{% static main_char %}">
+                    </a>
+                </div>
+
+                <div class="block">
+                    <a href="https://github.com/sighill/vaste">
+                        <h4>Source du site sur GitHub</h4>
+                        <img class="mainpage_link_img" src="{% static main_github %}">
+                    </a>
+                </div>
+
+            </div> <!-- container end -->
+
+        </div> <!-- wrapper end -->
+    </body>
+</html>

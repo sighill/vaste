@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>Tests Voxclam</title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static style %}" />
+        <link rel="favicon" href="{%  static favicon %}">
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+            <div class="container">
+                <div class="block" id="char_dropdown">
+                    <h3>Navigation</h3>
+                    <div id="char_dropdown_content">
+                        <a href="/"><h4>Accueil</h4></a>
+                        <a href="/pnj_index"><h4>Index des personnages</h4></a>
+                        <h4>{{ current_user |safe }}</h4>
+                        <h3>Personnages :</h3>
+                        {% for char in content %}
+                        <a href="/pnj/{{char.pk}}"><h4>{{char.name}}</h4></a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+  
+            <div class="container">
+                <div class="block">
+                    <h2>
+                        {{name}} : {{cast}}
+                    </h2>
+                    {% load staticfiles %}
+                    <img class ="avatar_img" src="{% static avatar %}" alt = 'profile pic'/>   
+                    <h2>Description</h2>
+                    <p>{{description}}</p>
+                    <h2>Inventaire</h2>
+                    <ul>{% for item in stuff %} <li>{{item}}</li> {% endfor %}</ul>
+                </div> <!-- block end -->
+            </div>
+        </div>
+    </body>
+
+</html>

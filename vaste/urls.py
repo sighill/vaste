@@ -16,9 +16,6 @@ Including another URLconf
 from django.conf.urls import url , include
 from django.contrib import admin
 from vsite import views
-from django.views.generic.base import RedirectView
-
-favicon_view = RedirectView.as_view(url='vsite/favicon.ico', permanent=True)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -27,6 +24,7 @@ urlpatterns = [
     url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
     url('^', include('django.contrib.auth.urls'),{'template_name': 'admin/login.html'}),
     url(r'^account', views.account),
+
 ]
 
 '''

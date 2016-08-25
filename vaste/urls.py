@@ -16,6 +16,9 @@ Including another URLconf
 from django.conf.urls import url , include
 from django.contrib import admin
 from vsite import views
+from django.views.generic.base import RedirectView
+
+favicon_view = RedirectView.as_view(url='vsite/favicon.ico', permanent=True)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

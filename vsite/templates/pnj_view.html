@@ -37,6 +37,19 @@
                     <h2>Inventaire</h2>
                     <ul>{% for item in stuff %} <li>{{item}}</li> {% endfor %}</ul>
                 </div> <!-- block end -->
+
+                <div class="block">
+                    <h2>Notes personnelles</h2>
+                    {% for entry in pj_note_content %}
+                        {{entry | linebreaks}}
+                    {% endfor %}
+
+                    <h4>Ajouter une nouvelle note :</h4>
+                    <form method='post'>{% csrf_token %}
+                    {{ form.as_p }}
+                    <p><input type='submit' value='Submit' /></p>
+                    </form>
+                </div>
             </div>
         </div>
     </body>

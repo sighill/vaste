@@ -18,13 +18,9 @@ body {
   :root {
     font-size: 4vw;
   }
-  .navbar_icons{
-    width: 200px;
-  }
 }
 
-img#main_img{
-  margin: 0 auto;
+img{
   display: block;
   border-radius: 10px;
   margin: 10px auto;
@@ -52,8 +48,7 @@ p {
   flex: 0 0 auto;
   flex-flow: row wrap;
   justify-content: space-between;
-  margin: 0 auto;
-  margin-top: 30px;
+  margin: 40px auto;
   border-radius: 10px;
   text-align: left;
   background-color: #46585a; /* last used : 46585a */
@@ -62,7 +57,7 @@ p {
 .block { 
   display: flex;
   flex: 1 1 auto;
-  border-radius: 10px;
+  margin: 20px auto;
   flex-flow: column;
   justify-content: space-between;
   background-color: #46585a; /* last used : 46585a */
@@ -91,35 +86,6 @@ p {
   margin:auto;
 }
 
-/* Navbar in character sheets */
-
-.navbar_container{ 
-  display: flex;
-  flex: 0 0 auto;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  margin:0 auto;
-  border-radius: 10px;
-  text-align: left;
-  background-color: #46585a; /* last used : 46585a */
-  max-width: 1000px;
-}
-
-.navbar_block{
-  display: flex;
-  flex: 1 1 auto;
-  margin: 0 auto;
-  border-radius: 10px;
-  flex-flow: column;
-  justify-content: space-between;
-  background-color: #46585a; /* last used : 46585a */
-}
-
-.navbar_img{
-  display: block;
-  margin: 10px auto;
-}
-
 /* Dropdown menu in character sheets */
 #char_dropdown {
 }
@@ -137,4 +103,3 @@ p {
   width:100%;
   max-width: 980px;
 }
-

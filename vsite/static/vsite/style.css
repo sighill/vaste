@@ -9,15 +9,40 @@ body {
   margin:0 auto;
 }
 
-@media (min-width: 1000px){
+@media (max-width: 1200px){
   :root {
-    font-size: 14px;  /*above 800px */
+    font-size: 3.5vw;
+  }
+  img#main_img{
+    max-width: 100%;
+  }
+  .container , .navbar_container , .block{
+    max-width: 100%;
+  }
+  input{
+    font-size: 3.5vw;
+  }
+  textarea {
+  font-size: 3.5vw;
+  }
+
+
+}
+
+@media (max-resolution: 1dppx){
+  :root {
+    font-size: 14px; 
+  }
+  .container , .navbar_container , .block{
+    max-width: 900px;
+  }
+  img#main_img{
+    max-width: 900px;
   }
 }
-@media (max-width: 1000px){
-  :root {
-    font-size: 4vw;
-  }
+
+img:not(.navbar_img){
+  border-radius: 10px;
 }
 
 img#main_img{
@@ -41,7 +66,17 @@ h2, h3, h4 {
 p {
   margin:0 auto;
   padding:20px;
-  text-align: center;
+  text-align: left;
+  text-justify: inter-word;
+}
+
+textarea {
+  width:100%;
+  color: black;
+}
+
+input{
+  color:black;
 }
 
 .container { 
@@ -54,7 +89,6 @@ p {
   border-radius: 10px;
   text-align: left;
   background-color: #46585a; /* last used : 46585a */
-  max-width: 1000px;
 }
 .block { 
   display: flex;
@@ -63,6 +97,20 @@ p {
   flex-flow: column;
   justify-content: space-between;
   background-color: #46585a; /* last used : 46585a */
+}
+
+div.block p{
+  width: 90%;
+}
+
+div.block p.note_quote{
+  font-style: italic;
+  margin-left: 5%
+}
+
+div.block p.note_quote::first-line{
+  font-style: normal;
+  font-weight: bold;
 }
 
 .home_links_img{
@@ -107,7 +155,6 @@ p {
   border-radius: 10px;
   text-align: left;
   background-color: #46585a; /* last used : 46585a */
-  max-width: 1000px;
 }
 
 .navbar_block{
@@ -126,16 +173,20 @@ p {
   margin: 10px auto;
 }
 
-/* Dropdown menu in character sheets */
+
+
+/* DEPRECATED BUT KEPT JUST IN CASE */
+
+/* Dropdown menu in character sheets 
 #char_dropdown {
 }
 
 #char_dropdown_content {
-    display: none;
-    position: absolute;
-    background-color: #46585a;
-    z-index: 1;
-    border: 10px solid #0e1316;
+  display: none;
+  position: absolute;
+  background-color: #46585a;
+  z-index: 1;
+  border: 10px solid #0e1316;
 }
 
 #char_dropdown:hover #char_dropdown_content {
@@ -143,4 +194,4 @@ p {
   width:100%;
   max-width: 980px;
 }
-
+*/

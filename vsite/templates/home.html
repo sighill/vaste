@@ -15,11 +15,21 @@
         <div id="wrapper">
             <img src="{% static main_img %}" alt="main img" id="main_img"/>
 
+            <div class="navbar_container">
+                <div class="navbar_block">
+                    <a href="/"><img class="navbar_img" src="{% static navbar_skull %}"></a>
+                </div>
+
+                <div class="navbar_block">
+                    <p>Site en construction en ce moment - tout peut craquer !</p>
+                </div>
+            </div> <!-- navbar container end -->
+
             <div class="container">
 
                 <div class="block">
-                    <a href="login">
-                        <h4>Se connecter</h4>
+                    <a href="{{main_userbay_href}}">
+                        <h4>{{main_userbay_title | safe}}</h4>
                         <img class="home_links_img" src="{% static main_profile %}">
                     </a>
                 </div>

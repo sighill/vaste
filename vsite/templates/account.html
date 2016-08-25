@@ -13,13 +13,26 @@
     <body>
 
         <div id="wrapper">
-                <div class="container">
-                    <div class="block">
-                        <p> work in progress </p>
-                        <a href="/"><p> Retourner à l'accueil </p></a>
-                    </div>
-                </div>
+            <img src="{% static main_img %}" alt="main img" id="main_img"/>
 
-        </div> <!-- wrapper end -->
+            <div class="navbar_container">
+                <div class="navbar_block">
+                    <a href="/"><img class="navbar_img" src="{% static navbar_icon_home %}"></a>
+                </div>
+                <div class="navbar_block">
+                    {{navbar_user_icon | safe}}
+                </div>
+            </div> <!-- end navbar_container -->
+
+            <div class="container">
+                <div class="block">
+                <h2>Notes personnelles</h2>
+                    {% for entry in pj_note_content %}
+                        <p class="note_quote">{{entry | linebreaksbr}}</p>
+                    {% endfor %}
+                </div>
+            </div> <!-- end container -->
+
+        </div> <!-- end wrapper -->
     </body>
 </html>

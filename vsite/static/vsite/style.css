@@ -55,6 +55,12 @@ img#main_img{
   border-color: black;
 }
 
+.stuff_pics{
+  width: 120px;
+  height: 150px;
+  margin:auto;
+}
+
 h2, h3, h4 {
   padding: 5px;
   text-align: center;

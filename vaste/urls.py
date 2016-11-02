@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.conf.urls import url , include
 from django.contrib import admin
+from  django.contrib.auth.views import password_change
 from vsite import views
 
 urlpatterns = [
@@ -22,7 +23,7 @@ urlpatterns = [
     url(r'^$', views.home),
     url(r'^pnj/$', views.pnj_index),
     url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
-    url('^', include('django.contrib.auth.urls'),{'template_name': 'admin/login.html'}),
+    url('^', include('django.contrib.auth.urls')),
     url(r'^account', views.account),
 
 ]

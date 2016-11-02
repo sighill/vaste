@@ -27,28 +27,36 @@
   
             <div class="container">
                 <div class="block">
-                    <h2>
-                        {{name}} : {{cast}}
-                    </h2>
-                    {% load staticfiles %}
+                    <h2>{{name}} : {{cast}}</h2>
                     <img class ="avatar_img" src="{% static avatar %}" alt = 'profile pic'/>   
+                    
                     <h2>Description</h2>
                     <p>{{description}}</p>
+                    
                     <h2>Inventaire</h2>
-                    <ul>{% for item in stuff %} <li>{{item}}</li> {% endfor %}</ul>
+                    <div class="container">
+                        {% for item in stuff %} 
+                            <div class="block"><h4>{{item}}</h4> <img class="stuff_pics" src="{% static stuff_pics %}"></div><div>    </div>
+                        {% endfor %}
+                    </div>
                 </div> <!-- block end -->
 
                 <div class="block">
                     <h2>Notes personnelles</h2>
-                    {% for entry in pj_note_content %}
-                        {{entry | linebreaks}}
-                    {% endfor %}
+                    
+                    {% if user.is_authenticated %}
+                        {% for entry in pj_note_content %}
+                            {{entry | linebreaks}}
+                        {% endfor %}
 
-                    <h4>Ajouter une nouvelle note :</h4>
-                    <form method='post'>{% csrf_token %}
-                    {{ form.as_p }}
-                    <p><input type='submit' value='Submit' /></p>
-                    </form>
+                        <h4>Ajouter une nouvelle note :</h4>
+                        <form method='post'>{% csrf_token %}
+                        {{ form.as_p }}
+                        <p><input type='submit' value='Submit' /></p>
+                        </form>
+                    {% else %}
+                        <p>Connectez vous pour voir ou poster une note personnelle.</p>
+                    {% endif %}
                 </div>
             </div>
         </div>

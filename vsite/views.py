@@ -66,7 +66,7 @@ def pnj_view(request, character_uid):
         # Choix des icones de la navbar
         navbar_user_icon = '<a href="/login"><img class="navbar_img" src="/static/vsite/navbar_login.png"></a>'
         # Message générique pour la partie notes personnelles
-        pj_note_content = ['Connectez vous pour voir/poster une note personnelle.']
+        pj_note_content = []
     cast_verbose = character.cast_choice[character.cast-1][1]
     form = pj_note_form()
     context = {
@@ -84,6 +84,7 @@ def pnj_view(request, character_uid):
         'cast': 'caste des {}'.format(cast_verbose) ,
         'attributes': character.attributes.split(',') ,
         'stuff': character.stuff.split(',') ,
+        'stuff_pics': 'vsite/main_char_1.jpg',
         'pj_note_content': pj_note_content,
         'form':form,
         }

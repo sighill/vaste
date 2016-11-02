@@ -1,0 +1,26 @@
+uid;name;level;recipe
+100;Restes de métal;0;
+101;Restes de bois;0;
+102;Restes de plastique;0;
+103;Restes de tissu;0;
+104;Restes de minéraux;0;
+201;Tige de métal;1;{ '100': 10 }
+202;Plaque de métal;1;{ '100': 20 }
+203;Planche de bois;1;{ '101': 10 }
+204;Plaque de bois;1;{ '101': 20 }
+205;Tige de plastique;1;{ '102': 10 }
+206;Plaque de plastique;1;{ '102': 20 }
+207;Rouleau de tissu;1;{ '103': 10 }
+208;Bloc de minéral;1;{ '104': 10 }
+301;Arc;2;{ '203': 1 , '207': 1 }
+302;Flèche à bout plastique;2;{ '101': 1 , '102': 1 }
+303;Flèche à bout métal;2;{ '101': 1 , '100': 1 }
+304;Brise crâne en pierre;2;{ '203': 1 , '208': 1 }
+305;Brise crâne en métal;2;{ '201': 1 , '203': 1 }
+306;Hache en pierre;2;{ '201': 1 , '203': 1 }
+307;Hache en métal;2;{ '201': 1 , '203': 1 }
+308;Hache en plastique;2;{ '201': 1 , '203': 1 }
+309;Épée en métal;2;{ '202': 1 , '203': 1 }
+310;Épée en plastique;2;{ '206': 1 , '203': 1 }
+311;Lance en plastique;2;{ '206': 1 , '203': 1 }
+312;Lance en métal;2;{ '202': 1 , '203': 1 }

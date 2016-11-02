@@ -25,7 +25,8 @@ class pnj(models.Model):
 
     # Attributs
     uid = models.AutoField(primary_key = True , db_index = True)
-    visible = models.BooleanField()
+    is_pj = models.BooleanField(default=False)
+    visible = models.BooleanField(default=False)
     img_id = models.CharField(
         max_length = 2500 , blank = True, null = True)
     name = models.CharField(max_length = 255)
@@ -71,3 +72,52 @@ class pj_note(models.Model):
     # Methodes
     def __str__(self):
         return str(self.uid)
+
+#####################################################################
+class item_blueprint(models.Model):
+    '''
+        Cette classe va servir de référence pour accueillir la donnée
+        caractérisant chaque item du jeu. Ces items seront instanciés
+        à chaque fois qu'un joueur reçoit l'item dans son inventaire.
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    name = models.CharField(max_length = 255)
+    level = models.PositiveIntegerField()
+    recipe = models.CharField(max_length = 2048)
+    rarity = models.PositiveIntegerField()
+    description = models.CharField(max_length = 2048)
+
+    # Methodes
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
+class item(models.Model):
+    '''
+        Cette classe suit le modèle item_blueprint
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    blueprint_uid = models.ForeignKey(
+        item_blueprint , related_name = 'bleuprint_uid')
+    name = models.CharField(max_length = 255)
+    owner = models.ForeignKey(User , related_name = 'pj_id')
+    level = models.PositiveIntegerField()
+    quality = models.PositiveIntegerField()
+    rarity = models.PositiveIntegerField()
+    description = models.CharField(max_length = 2048)
+    created_date = models.DateTimeField(
+            default=timezone.now) 
+
+    # Methodes
+    def __str__(self):
+        return str(self.name)

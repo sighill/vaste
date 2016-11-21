@@ -21,8 +21,10 @@ from vsite import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.home),
-    url(r'^pnj/$', views.pnj_index),
+    url(r'^pnj/$', views.pnj_index, {'view_filter': 'pnj'}),
+    url(r'^creatures/$', views.pnj_index, {'view_filter': 'creatures'}),
     url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
+    url(r'^creatures/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
     url('^', include('django.contrib.auth.urls')),
     url(r'^account', views.account),
 

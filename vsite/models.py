@@ -18,20 +18,21 @@ class pnj(models.Model):
 
     # Variables pour les choix pré-remplis
     cast_choice = (
-        ( 1 , 'Fongeux' ) ,
-        ( 2 , 'Monteurs') ,
-        ( 3 , 'Rapiats' ) ,
-        ( 4 , 'Pisteurs') )
+        ( 1 , 'Scaveux' ),
+        ( 2 , 'Fongerbeux'),
+        ( 3 , 'Chassoux' ),
+        ( 4 , 'Soldards'),
+        ( 5 , 'Brassoux'),
+        ( 6 , 'Chamans') )
 
     # Attributs
     uid = models.AutoField(primary_key = True , db_index = True)
     is_pj = models.BooleanField(default=False)
+    is_creature = models.BooleanField(default=False)
     visible = models.BooleanField(default=False)
     img_id = models.CharField(
         max_length = 2500 , blank = True, null = True)
     name = models.CharField(max_length = 255)
-    family = models.CharField(max_length = 255)
-    age = models.PositiveIntegerField(default = 20)
     cast = models.PositiveIntegerField(choices = cast_choice) 
     attributes = models.CharField(
         default = '0,0,0,0,0,0,0,0,0', max_length = 100)
@@ -62,9 +63,9 @@ class pj_note(models.Model):
     # Attributs
     uid = models.AutoField(primary_key=True, db_index= True)
     poster_id = models.ForeignKey(
-        User , related_name='user_id', blank=True,null=True)
+        User , related_name='user_id', blank=True, null=True)
     pnj_id = models.ForeignKey(
-        pnj , related_name='pnj_id', blank=True,null=True)
+        pnj , related_name='pnj_id', blank=True, null=True)
     note = models.TextField(blank = True, null = True)
     created_date = models.DateTimeField(
             default=timezone.now)
@@ -117,6 +118,28 @@ class item(models.Model):
     description = models.CharField(max_length = 2048)
     created_date = models.DateTimeField(
             default=timezone.now) 
+
+    # Methodes
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
+class home_items(models.Model):
+    '''
+        Permet de générer le contenu des vues du site de manière
+        pratique
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    name = models.CharField(max_length = 255, blank=True, null=True)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    order_position = models.PositiveIntegerField(blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    link = models.CharField(max_length = 255, blank=True, null=True)
 
     # Methodes
     def __str__(self):

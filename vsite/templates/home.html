@@ -13,42 +13,21 @@
     <body>
 
         <div id="wrapper">
-            <img src="{% static main_img %}" alt="main img" id="main_img"/>
-
-            <div class="navbar_container">
-                <div class="navbar_block">
-                    <a href="/"><img class="navbar_img" src="{% static navbar_skull %}"></a>
-                </div>
-
-                <div class="navbar_block">
-                    <p>Site en construction en ce moment - tout peut craquer !</p>
-                </div>
-            </div> <!-- navbar container end -->
-
+            
+            {% for item in home_items %}
             <div class="container">
-
-                <div class="block">
-                    <a href="{{main_userbay_href}}">
-                        <h4>{{main_userbay_title | safe}}</h4>
-                        <img class="home_links_img" src="{% static main_profile %}">
+                <div class="left_block">
+                    <a href="{{item.link}}">
+                        <img class ="medium_img" src="{{item.img_id}}" alt = 'home item pic'/>
                     </a>
                 </div>
 
                 <div class="block">
-                    <a href="/pnj">
-                        <h4>Voir les personnages</h4>
-                        <img class="home_links_img" src="{% static main_char %}">
-                    </a>
+                    <h2>{{item.name}}</h2>
+                    <p>{{item.description}}</p>
                 </div>
-
-                <div class="block">
-                    <a href="https://github.com/sighill/vaste">
-                        <h4>Source du site sur GitHub</h4>
-                        <img class="home_links_img" src="{% static main_github %}">
-                    </a>
-                </div>
-
-            </div> <!-- container end -->
+            </div> <!-- end container -->
+            {% endfor %}
 
         </div> <!-- wrapper end -->
     </body>

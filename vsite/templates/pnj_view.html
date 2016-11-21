@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="ROBOTS" content="NONE" />
-        <title>Tests Voxclam</title>
+        <title>Vaste :: </title>
         
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="{% static style %}" />
@@ -13,53 +13,47 @@
     <body>
 
         <div id="wrapper">
-        
-            <img src="{% static main_img %}" alt="main img" id="main_img"/>
-
-            <div class="navbar_container">
-                <div class="navbar_block">
-                    <a href="/"><img class="navbar_img" src="{% static navbar_icon_home %}"></a>
-                </div>
-                <div class="navbar_block">
-                    {{navbar_user_icon | safe}}
-                </div>
-            </div>
+            <div class="container">
+                {% for navbar_item in navbar_items %}
+                    <div class="block"><a href="{{navbar_item.link}}"><h4>{{navbar_item.name}}</h4></a></div>
+                {% endfor %}
+            </div> <!-- end container -->
   
             <div class="container">
+                
                 <div class="block">
-                    <h2>{{name}} : {{cast}}</h2>
-                    <img class ="avatar_img" src="{% static avatar %}" alt = 'profile pic'/>   
-                    
-                    <h2>Description</h2>
-                    <p>{{description}}</p>
-                    
-                    <h2>Inventaire</h2>
-                    <div class="container">
-                        {% for item in stuff %} 
-                            <div class="block"><h4>{{item}}</h4> <img class="stuff_pics" src="{% static stuff_pics %}"></div><div>    </div>
-                        {% endfor %}
-                    </div>
-                </div> <!-- block end -->
+                    <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>   
+                </div> <!-- end block -->
 
                 <div class="block">
+                    <h2>{{character.name}} : {{character.cast}}</h2>
+                    <p>{{character.description | linebreaksbr}}</p>
+                    <h2>Possessions visibles</h2>
+                    <ul>
+                    {% for item in character.stuff %} 
+                    <li>{{item}}</li>
+                    {% endfor %}
+                    </ul>
                     <h2>Notes personnelles</h2>
                     
                     {% if user.is_authenticated %}
                         {% for entry in pj_note_content %}
-                            {{entry | linebreaks}}
+                            <p class="note_quote">{{entry | linebreaksbr}}</p>
                         {% endfor %}
 
-                        <h4>Ajouter une nouvelle note :</h4>
+                        <p>Ajouter une nouvelle note :</p>
                         <form method='post'>{% csrf_token %}
                         {{ form.as_p }}
-                        <p><input type='submit' value='Submit' /></p>
+                        <p class="note_quote"><input type='submit' value='Submit' /></p>
                         </form>
                     {% else %}
-                        <p>Connectez vous pour voir ou poster une note personnelle.</p>
+                        <a href="/login"><p><u>Connectez vous pour voir ou poster une note personnelle.</u></p></a>
                     {% endif %}
-                </div>
-            </div>
-        </div>
+                </div> <!-- end block -->
+
+            </div> <!-- end container -->
+
+        </div> <!-- end wrapper -->
     </body>
 
 </html>

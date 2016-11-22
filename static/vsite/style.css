@@ -1,5 +1,5 @@
 /* MEDIA QUERIES FOR MOBILE ---------------------------------------*/
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (max-resolution: 0.9dppx) {
   :root {
     font-size: 2em;
   }
@@ -8,17 +8,6 @@
     width: 100%;
     flex-flow: column;
   }
-
-  .left_block { 
-  display: flex;
-  flex: 1 1 auto;
-  border-radius: 10px;
-  margin: 5px;
-  flex-flow: column;
-  align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.6);  
-  /*background-color: #46585a;*/
-}
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
@@ -33,18 +22,10 @@
     max-width: 1200px;
     max-height: 1200px;
   }
-
   .left_block { 
-  display: flex;
-  flex: 1 1 auto;
-  border-radius: 10px;
-  margin: 5px;
-  flex-flow: column;
-  align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.6);  
-  max-width: 10%;
-  /*background-color: #46585a;*/
-}
+    max-width: 10%;
+  }
+
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -121,6 +102,17 @@ input{
   border-radius: 10px;
   margin: 5px;
   flex-flow: column;
+  align-content: stretch;
+  background-color: rgba(78, 88, 90, 0.6);  
+  /*background-color: #46585a;*/
+}
+
+.left_block { 
+  display: flex;
+  flex: 1 1 auto;
+  border-radius: 10px;
+  margin: 5px;
+  flex-flow: column;
   align-items: stretch;
   background-color: rgba(78, 88, 90, 0.6);  
   /*background-color: #46585a;*/
@@ -145,4 +137,10 @@ input{
 
 .wrapper {
   margin:auto;
+}
+
+.small_legend{
+  font-style: italic;
+  text-align: center;
+  font-size: 90%;
 }

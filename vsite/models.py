@@ -144,3 +144,67 @@ class home_items(models.Model):
     # Methodes
     def __str__(self):
         return str(self.name)
+
+#####################################################################
+class pj_character(models.Model):
+    '''
+        Permet de générer le contenu des vues du site de manière
+        pratique
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+    fjob_choice = (
+        ( 'Scaveux', 'Scaveux' ),
+        ( 'Fongerbeux', 'Fongerbeux'),
+        ( 'Chassoux', 'Chassoux' ),
+        ( 'Soldards', 'Soldards'),
+        ( 'Brassoux', 'Brassoux'),
+        ( 'Chamans', 'Chamans') )
+
+    sjob_choice = (
+        ('Boisard', 'Boisard'),
+        ('Forgeard', 'Forgeard'),
+        ('Chefton', 'Chefton'),
+        ('Soigneur', 'Soigneur'),
+        ('Leveur', 'Leveur'))
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    owner = models.ForeignKey(User , related_name='owner')
+    name = models.CharField(max_length = 255, blank=True, null=True)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    first_job = models.CharField(max_length = 255, choices = fjob_choice) 
+    second_job = models.CharField(max_length = 255, choices = sjob_choice)
+    attributes = models.CharField(default = '0,0,0,0,0,0,0,0,0', max_length = 100)
+    skills  = models.CharField(blank = True , max_length = 1200)
+    stuff = models.CharField(blank = True, max_length = 1200)
+    more = models.CharField(max_length = 2500 , blank = True, null = True)
+    
+    # Methodes
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
+class game_log(models.Model):
+    '''
+        Displays chapters of each story lived by players.
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributes
+    uid = models.AutoField(primary_key = True, db_index = True)
+    campaign = models.CharField(max_length = 255, blank=True, null=True)
+    chapter_date = models.CharField(max_length = 255, blank=True, null=True)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_legend = models.CharField(max_length = 255, blank=True, null=True)
+    img_link = models.CharField(max_length = 255, blank=True, null=True)
+    corpus = models.TextField(blank = True, null = True, db_index = True)
+    order_position = models.PositiveIntegerField()
+    created_date = models.DateTimeField(default=timezone.now)
+
+    # Methodes
+    def __str__(self):
+        return str(self.uid)

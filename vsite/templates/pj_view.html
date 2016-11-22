@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="ROBOTS" content="NONE" />
-        <title>Vaste :: Compte de joueur</title>
+        <title>Vaste :: </title>
         
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="{% static style %}" />
@@ -18,14 +18,15 @@
                     <div class="block"><a href="{{navbar_item.link}}"><h4>{{navbar_item.name}}</h4></a></div>
                 {% endfor %}
             </div> <!-- end container -->
-
+  
             <div class="container">
+                
                 <div class="block">
                     <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>   
                 </div> <!-- end block -->
 
                 <div class="block">
-                    <h2>{{character.name}} : {{character.cast}}</h2>
+                    <h2>{{character.name}} : {{character.fjob}} {{character.sjob}}</h2>
                     <p>{{character.description | linebreaksbr}}</p>
                     <h2>Possessions visibles</h2>
                     <ul>
@@ -34,16 +35,10 @@
                     {% endfor %}
                     </ul>
                 </div> <!-- end block -->
+
             </div> <!-- end container -->
 
-            <div class="container">
-                <div class="block">
-                    <h2>Notes personnelles</h2>
-                        {% for entry in pj_note_content %}
-                            <p class="note_quote">{{entry | linebreaksbr}}</p>
-                        {% endfor %}
-                </div>
-            </div>  <!-- end container -->
         </div> <!-- end wrapper -->
     </body>
+
 </html>

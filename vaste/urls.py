@@ -23,11 +23,13 @@ urlpatterns = [
     url(r'^$', views.home),
     url(r'^pnj/$', views.pnj_index, {'view_filter': 'pnj'}),
     url(r'^creatures/$', views.pnj_index, {'view_filter': 'creatures'}),
+    url(r'^pj/$', views.pnj_index, {'view_filter': 'pj'}),
     url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
     url(r'^creatures/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
+    url(r'^pj/view/(?P<character_uid>\d+)', views.pj_view, name='pj'),
     url('^', include('django.contrib.auth.urls')),
-    url(r'^account', views.account),
-
+    url(r'^account/', views.account, name='account'),
+    url(r'^log/', views.log, name='gamelog'),
 ]
 
 '''

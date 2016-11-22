@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import pnj, pj_note, home_items
+from .models import pnj, pj_note, home_items, pj_character, game_log
 from .forms import pj_note_form
 
 #####################################################################
@@ -19,12 +19,15 @@ def home(request):
 def pnj_index(request, view_filter):
     if view_filter == 'creatures':
         content = pnj.objects.filter(visible=True, is_creature = True)
+    elif view_filter == 'pj':
+        content = pj_character.objects.all()
     else:
         content = pnj.objects.filter(visible=True, is_creature = False)
 
+
     context = {
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all(),
+        'navbar_items': home_items.objects.all().order_by('order_position'),
         'content': content,
     }
     template = loader.get_template('pnj_index.html')
@@ -63,7 +66,7 @@ def pnj_view(request, character_uid):
     context = {
         # Données génériques communes à toutes les pages
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all(),
+        'navbar_items': home_items.objects.all().order_by('order_position'),
 
         # Données spécifiques à la vue
         'character': character,
@@ -85,6 +88,21 @@ def pnj_view(request, character_uid):
                     poster_id=poster_id , pnj_id=pnj_id , note=note_to_create)
         return HttpResponseRedirect(character_uid)
 
+#####################################################################
+def pj_view(request, character_uid):
+    character = pj_character.objects.get(uid=character_uid)
+
+    # Object attributes transformation for better display
+    character.stuff = character.stuff.split(',')
+
+    context = {
+        'style': 'vsite/style.css',
+        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'character': character,
+        }
+    template = loader.get_template('pj_view.html')
+
+    return HttpResponse(template.render(context , request ))
 
 #####################################################################
 def account(request):
@@ -99,10 +117,16 @@ def account(request):
             pj_note_content[0] # Retourne IndexError si vide
         except IndexError:
             pj_note_content = ['Pas de note personnelle enregistrée.']
+
+        # Character preparation for display
+        character= pj_character.objects.get(owner_id=request.user.id)
+        character.stuff = character.stuff.split(',')
+
         context = {
         'style': 'vsite/style.css',
         'pj_note_content': pj_note_content,
-        'navbar_items': home_items.objects.all(),
+        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'character': character,
         }
         
         template = loader.get_template('account.html')
@@ -110,4 +134,16 @@ def account(request):
     else:
         return HttpResponseRedirect('/login')
 
-
+#####################################################################
+def log(request):
+    # Building dynamic filters to display a part of the logs
+    # By date of game
+    date_filter= [i[0] for i in game_log.objects.values_list('chapter_date').distinct()]
+    context = {
+        'style': 'vsite/style.css',
+        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'log': game_log.objects.all().order_by('order_position'),
+        'date_filter': date_filter,
+    }
+    template = loader.get_template('game_log.html')
+    return HttpResponse(template.render(context, request))

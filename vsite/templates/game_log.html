@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>Vaste :: </title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static style %}" />
+        <link rel="favicon" href="{%  static favicon %}">
+    </head>
+
+    <body>
+
+        <div id="wrapper">
+            <div class="container">
+                {% for navbar_item in navbar_items %}
+                    <div class="block"><a href="{{navbar_item.link}}"><h4>{{navbar_item.name}}</h4></a></div>
+                {% endfor %}
+            </div> <!-- end container -->
+
+            {% for log_item in log %}
+            <div class="container">  
+                <div class="block">
+                    <a href="{{log_item.img_link}}">
+                        <img class ="large_img" src="{{log_item.img_id}}" alt = 'log pic'/>
+                        <p class="small_legend">{{log_item.img_legend}}</p>
+
+                    </a>
+                </div> <!-- end block -->
+                
+                <div class="block">
+                    <p>{{log_item.corpus | safe | linebreaksbr}}</p>
+                    <p class="small_legend">{{log_item.chapter_date}}</p>
+                </div>
+            </div> <!-- end container -->
+            {% endfor %}
+        </div> <!-- end wrapper -->
+    </body>
+
+</html>

@@ -1,33 +1,32 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import pnj, pj_note, home_items, pj_character, game_log
-from .forms import pj_note_form
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog
+from .forms import PjNoteForm
 
 #####################################################################
 
 
-def home(request):
+def Home(request):
     context = {
         'style': 'vsite/style.css',
-        'home_items': home_items.objects.filter().exclude(name='Accueil').order_by('order_position'),
+        'home_items': HomeItems.objects.filter().exclude(name='Accueil').order_by('order_position'),
     }
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
 
 
 #####################################################################
-def pnj_index(request, view_filter):
+def PnjIndex(request, view_filter):
     if view_filter == 'creatures':
-        content = pnj.objects.filter(visible=True, is_creature = True)
+        content = Pnj.objects.filter(is_visible=True, is_creature = True)
     elif view_filter == 'pj':
-        content = pj_character.objects.all()
+        content = PjCharacter.objects.all()
     else:
-        content = pnj.objects.filter(visible=True, is_creature = False)
-
+        content = Pnj.objects.filter(is_visible=True, is_creature = False)
 
     context = {
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'content': content,
     }
     template = loader.get_template('pnj_index.html')
@@ -35,18 +34,16 @@ def pnj_index(request, view_filter):
 
 
 #####################################################################
-def pnj_view(request, character_uid):
-    character = pnj.objects.get(uid=character_uid)
+def PnjView(request, character_uid):
+    character = Pnj.objects.get(uid=character_uid)
 
     # Object attributes transformation for better display
     character.stuff = character.stuff.split(',')
-    cast_verbose = character.cast_choice[character.cast-1][1]
-    character.cast = 'caste des {}'.format(cast_verbose)
     
     # Content choice if the user is auth or not
     if request.user.is_authenticated():
         # Récupération des notes personnelles pour le pnj affiché
-        pj_note_qs = pj_note.objects.filter(
+        pj_note_qs = PjNote.objects.filter(
             pnj_id=character_uid, poster_id=request.user.id)
         try:
             pj_note_content = []
@@ -57,16 +54,14 @@ def pnj_view(request, character_uid):
         except IndexError:
             pj_note_content = ['Pas de note personnelle enregistrée.']
     else:
-        # Choix des icones de la navbar
-        navbar_user_icon = '<a href="/login"><img class="navbar_img" src="/static/vsite/navbar_login.png"></a>'
         # Message générique pour la partie notes personnelles
         pj_note_content = []
-    form = pj_note_form()
+    form = PjNoteForm()
 
     context = {
         # Données génériques communes à toutes les pages
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'navbar_items': HomeItems.objects.all().order_by('order_position'),
 
         # Données spécifiques à la vue
         'character': character,
@@ -83,21 +78,21 @@ def pnj_view(request, character_uid):
         if form.is_valid():
                 note_to_create = form.cleaned_data['note']
                 poster_id = request.user
-                pnj_id = pnj.objects.get(pk=character_uid)
-                post = pj_note.objects.create(
+                pnj_id = Pnj.objects.get(pk=character_uid)
+                post = PjNote.objects.create(
                     poster_id=poster_id , pnj_id=pnj_id , note=note_to_create)
         return HttpResponseRedirect(character_uid)
 
 #####################################################################
-def pj_view(request, character_uid):
-    character = pj_character.objects.get(uid=character_uid)
+def PjView(request, character_uid):
+    character = PjCharacter.objects.get(uid=character_uid)
 
     # Object attributes transformation for better display
     character.stuff = character.stuff.split(',')
 
     context = {
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'character': character,
         }
     template = loader.get_template('pj_view.html')
@@ -105,10 +100,10 @@ def pj_view(request, character_uid):
     return HttpResponse(template.render(context , request ))
 
 #####################################################################
-def account(request):
+def Account(request):
     if request.user.is_authenticated():
-        pj_note_qs = pj_note.objects.filter(poster_id = request.user.id).order_by('pnj_id')
-        pnj_list = pnj.objects.all()
+        pj_note_qs = PjNote.objects.filter(poster_id = request.user.id).order_by('pnj_id')
+        pnj_list = Pnj.objects.all()
         try:
             pj_note_content = []
             for entry in pj_note_qs:
@@ -119,13 +114,13 @@ def account(request):
             pj_note_content = ['Pas de note personnelle enregistrée.']
 
         # Character preparation for display
-        character= pj_character.objects.get(owner_id=request.user.id)
+        character= PjCharacter.objects.get(owner_id=request.user.id)
         character.stuff = character.stuff.split(',')
 
         context = {
         'style': 'vsite/style.css',
         'pj_note_content': pj_note_content,
-        'navbar_items': home_items.objects.all().order_by('order_position'),
+        'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'character': character,
         }
         
@@ -135,14 +130,14 @@ def account(request):
         return HttpResponseRedirect('/login')
 
 #####################################################################
-def log(request):
+def Log(request):
     # Building dynamic filters to display a part of the logs
     # By date of game
-    date_filter= [i[0] for i in game_log.objects.values_list('chapter_date').distinct()]
+    date_filter= [i[0] for i in GameLog.objects.values_list('chapter_date').distinct()]
     context = {
         'style': 'vsite/style.css',
-        'navbar_items': home_items.objects.all().order_by('order_position'),
-        'log': game_log.objects.all().order_by('order_position'),
+        'navbar_items': HomeItems.objects.all().order_by('order_position'),
+        'log': GameLog.objects.all().order_by('order_position'),
         'date_filter': date_filter,
     }
     template = loader.get_template('game_log.html')

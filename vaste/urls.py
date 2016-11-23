@@ -20,16 +20,16 @@ from vsite import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', views.home),
-    url(r'^pnj/$', views.pnj_index, {'view_filter': 'pnj'}),
-    url(r'^creatures/$', views.pnj_index, {'view_filter': 'creatures'}),
-    url(r'^pj/$', views.pnj_index, {'view_filter': 'pj'}),
-    url(r'^pnj/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
-    url(r'^creatures/view/(?P<character_uid>\d+)', views.pnj_view, name='pnj'),
-    url(r'^pj/view/(?P<character_uid>\d+)', views.pj_view, name='pj'),
+    url(r'^$', views.Home),
+    url(r'^pnj/$', views.PnjIndex, {'view_filter': 'pnj'}),
+    url(r'^creatures/$', views.PnjIndex, {'view_filter': 'creatures'}),
+    url(r'^pj/$', views.PnjIndex, {'view_filter': 'pj'}),
+    url(r'^pnj/view/(?P<character_uid>\d+)', views.PnjView, name='pnj'),
+    url(r'^creatures/view/(?P<character_uid>\d+)', views.PnjView, name='pnj'),
+    url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
     url('^', include('django.contrib.auth.urls')),
-    url(r'^account/', views.account, name='account'),
-    url(r'^log/', views.log, name='gamelog'),
+    url(r'^account/', views.Account, name='account'),
+    url(r'^log/', views.Log, name='gamelog'),
 ]
 
 '''

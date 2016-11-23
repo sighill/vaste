@@ -1,30 +1,33 @@
 from django.contrib import admin
-from .models import pnj, pj_note, home_items, pj_character, game_log
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Jobs
 # Register your models here.
 
-class adminPnj(admin.ModelAdmin):
-    list_display = ['uid', 'img_id','name','description','cast',
-        'attributes']
+class AdminPnj(admin.ModelAdmin):
+    list_display =['uid', 'owner', 'name', 'first_job', 'second_job', 'stuff', 'is_creature', 'is_visible']
     ordering = ['uid']
-admin.site.register(pnj , adminPnj)
+admin.site.register(Pnj , AdminPnj)
 
-
-class admin_pj_note(admin.ModelAdmin):
+class AdminPjNote(admin.ModelAdmin):
     list_display =['uid','poster_id','pnj_id','note']
     ordering = ['uid']
-admin.site.register(pj_note , admin_pj_note)
+admin.site.register(PjNote , AdminPjNote)
 
-class admin_home_items(admin.ModelAdmin):
+class AdminHomeItems(admin.ModelAdmin):
     list_display =['uid','name', 'order_position', 'description', 'img_id', 'link']
     ordering = ['uid']
-admin.site.register(home_items , admin_home_items)
+admin.site.register(HomeItems , AdminHomeItems)
 
-class admin_pj_character(admin.ModelAdmin):
-    list_display =['uid', 'owner', 'name', 'img_id', 'first_job', 'second_job', 'attributes','skills','stuff']
+class AdminPjCharacter(admin.ModelAdmin):
+    list_display =['uid', 'owner', 'name', 'first_job', 'second_job','stuff']
     ordering = ['uid']
-admin.site.register(pj_character , admin_pj_character)
+admin.site.register(PjCharacter , AdminPjCharacter)
 
-class admin_game_log(admin.ModelAdmin):
+class AdminGameLog(admin.ModelAdmin):
     list_display =['uid','img_id', 'corpus', 'created_date']
     ordering = ['created_date']
-admin.site.register(game_log , admin_game_log)
+admin.site.register(GameLog , AdminGameLog)
+
+class AdminJobs(admin.ModelAdmin):
+    list_display =['uid','name', 'job_type', 'job_description']
+    ordering = ['uid']
+admin.site.register(Jobs , AdminJobs)

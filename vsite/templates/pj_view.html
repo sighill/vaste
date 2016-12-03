@@ -30,8 +30,8 @@
                     <p>{{character.description | linebreaksbr}}</p>
                     <h2>Possessions visibles</h2>
                     <ul>
-                    {% for item in character.stuff %} 
-                    <li>{{item}}</li>
+                    {% for item in char_stuff %} 
+                    <li><span title="{{item.description}}">{{item.name}} en {{item.ia_type}}</span></li>
                     {% endfor %}
                     </ul>
                 </div> <!-- end block -->

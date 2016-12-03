@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item
 from .forms import PjNoteForm
 
 #####################################################################
@@ -74,18 +74,19 @@ def PnjView(request, character_uid):
         return HttpResponse(template.render(context , request ))
 
     if request.method == 'POST':
-        form = pj_note_form(request.POST)
+        form = PjNoteForm(request.POST)
         if form.is_valid():
-                note_to_create = form.cleaned_data['note']
-                poster_id = request.user
-                pnj_id = Pnj.objects.get(pk=character_uid)
-                post = PjNote.objects.create(
-                    poster_id=poster_id , pnj_id=pnj_id , note=note_to_create)
+            note_to_create = form.cleaned_data['note']
+            poster_id = request.user.id
+            pnj_id = Pnj.objects.get(pk=character_uid).uid
+            post = PjNote.objects.create(
+                poster_id=poster_id , pnj_id=pnj_id , note=note_to_create)
         return HttpResponseRedirect(character_uid)
 
 #####################################################################
 def PjView(request, character_uid):
-    character = PjCharacter.objects.get(uid=character_uid)
+    character = PjCharacter.objects.get(uid= character_uid)
+    char_stuff = [item for item in Item.objects.filter(owner_id= character_uid)]
 
     # Object attributes transformation for better display
     character.stuff = character.stuff.split(',')
@@ -94,6 +95,7 @@ def PjView(request, character_uid):
         'style': 'vsite/style.css',
         'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'character': character,
+        'char_stuff': char_stuff,
         }
     template = loader.get_template('pj_view.html')
 

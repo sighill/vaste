@@ -14,41 +14,28 @@ class ItemRecipes(models.Model):
 
     # Attributs
     uid = models.AutoField(primary_key = True , db_index = True)
+    item_type = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
-    level = models.PositiveIntegerField()
-    recipe = models.CharField(max_length = 2048)
-    rarity = models.PositiveIntegerField()
-    description = models.CharField(max_length = 2048)
+    ia = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_a')
+    iaq = models.PositiveIntegerField(null = True, blank = True)
+    ib = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_b')
+    ibq = models.PositiveIntegerField(null = True, blank = True)
+    ic = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_c')
+    icq = models.PositiveIntegerField(null = True, blank = True)
+    wood = models.NullBooleanField(blank = True, default = False)
+    plastic = models.NullBooleanField(blank = True, default = False)
+    metal = models.NullBooleanField(blank = True, default = False)
+    rock = models.NullBooleanField(blank = True, default = False)
+    fiber = models.NullBooleanField(blank = True, default = False)
+    leather = models.NullBooleanField(blank = True, default = False)
+    rarity = models.PositiveIntegerField(null = True, blank = True)
+    description = models.CharField(max_length = 2048, null = True, blank = True,)
 
     # Methodes
     def __str__(self):
         return str(self.name)
 
-#####################################################################
-class Item(models.Model):
-    '''
-        Item instances
-    '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
-    uid = models.AutoField(primary_key = True , db_index = True)
-    recipe = models.ForeignKey(
-        ItemRecipes , related_name = 'recipe_uid', blank=True, null=True)
-    name = models.CharField(max_length = 255)
-    owner = models.ForeignKey(User , related_name = 'pj_id', blank=True, null=True)
-    level = models.PositiveIntegerField()
-    quality = models.PositiveIntegerField()
-    rarity = models.PositiveIntegerField()
-    description = models.CharField(max_length = 2048)
-    created_date = models.DateTimeField(
-            default=timezone.now) 
-
-    # Methodes
-    def __str__(self):
-        return str(self.name)
 
 #####################################################################
 class HomeItems(models.Model):
@@ -239,3 +226,29 @@ class GameLog(models.Model):
     # Methodes
     def __str__(self):
         return str(self.uid)
+
+#####################################################################
+class Item(models.Model):
+    '''
+        Item instances
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    recipe = models.ForeignKey(
+        ItemRecipes , related_name = 'recipe_uid', blank=True, null=True)
+    name = models.CharField(max_length = 255)
+    owner = models.ForeignKey(PjCharacter , related_name = 'pj_id', blank=True, null=True)
+    ia_type = models.CharField(max_length = 100, null = True, blank = True)
+    ib_type = models.CharField(max_length = 100, null = True, blank = True)
+    ic_type = models.CharField(max_length = 100, null = True, blank = True)
+    description = models.CharField(max_length = 2048)
+    created_date = models.DateTimeField(
+            default=timezone.now) 
+
+    # Methodes
+    def __str__(self):
+        return str(self.name)

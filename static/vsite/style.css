@@ -1,5 +1,5 @@
 /* MEDIA QUERIES FOR MOBILE ---------------------------------------*/
-@media (max-width: 1200px) and (max-resolution: 0.9dppx) {
+@media (max-width: 1200px) {
   :root {
     font-size: 2em;
   }
@@ -11,7 +11,7 @@
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
-@media(max-resolution: 1dppx) and (min-width: 1200px){
+@media(max-resolution: 1dppx){
   :root {
     font-size: 14px; 
   }
@@ -50,6 +50,7 @@ html {
   -o-background-size: cover;
   background-size: cover;
   background-color: #0e1316; /*last used : 0e1316*/ 
+  overflow-y: scroll;
 }
 
 h1, h4{
@@ -102,7 +103,6 @@ input{
   border-radius: 10px;
   margin: 5px;
   flex-flow: column;
-  align-content: stretch;
   background-color: rgba(78, 88, 90, 0.6);  
   /*background-color: #46585a;*/
 }

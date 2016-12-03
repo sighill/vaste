@@ -1,0 +1,44 @@
+uid;item_type;name;ia_id;iaq;ib_d;ibq;ic_id;icq;wood;plastic;metal;rock;fiber;leather
+000;null;pas de recette;;;;;;;;;;;;
+100;matériau;plusieurs choix;;;;;;;;;;;;
+101;matériau;bois;;;;;;;;;;;;
+102;matériau;plastique;;;;;;;;;;;;
+103;matériau;métal;;;;;;;;;;;;
+104;matériau;pierre;;;;;;;;;;;;
+105;matériau;fibre;;;;;;;;;;;;
+106;matériau;cuir;;;;;;;;;;;;
+201;base;élémentaire;100;3;;;;;True;True;True;False;False;False
+203;base;souple;100;3;;;;;True;True;True;False;False;False
+204;base;allongée;100;5;105;1;;;True;True;True;False;False;False
+301;embout;lame longue;100;10;;;;;False;True;True;True;False;False
+302;embout;lame courte;100;3;;;;;False;True;True;True;False;False
+303;embout;hache;100;4;;;;;False;True;True;True;False;False
+304;embout;lest;100;5;;;;;True;True;True;True;False;False
+305;embout;pinces;100;2;;;;;True;True;True;False;False;False
+306;embout;corde tendue;100;10;;;;;False;False;True;False;True;False
+307;embout;corde avec poche;100;5;;;;;False;False;True;False;True;True
+308;embout;plaque protectrice;100;10;;;;;True;True;True;False;False;False
+401;sac;bandoulière;100;10;;;;;False;False;False;False;True;True
+402;sac;dos;100;10;;;;;False;False;False;False;True;True
+501;outil;couteau;201;1;302;1;;;False;True;True;True;False;False
+502;outil;maillet;201;1;304;1;;;True;True;True;True;False;False
+503;outil;pinces;201;1;305;1;;;False;True;True;False;False;False
+601;arme;épée;201;1;301;1;105;1;;;;;;
+701;arme;hache;201;1;303;1;105;1;;;;;;
+702;arme;masse;201;1;304;1;105;1;;;;;;
+703;arme;lance;204;1;302;1;105;3;;;;;;
+704;arme;bâton lesté;204;1;304;1;105;3;;;;;;
+705;arme;arc;204;1;105;5;;;;;;;;
+706;arme;fronde;203;1;;;;;;;;;;
+801;munition;bille;100;1;;;;;True;True;True;True;False;False
+802;munition;flèche;201;1;;;;;;;;;;
+901;survie;couverture;105;6;;;;;;;;;;
+904;survie;mètre de corde;105;5;;;;;;;;;;
+905;survie;piège simple;101;1;106;2;;;;;;;;
+906;survie;piège élaboré;101;2;106;4;;;;;;;;
+907;survie;bottes;106;5;;;;;;;;;;
+908;survie;pantalon;100;10;106;1;;;False;False;False;False;True;True
+909;survie;tunique;100;8;106;1;;;False;False;False;False;True;True
+910;survie;manteau;100;15;106;3;;;False;False;False;False;True;True
+911;survie;masque;100;10;106;5;;;True;True;True;False;True;True
+912;survie;chapeau;100;5;;;;;False;False;False;False;True;True

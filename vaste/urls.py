@@ -24,12 +24,13 @@ urlpatterns = [
     url(r'^pnj/$', views.PnjIndex, {'view_filter': 'pnj'}),
     url(r'^creatures/$', views.PnjIndex, {'view_filter': 'creatures'}),
     url(r'^pj/$', views.PnjIndex, {'view_filter': 'pj'}),
-    url(r'^pnj/view/(?P<character_uid>\d+)', views.PnjView, name='pnj'),
-    url(r'^creatures/view/(?P<character_uid>\d+)', views.PnjView, name='pnj'),
+    url(r'^pnj/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
+    url(r'^creatures/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
     url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
     url('^', include('django.contrib.auth.urls')),
     url(r'^account/', views.Account, name='account'),
     url(r'^log/', views.Log, name='gamelog'),
+    url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'make_public'),
 ]
 
 '''

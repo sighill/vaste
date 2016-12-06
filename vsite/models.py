@@ -192,12 +192,13 @@ class PjNote(models.Model):
     # Attributs
     uid = models.AutoField(primary_key=True, db_index= True)
     poster = models.ForeignKey(
-        User , related_name='user_id', blank=True, null=True)
+        PjCharacter, related_name='char_id', blank=True, null=True)
     pnj = models.ForeignKey(
         Pnj , related_name='pnj_id', blank=True, null=True)
     note = models.TextField(blank = True, null = True)
     created_date = models.DateTimeField(
             default=timezone.now)
+    is_public = models.BooleanField(default= False)
 
     # Methodes
     def __str__(self):

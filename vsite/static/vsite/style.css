@@ -135,6 +135,10 @@ input{
   height: auto;
 }
 
+.micro_img{
+  max-width: 20px;
+}
+
 .wrapper {
   margin:auto;
 }

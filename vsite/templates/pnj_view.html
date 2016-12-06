@@ -22,23 +22,30 @@
             <div class="container">
                 
                 <div class="block">
-                    <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>   
+                    <img class ="large_img" src="{{pnj.img_id}}" alt = 'profile pic'/>   
                 </div> <!-- end block -->
 
                 <div class="block">
-                    <h2>{{character.name}}</h2>
-                    <p>{{character.description | linebreaksbr}}</p>
+                    <h2>{{pnj.name}}</h2>
+                    <p>{{pnj.description | linebreaksbr}}</p>
                     <h2>Possessions visibles</h2>
                     <ul>
-                    {% for item in character.stuff %} 
+                    {% for item in pnj.stuff %} 
                     <li>{{item}}</li>
                     {% endfor %}
                     </ul>
+
+                    <h2>Notes publiques</h2>
+
+                    {% for public_note in public_notes %} 
+                        <p>{{public_note | safe}}</p>
+                    {% endfor %}
+
                     <h2>Notes personnelles</h2>
                     
                     {% if user.is_authenticated %}
-                        {% for entry in pj_note_content %}
-                            <p class="note_quote">{{entry | linebreaksbr}}</p>
+                        {% for private_note in private_notes %}
+                            <p>{{private_note | safe}}</p>
                         {% endfor %}
 
                         <p>Ajouter une nouvelle note :</p>

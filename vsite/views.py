@@ -65,8 +65,8 @@ def PnjView(request, pnj_uid):
         else:
             for private_note in private_notes:
                 private_notes_formatted.append(
-                    '<p><a href="/switchprivacy/{}">[O]</a> <i>« {} »</i> - {}'.format(
-                        private_note.uid, private_note.note, private_note.poster
+                    '<p>[ <a style="font-size:70%" href="/switchprivacy/{}">O</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
+                        private_note.uid, private_note.uid, private_note.note, private_note.poster
                         )
                     )
 
@@ -84,8 +84,8 @@ def PnjView(request, pnj_uid):
             # switch the privacy of said note
             if public_note.poster_id == current_character.uid:
                 public_notes_formatted.append(
-                    '<p><a href="/switchprivacy/{}">[Ø]</a> <i>« {} »</i> - {}'.format(
-                        public_note.uid, public_note.note, public_note.poster
+                    '<p>[ <a style="font-size:70%" href="/switchprivacy/{}">Ø</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
+                        public_note.uid, public_note.uid, public_note.note, public_note.poster
                         )
                     )
 
@@ -245,12 +245,22 @@ def NoteDelete(request, note_uid):
     '''
 
     # Retrieve poster id
-    poster_id = PjCharacter.objects.get(owner_id= request.user.id)
+    pjchar = PjCharacter.objects.get(owner_id= request.user.id)
 
     # Retrieve note object
     note_to_delete = PjNote.objects.get(pk= note_uid)
 
-    # retrieve related pnj to rebuild the redirect url
-    related_pnj = Pnj.objects.get(pk= note_to_switch.pnj_id)
+        # retrieve related pnj to rebuild the redirect url
+    related_pnj = Pnj.objects.get(pk= note_to_delete.pnj_id)
 
-    return HttpResponseRedirect('/{}/view/{}'.format(pnj_type, note_to_switch.pnj_id))
+    # additional info to redirect to correct page
+    if related_pnj.is_creature == True:
+        pnj_type= 'creatures'
+    else:
+        pnj_type= 'pnj'
+
+    # make sure the to-delete posts is owned by current user
+    if pjchar.uid == note_to_delete.poster_id:
+        note_to_delete.delete()
+
+    return HttpResponseRedirect('/{}/view/{}'.format(pnj_type, note_to_delete.pnj_id))

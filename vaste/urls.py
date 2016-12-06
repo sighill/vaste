@@ -30,7 +30,8 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     url(r'^account/', views.Account, name='account'),
     url(r'^log/', views.Log, name='gamelog'),
-    url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'make_public'),
+    url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),
+    url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
 ]
 
 '''

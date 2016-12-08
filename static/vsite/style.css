@@ -22,10 +22,16 @@
     max-width: 1200px;
     max-height: 1200px;
   }
-  .left_block { 
-    max-width: 10%;
+
+  .large_left_block{
+    min-width: 220px;
+    max-width: 220px;
   }
 
+  .medium_left_block{
+    min-width: 120px;
+    max-width: 120px;
+    }
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -107,16 +113,26 @@ input{
   /*background-color: #46585a;*/
 }
 
-.left_block { 
+.medium_left_block { 
   display: flex;
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   border-radius: 10px;
   margin: 5px;
   flex-flow: column;
   align-items: stretch;
   background-color: rgba(78, 88, 90, 0.6);  
-  /*background-color: #46585a;*/
 }
+
+.large_left_block { 
+  display: flex;
+  flex: 0 0 auto;
+  border-radius: 10px;
+  margin: 5px;
+  flex-flow: column;
+  align-items: stretch;
+  background-color: rgba(78, 88, 90, 0.6);
+}
+
 
 .large_img {
   display: block;
@@ -124,8 +140,6 @@ input{
   border-width: 2px;
   border-style: solid;
   border-color: black;
-  width: 300px;
-  height: auto;
 
 }
 

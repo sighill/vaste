@@ -103,6 +103,17 @@ def PnjView(request, pnj_uid):
         # generic message leading to login page.
         private_notes_formatted = ['<a href ="/login">Connectez vous.</a>']
 
+        # Load public notes
+        public_notes_formatted = []
+        public_notes = [i for i in PjNote.objects.filter(
+            pnj_id= pnj_uid, is_public= True)]
+        for public_note in public_notes:
+            public_notes_formatted.append(
+                '<i>« {} »</i> - {}'.format(
+                    public_note.note, public_note.poster
+                    )
+                )
+
     # Filling the context passed to the template
     context = {
         # Generic data

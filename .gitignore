@@ -20,6 +20,10 @@ tests/report/
 
 # Others
 *.json
+*.jpg
+*.png
+*.tif
+*.tiff
 
 # Logs and databases #
 *.log

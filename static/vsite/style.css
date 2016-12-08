@@ -124,6 +124,9 @@ input{
   border-width: 2px;
   border-style: solid;
   border-color: black;
+  width: 300px;
+  height: auto;
+
 }
 
 .medium_img{

@@ -159,6 +159,7 @@ def PjView(request, character_uid):
 
     return HttpResponse(template.render(context , request ))
 
+
 #####################################################################
 def Account(request):
     if request.user.is_authenticated():
@@ -191,14 +192,11 @@ def Account(request):
 
 #####################################################################
 def Log(request):
-    # Building dynamic filters to display a part of the logs
-    # By date of game
-    date_filter= [i[0] for i in GameLog.objects.values_list('chapter_date').distinct()]
+
     context = {
         'style': 'vsite/style.css',
         'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'log': GameLog.objects.all().order_by('order_position'),
-        'date_filter': date_filter,
     }
     template = loader.get_template('game_log.html')
     return HttpResponse(template.render(context, request))

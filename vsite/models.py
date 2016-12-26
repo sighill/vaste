@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from django.contrib.gis.db import models as gismodels
 
 
 #####################################################################
@@ -253,5 +254,71 @@ class Item(models.Model):
             default=timezone.now) 
 
     # Methodes
+    def __str__(self):
+        return str(self.name)
+
+
+#####################################################################
+class Place(models.Model):
+    '''
+        Data for the several places of Vaste. These are supposed to
+        be located in a GIS sytem later, hence the GID
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+    place_category_choices = (
+        ('Havre', 'Havre'),
+        ('Ruine', 'Ruine'),
+        ('Bunker','Bunker'),
+        ('Cache', 'Cache'),
+        ('Abri', 'Abri'),
+    )
+    
+    # Attributs
+    gid = models.AutoField(primary_key= True, db_index = True)
+    name = models.CharField(max_length = 255)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    category = models.CharField(
+        max_length = 255, 
+        choices = place_category_choices)
+    description = models.TextField(blank=True, null=True)
+    more = models.CharField(max_length = 255)
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    modified_date = models.DateTimeField(
+            auto_now=True)
+    # geometry
+    geom = gismodels.PolygonField()
+
+    # Methods
+    def __str__(self):
+        return str(self.name)
+#####################################################################
+class Phenomenon(models.Model):
+    '''
+        Data for the several places of Vaste. These are supposed to
+        be located in a GIS sytem later, hence the GID
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+    
+    # Attributs
+    gid = models.AutoField(primary_key= True, db_index = True)
+    name = models.CharField(max_length = 255)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    more = models.CharField(max_length = 255)
+    created_date = models.DateTimeField(
+            default=timezone.now)
+    modified_date = models.DateTimeField(
+            auto_now=True)
+    # geometry
+    geom = gismodels.PolygonField()
+
+    # Methods
     def __str__(self):
         return str(self.name)

@@ -181,6 +181,45 @@ class Pnj(models.Model):
         return str(self.name)
 
 #####################################################################
+class Creature(models.Model):
+    '''
+        Les créatures sont des monstres dans la 
+        partie de jeu de rôles.
+
+        Les attributes sont des intégrales séparées de virgules
+            Il y en a toujours 9
+        Les compétences sont des couples de valeur (nom:valeur)
+            Séparés par une virgule
+        Les stuff sont des strings séparés par une virgule
+    '''
+    # TODO 
+
+    # Variables pour les choix pré-remplis
+
+    # Attributs
+    uid = models.AutoField(primary_key = True , db_index = True)
+    is_visible = models.BooleanField(default= False)
+    name = models.CharField(max_length = 255, blank=True, null=True)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    puissance = models.PositiveIntegerField()
+    vigueur = models.PositiveIntegerField()
+    dexterite = models.PositiveIntegerField()
+    perception = models.PositiveIntegerField()
+    charisme = models.PositiveIntegerField()
+    astuce = models.PositiveIntegerField()
+    volonte = models.PositiveIntegerField()
+    intelligence = models.PositiveIntegerField()
+    essence = models.PositiveIntegerField()
+    stuff = models.CharField(blank = True, max_length = 1200)
+    more = models.CharField(max_length = 2500 , blank = True, null = True)
+    
+    # Methodes
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
 class PjNote(models.Model):
     '''
         Les utilisateurs du site peuvent poster des notes de jeu 
@@ -283,6 +322,7 @@ class Place(models.Model):
     category = models.CharField(
         max_length = 255, 
         choices = place_category_choices)
+    is_visible = models.BooleanField(default= False)
     description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 255)
     created_date = models.DateTimeField(
@@ -290,7 +330,7 @@ class Place(models.Model):
     modified_date = models.DateTimeField(
             auto_now=True)
     # geometry
-    geom = gismodels.PolygonField()
+    geom = gismodels.PolygonField(blank=True, null=True)
 
     # Methods
     def __str__(self):
@@ -310,6 +350,7 @@ class Phenomenon(models.Model):
     name = models.CharField(max_length = 255)
     img_id = models.CharField(max_length = 255, blank=True, null=True)
     img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    is_visible = models.BooleanField(default= False)
     description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 255)
     created_date = models.DateTimeField(
@@ -317,7 +358,7 @@ class Phenomenon(models.Model):
     modified_date = models.DateTimeField(
             auto_now=True)
     # geometry
-    geom = gismodels.PolygonField()
+    geom = gismodels.PolygonField(blank=True, null=True)
 
     # Methods
     def __str__(self):

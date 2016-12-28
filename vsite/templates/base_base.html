@@ -1,0 +1,41 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>:: Vaste ::</title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="{% static style %}" />
+        <link rel="favicon" href="{%  static favicon %}">
+    </head>
+
+    <body>
+        <div id="wrapper">
+            <div class="container">
+
+                <div class="block"><a href="/"><h4>Accueil</h4></a></div>
+                <div class="block"><a href="/account"><h4>Journal</h4></a></div>
+                <div class="block"><a href="/log"><h4>Résumé de parties</h4></a></div>
+                <div class="block" id="world_dropdown"><a href="#"><h4>Monde du vaste</h4></a>
+                    <div id="world_dropdown_content">
+                        <p>Lieux</p>
+                        <p>Phénomènes</p>
+                    </div>
+                </div>
+                <div class="block" id="char_dropdown"><a href="#"><h4>Personnages</h4></a>
+                    <div id="char_dropdown_content">
+                        <p>Joueurs</p>
+                        <p>Non joueurs</p>
+                        <p>Créatures</p>
+                    </div>
+                </div>
+            </div> <!-- end container -->
+
+            {% block content %}
+            {% endblock %}
+
+        </div> <!-- end wrapper -->
+    </body>
+</html>

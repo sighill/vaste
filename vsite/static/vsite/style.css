@@ -28,6 +28,23 @@
     max-width: 220px;
   }
 
++/* Dropdown menu in character sheets */
++#char_dropdown {
++}
++
++#char_dropdown_content {
++    display: none;
++    position: absolute;
++    background-color: #46585a;
++    z-index: 1;
++    border: 10px solid #0e1316;
++}
++
++#char_dropdown:hover #char_dropdown_content {
++  display:block; 
++  width:100%;
++  max-width: 980px;
++}
   .medium_left_block{
     min-width: 120px;
     max-width: 120px;
@@ -164,4 +181,41 @@ input{
   font-style: italic;
   text-align: center;
   font-size: 90%;
+}
+
+
+/* Dropdown menu -----------------------------*/
+
+#char_dropdown {
+}
+
+#char_dropdown_content {
+  display: none;
+  justify-content: center;
+  position: relative;
+  align-items: left;
+  z-index: 1;
+}
+
+#char_dropdown:hover #char_dropdown_content {
+  display: flex; 
+  width:100%;
+  max-width: 980px;
+}
+
+#world_dropdown {
+}
+
+#world_dropdown_content {
+  display: none;
+  justify-content: center;
+  position: relative;
+  align-items: left;
+  z-index: 1;
+}
+
+#world_dropdown:hover #world_dropdown_content {
+  display: flex; 
+  width:100%;
+  max-width: 980px;
 }

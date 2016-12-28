@@ -1,66 +1,44 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <meta name="ROBOTS" content="NONE" />
-        <title>Vaste :: </title>
+{% extends 'base_base.html' %}
+
+{% block content %}
+<div class="container">
+    
+    <div class="large_left_block">
+        <a href="{{pnj.img_src}}" target="_blank"><img class ="large_img" src="{{pnj.img_id}}" alt = 'profile pic'/></a>
+    </div> <!-- end block -->
+
+    <div class="block">
+        <h2>{{pnj.name}}</h2>
+        <p>{{pnj.description | linebreaksbr}}</p>
+        <h2>Possessions visibles</h2>
+        <ul>
+        {% for item in pnj.stuff %} 
+        <li>{{item}}</li>
+        {% endfor %}
+        </ul>
+
+        <h2>Notes publiques</h2>
+
+        {% for public_note in public_notes %} 
+            <p>{{public_note | safe}}</p>
+        {% endfor %}
+
+        <h2>Notes personnelles</h2>
         
-        {% load staticfiles %}
-        <link rel="stylesheet" type="text/css" href="{% static style %}" />
-        <link rel="favicon" href="{%  static favicon %}">
-    </head>
+        {% if user.is_authenticated %}
+            {% for private_note in private_notes %}
+                <p>{{private_note | safe}}</p>
+            {% endfor %}
 
-    <body>
+            <p>Ajouter une nouvelle note :</p>
+            <form method='post'>{% csrf_token %}
+            {{ form.as_p }}
+            <p class="note_quote"><input type='submit' value='Submit' /></p>
+            </form>
+        {% else %}
+            <a href="/login"><p><u>Connectez vous pour voir ou poster une note personnelle.</u></p></a>
+        {% endif %}
+    </div> <!-- end block -->
 
-        <div id="wrapper">
-            <div class="container">
-                {% for navbar_item in navbar_items %}
-                    <div class="block"><a href="{{navbar_item.link}}"><h4>{{navbar_item.name}}</h4></a></div>
-                {% endfor %}
-            </div> <!-- end container -->
-  
-            <div class="container">
-                
-                <div class="large_left_block">
-                    <a href="{{pnj.img_src}}" target="_blank"><img class ="large_img" src="{{pnj.img_id}}" alt = 'profile pic'/></a>
-                </div> <!-- end block -->
-
-                <div class="block">
-                    <h2>{{pnj.name}}</h2>
-                    <p>{{pnj.description | linebreaksbr}}</p>
-                    <h2>Possessions visibles</h2>
-                    <ul>
-                    {% for item in pnj.stuff %} 
-                    <li>{{item}}</li>
-                    {% endfor %}
-                    </ul>
-
-                    <h2>Notes publiques</h2>
-
-                    {% for public_note in public_notes %} 
-                        <p>{{public_note | safe}}</p>
-                    {% endfor %}
-
-                    <h2>Notes personnelles</h2>
-                    
-                    {% if user.is_authenticated %}
-                        {% for private_note in private_notes %}
-                            <p>{{private_note | safe}}</p>
-                        {% endfor %}
-
-                        <p>Ajouter une nouvelle note :</p>
-                        <form method='post'>{% csrf_token %}
-                        {{ form.as_p }}
-                        <p class="note_quote"><input type='submit' value='Submit' /></p>
-                        </form>
-                    {% else %}
-                        <a href="/login"><p><u>Connectez vous pour voir ou poster une note personnelle.</u></p></a>
-                    {% endif %}
-                </div> <!-- end block -->
-
-            </div> <!-- end container -->
-
-        </div> <!-- end wrapper -->
-    </body>
-
-</html>
+</div> <!-- end container -->
+{% endblock %}

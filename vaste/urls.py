@@ -17,12 +17,12 @@ from django.conf.urls import url , include
 from django.contrib import admin
 from  django.contrib.auth.views import password_change
 from vsite import views
+from vsite.models import Place, Phenomenon, Creature, Pnj, PjCharacter
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.Home),
     url(r'^pnj/$', views.PnjIndex, {'view_filter': 'pnj'}),
-    url(r'^creatures/$', views.PnjIndex, {'view_filter': 'creatures'}),
     url(r'^pj/$', views.PnjIndex, {'view_filter': 'pj'}),
     url(r'^pnj/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
     url(r'^creatures/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
@@ -32,6 +32,8 @@ urlpatterns = [
     url(r'^log/', views.Log, name='gamelog'),
     url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),
     url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
+    url(r'^place/$', views.GenericIndex, {'obj_to_display': Place}),
+    url(r'^creatures/$', views.GenericIndex, {'obj_to_display': Creature}),
 ]
 
 '''

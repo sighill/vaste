@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Jobs, ItemRecipes, Item
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Jobs, ItemRecipes, Item, Place, Phenomenon, Creature
 # Register your models here.
 
 class AdminPnj(admin.ModelAdmin):
@@ -41,3 +41,18 @@ class AdminItem(admin.ModelAdmin):
     list_display =['uid','name', 'owner_id']
     ordering = ['uid']
 admin.site.register(Item , AdminItem)
+
+class AdminPlace(admin.ModelAdmin):
+    list_display =['gid','name']
+    ordering = ['gid']
+admin.site.register(Place , AdminPlace)
+
+class AdminPhenomenon(admin.ModelAdmin):
+    list_display =['gid','name']
+    ordering = ['gid']
+admin.site.register(Phenomenon , AdminPhenomenon)
+
+class AdminCreature(admin.ModelAdmin):
+    list_display =['uid','name']
+    ordering = ['uid']
+admin.site.register(Creature , AdminCreature)

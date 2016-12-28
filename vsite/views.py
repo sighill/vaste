@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item, Creature, Place, Phenomenon
 from .forms import PjNoteForm
 
 #####################################################################
@@ -273,3 +273,20 @@ def NoteDelete(request, note_uid):
         note_to_delete.delete()
 
     return HttpResponseRedirect('/{}/view/{}'.format(pnj_type, note_to_delete.pnj_id))
+
+#####################################################################
+def GenericIndex(request, obj_to_display):
+    
+    # Some tables have  a 'is_visible' valeu that we have to filter
+    # out before filling the content.
+    if obj_to_display in [Pnj, Creature, Place, Phenomenon]:
+        content = obj_to_display.objects.filter(is_visible= True)
+    else:
+        content = obj_to_display.objects.all()
+
+    context = {
+        'style': 'vsite/style.css',
+        'content': content,
+    }
+    template = loader.get_template('generic_index.html')
+    return HttpResponse(template.render(context, request))

@@ -16,39 +16,21 @@
     font-size: 14px; 
   }
 
-  .container{
-    flex: row;
-    justify-content: space-between;
-    max-width: 1200px;
-    max-height: 1200px;
-  }
+.container{
+  flex: row;
+  justify-content: space-between;
+  max-width: 1200px;
+  max-height: 1200px;
+}
 
-  .large_left_block{
-    min-width: 220px;
-    max-width: 220px;
-  }
+.large_left_block{
+  min-width: 220px;
+  max-width: 220px;
+}
 
-+/* Dropdown menu in character sheets */
-+#char_dropdown {
-+}
-+
-+#char_dropdown_content {
-+    display: none;
-+    position: absolute;
-+    background-color: #46585a;
-+    z-index: 1;
-+    border: 10px solid #0e1316;
-+}
-+
-+#char_dropdown:hover #char_dropdown_content {
-+  display:block; 
-+  width:100%;
-+  max-width: 980px;
-+}
-  .medium_left_block{
-    min-width: 120px;
-    max-width: 120px;
-    }
+.medium_left_block{
+  min-width: 120px;
+  max-width: 120px;
 }
 
 /* NATIVE CSS -----------------------------------------------------*/

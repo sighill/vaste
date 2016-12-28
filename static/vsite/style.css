@@ -16,22 +16,21 @@
     font-size: 14px; 
   }
 
-  .container{
-    flex: row;
-    justify-content: space-between;
-    max-width: 1200px;
-    max-height: 1200px;
-  }
+.container{
+  flex: row;
+  justify-content: space-between;
+  max-width: 1200px;
+  max-height: 1200px;
+}
 
-  .large_left_block{
-    min-width: 220px;
-    max-width: 220px;
-  }
+.large_left_block{
+  min-width: 220px;
+  max-width: 220px;
+}
 
-  .medium_left_block{
-    min-width: 120px;
-    max-width: 120px;
-    }
+.medium_left_block{
+  min-width: 120px;
+  max-width: 120px;
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -164,4 +163,41 @@ input{
   font-style: italic;
   text-align: center;
   font-size: 90%;
+}
+
+
+/* Dropdown menu -----------------------------*/
+
+#char_dropdown {
+}
+
+#char_dropdown_content {
+  display: none;
+  justify-content: center;
+  position: relative;
+  align-items: left;
+  z-index: 1;
+}
+
+#char_dropdown:hover #char_dropdown_content {
+  display: flex; 
+  width:100%;
+  max-width: 980px;
+}
+
+#world_dropdown {
+}
+
+#world_dropdown_content {
+  display: none;
+  justify-content: center;
+  position: relative;
+  align-items: left;
+  z-index: 1;
+}
+
+#world_dropdown:hover #world_dropdown_content {
+  display: flex; 
+  width:100%;
+  max-width: 980px;
 }

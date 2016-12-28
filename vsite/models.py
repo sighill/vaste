@@ -235,8 +235,7 @@ class PjNote(models.Model):
     uid = models.AutoField(primary_key=True, db_index= True)
     poster = models.ForeignKey(
         PjCharacter, related_name='char_id', blank=True, null=True)
-    pnj = models.ForeignKey(
-        Pnj , related_name='pnj_id', blank=True, null=True)
+    note_target = models.BigIntegerField()
     note = models.TextField(blank = True, null = True)
     created_date = models.DateTimeField(
             default=timezone.now)

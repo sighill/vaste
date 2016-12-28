@@ -12,7 +12,6 @@ for item in creatures_to_transfer:
     # Create new creature
     new_creature = Creature()
     # Fill in the attributes
-    new_creature.uid = randint(1e16,1e17)
     new_creature.name = item.name
     new_creature.img_id = item.img_id
     new_creature.img_src = item.img_src

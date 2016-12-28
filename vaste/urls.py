@@ -20,20 +20,32 @@ from vsite import views
 from vsite.models import Place, Phenomenon, Creature, Pnj, PjCharacter
 
 urlpatterns = [
+    # general urls
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.Home),
-    url(r'^pnj/$', views.PnjIndex, {'view_filter': 'pnj'}),
-    url(r'^pj/$', views.PnjIndex, {'view_filter': 'pj'}),
-    url(r'^pnj/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
-    url(r'^creatures/view/(?P<pnj_uid>\d+)', views.PnjView, name='pnj'),
-    url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
-    url('^', include('django.contrib.auth.urls')),
     url(r'^account/', views.Account, name='account'),
     url(r'^log/', views.Log, name='gamelog'),
+    # game entity indexes
+    url(r'^pnj/$', views.EntityIndex, {'obj_to_display': Pnj}),
+    url(r'^pj/$', views.EntityIndex, {'obj_to_display': PjCharacter}),
+    url(r'^places/$', views.EntityIndex, {'obj_to_display': Place}),
+    url(r'^creatures/$', views.EntityIndex, {'obj_to_display': Creature}),
+    url(r'^pheno/$', views.EntityIndex, {'obj_to_display': Phenomenon}),
+    # game entity specific views
+    url(r'^pnj/view/(?P<obj_pk>\d+)', 
+        views.EntityView, 
+        {'obj_to_display': Pnj}, 
+        name='pnj'),
+    url(r'^creatures/view/(?P<obj_pk>\d+)', 
+        views.EntityView, 
+        {'obj_to_display': Creature}, 
+        name='creature', ),
+    url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
+    url('^', include('django.contrib.auth.urls')),
+    # note mechanisms spcial urls
     url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),
     url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
-    url(r'^place/$', views.GenericIndex, {'obj_to_display': Place}),
-    url(r'^creatures/$', views.GenericIndex, {'obj_to_display': Creature}),
+
 ]
 
 '''

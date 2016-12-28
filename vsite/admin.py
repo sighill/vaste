@@ -8,7 +8,7 @@ class AdminPnj(admin.ModelAdmin):
 admin.site.register(Pnj , AdminPnj)
 
 class AdminPjNote(admin.ModelAdmin):
-    list_display =['uid','poster_id','pnj_id','note']
+    list_display =['uid','poster_id', 'note_target','note']
     ordering = ['uid']
 admin.site.register(PjNote , AdminPjNote)
 

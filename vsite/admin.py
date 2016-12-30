@@ -1,11 +1,7 @@
 from django.contrib import admin
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Jobs, ItemRecipes, Item, Place, Phenomenon, Creature
+from .models import PjNote, HomeItems, GameLog, Jobs, ItemRecipes, Item, GameEntity, Pnj, PjCharacter, Creature, Place, Phenomenon 
 # Register your models here.
 
-class AdminPnj(admin.ModelAdmin):
-    list_display =['uid', 'owner', 'name', 'first_job', 'second_job', 'stuff', 'is_creature', 'is_visible']
-    ordering = ['uid']
-admin.site.register(Pnj , AdminPnj)
 
 class AdminPjNote(admin.ModelAdmin):
     list_display =['uid','poster_id', 'note_target','note']
@@ -17,18 +13,13 @@ class AdminHomeItems(admin.ModelAdmin):
     ordering = ['uid']
 admin.site.register(HomeItems , AdminHomeItems)
 
-class AdminPjCharacter(admin.ModelAdmin):
-    list_display =['uid', 'owner', 'name', 'first_job', 'second_job','stuff']
-    ordering = ['uid']
-admin.site.register(PjCharacter , AdminPjCharacter)
-
 class AdminGameLog(admin.ModelAdmin):
-    list_display =['uid','img_id', 'corpus', 'created_date']
+    list_display =['uid','img_id', 'img_link', 'created_date']
     ordering = ['created_date']
 admin.site.register(GameLog , AdminGameLog)
 
 class AdminJobs(admin.ModelAdmin):
-    list_display =['uid','name', 'job_type', 'job_description']
+    list_display =['uid','name', 'job_description']
     ordering = ['uid']
 admin.site.register(Jobs , AdminJobs)
 
@@ -42,17 +33,32 @@ class AdminItem(admin.ModelAdmin):
     ordering = ['uid']
 admin.site.register(Item , AdminItem)
 
+class AdminGameEntity(admin.ModelAdmin):
+    list_display =['uid','name', 'is_visible', 'more']
+    ordering = ['uid']
+admin.site.register(GameEntity , AdminGameEntity)
+
+class AdminPnj(admin.ModelAdmin):
+    list_display =['uid', 'name', 'first_job', 'second_job']
+    ordering = ['uid']
+admin.site.register(Pnj , AdminPnj)
+
+class AdminPjCharacter(admin.ModelAdmin):
+    list_display =['uid', 'name', 'more']
+    ordering = ['uid']
+admin.site.register(PjCharacter , AdminPjCharacter)
+
+class AdminCreature(admin.ModelAdmin):
+    list_display =['uid', 'name', 'more']
+    ordering = ['uid']
+admin.site.register(Creature , AdminCreature)
+
 class AdminPlace(admin.ModelAdmin):
-    list_display =['gid','name']
-    ordering = ['gid']
+    list_display =['uid', 'name', 'more']
+    ordering = ['uid']
 admin.site.register(Place , AdminPlace)
 
 class AdminPhenomenon(admin.ModelAdmin):
-    list_display =['gid','name']
-    ordering = ['gid']
-admin.site.register(Phenomenon , AdminPhenomenon)
-
-class AdminCreature(admin.ModelAdmin):
-    list_display =['uid','name']
+    list_display =['uid', 'name', 'more']
     ordering = ['uid']
-admin.site.register(Creature , AdminCreature)
+admin.site.register(Phenomenon , AdminPhenomenon)

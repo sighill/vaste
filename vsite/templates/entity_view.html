@@ -9,7 +9,7 @@
 
     <div class="block">
         <h2>{{obj.name}}</h2>
-        <p>{{obj.description | linebreaksbr}}</p>
+        <p>{{obj.description | safe | linebreaksbr}}</p>
         <h2>Possessions visibles</h2>
         <ul>
         {% for item in obj.stuff %} 

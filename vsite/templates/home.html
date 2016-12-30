@@ -29,8 +29,10 @@
                 </div>
 
                 <div class="block">
-                    <h2>{{item.name}}</h2>
-                    <p>{{item.description}}</p>
+                    <a href="{{item.link}}">
+                        <h2>{{item.name}}</h2>
+                        <p>{{item.description}}</p>
+                    </a>
                 </div>
             </div> <!-- end container -->
             {% endfor %}

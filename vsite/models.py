@@ -9,11 +9,8 @@ class ItemRecipes(models.Model):
     '''
         Item blueprints for reference along with the instances.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
+    # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     item_type = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
@@ -32,7 +29,7 @@ class ItemRecipes(models.Model):
     rarity = models.PositiveIntegerField(null = True, blank = True)
     description = models.CharField(max_length = 2048, null = True, blank = True,)
 
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
@@ -41,13 +38,11 @@ class ItemRecipes(models.Model):
 #####################################################################
 class HomeItems(models.Model):
     '''
-        Generates navbar items.
+        Generates home link items to the different parts of the
+        website.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
+    # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255, blank=True, null=True)
     img_id = models.CharField(max_length = 255, blank=True, null=True)
@@ -55,7 +50,7 @@ class HomeItems(models.Model):
     description = models.TextField(blank=True, null=True)
     link = models.CharField(max_length = 255, blank=True, null=True)
 
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
@@ -64,16 +59,10 @@ class Jobs(models.Model):
     '''
         Reference model for all the jobs in the game.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-    job_type_choices = (
-        ('Métier principal', 'Métier principal'),
-        ('Métier secondaire', 'Métier secondaire'))
     # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255)
-    job_type = models.CharField(max_length = 255, choices= job_type_choices)
     job_description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 2500 , blank = True, null = True)
 
@@ -86,39 +75,48 @@ class Skills(models.Model):
     '''
         Reference model for all the jobs in the game.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
- 
     # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255)
-    related_job = models.ForeignKey(Jobs , related_name='related_job', blank=True, null=True)
+    related_job = models.ForeignKey(
+        Jobs , related_name='related_job', blank=True, null=True)
     job_description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 2500 , blank = True, null = True)
 
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
+#####################################################################
+class GameEntity(models.Model):
+    '''
+        Abstract class to federate all entities into a single table,
+        making easy any FK relation.
+    '''
+
+    # Attributes
+    uid = models.BigAutoField(primary_key = True , db_index = True)
+    name = models.CharField(max_length = 255, blank=True, null=True)
+    is_visible = models.BooleanField(default= True)
+    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    description = models.TextField(blank=True, null=True)
+    more = models.CharField(max_length = 2500 , blank = True, null = True)
+
+    # Methods
+    def __str__(self):
+        return str(self.name)
 
 #####################################################################
-class PjCharacter(models.Model):
+class PjCharacter(GameEntity):
     '''
         Permet de générer le contenu des vues du site de manière
         pratique
     '''
-    # TODO 
-
-    # Variables pour les choix pré-remplis
-
-    # Attributs
-    uid = models.AutoField(primary_key = True , db_index = True)
+    
+    # Attributes
     owner = models.ForeignKey(User , related_name='pj_owner')
-    name = models.CharField(max_length = 255, blank=True, null=True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
     first_job = models.ForeignKey(Jobs, related_name='pj_fjob', blank=True, null=True)
     second_job = models.ForeignKey(Jobs, related_name='pj_sjob', blank=True, null=True)
     puissance = models.PositiveIntegerField()
@@ -131,37 +129,19 @@ class PjCharacter(models.Model):
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
     stuff = models.CharField(blank = True, max_length = 1200)
-    more = models.CharField(max_length = 2500 , blank = True, null = True)
     
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
 #####################################################################
-class Pnj(models.Model):
+class Pnj(GameEntity):
     '''
-        Les PNJ sont des personnages figurants dans la 
-        partie de jeu de rôles.
-
-        Les attributes sont des intégrales séparées de virgules
-            Il y en a toujours 9
-        Les compétences sont des couples de valeur (nom:valeur)
-            Séparés par une virgule
-        Les stuff sont des strings séparés par une virgule
+        PNJ is french for NPC, non player characters. This is for 
+        thinking creatures, not beasts. They are friends or foes.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
-    uid = models.AutoField(primary_key = True , db_index = True)
-    owner = models.ForeignKey(User , related_name='pnj_owner', blank=True, null=True)
-    is_creature = models.BooleanField(default= False)
-    is_visible = models.BooleanField(default= False)
-    name = models.CharField(max_length = 255, blank=True, null=True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    # Attributes
     first_job = models.ForeignKey(Jobs, related_name='pnj_fjob', blank=True, null=True)
     second_job = models.ForeignKey(Jobs, related_name='pnj_sjob', blank=True, null=True)
     puissance = models.PositiveIntegerField()
@@ -174,35 +154,19 @@ class Pnj(models.Model):
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
     stuff = models.CharField(blank = True, max_length = 1200)
-    more = models.CharField(max_length = 2500 , blank = True, null = True)
     
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
 #####################################################################
-class Creature(models.Model):
+class Creature(GameEntity):
     '''
-        Les créatures sont des monstres dans la 
-        partie de jeu de rôles.
-
-        Les attributes sont des intégrales séparées de virgules
-            Il y en a toujours 9
-        Les compétences sont des couples de valeur (nom:valeur)
-            Séparés par une virgule
-        Les stuff sont des strings séparés par une virgule
+        Creatures are non thinking NPC (beasts, monsters)
+        Some can be tamed as familiars.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
-    uid = models.AutoField(primary_key = True , db_index = True)
-    is_visible = models.BooleanField(default= False)
-    name = models.CharField(max_length = 255, blank=True, null=True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
+    # Attributes
     puissance = models.PositiveIntegerField()
     vigueur = models.PositiveIntegerField()
     dexterite = models.PositiveIntegerField()
@@ -213,35 +177,29 @@ class Creature(models.Model):
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
     stuff = models.CharField(blank = True, max_length = 1200)
-    more = models.CharField(max_length = 2500 , blank = True, null = True)
     
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.name)
 
 #####################################################################
 class PjNote(models.Model):
     '''
-        Les utilisateurs du site peuvent poster des notes de jeu 
-        sur un PNJ. Ils peuvent consulter cette note de jeu sur 
-        le profil du pnj et aussisur un tableau de bord sur une vue 
-        à part.
+        Personal or public notes made on game entities.
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-
-    # Attributs
+    # Attributes
     uid = models.AutoField(primary_key=True, db_index= True)
     poster = models.ForeignKey(
         PjCharacter, related_name='char_id', blank=True, null=True)
-    note_target = models.BigIntegerField()
+    note_target = models.ForeignKey(
+        GameEntity, related_name='entity_id')
     note = models.TextField(blank = True, null = True)
     created_date = models.DateTimeField(
             default=timezone.now)
     is_public = models.BooleanField(default= False)
 
-    # Methodes
+    # Methods
     def __str__(self):
         return str(self.uid)
 
@@ -297,14 +255,13 @@ class Item(models.Model):
 
 
 #####################################################################
-class Place(models.Model):
+class Place(GameEntity):
     '''
         Data for the several places of Vaste. These are supposed to
         be located in a GIS sytem later, hence the GID
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
+    # Variables pour field option choices
     place_category_choices = (
         ('Havre', 'Havre'),
         ('Ruine', 'Ruine'),
@@ -313,17 +270,10 @@ class Place(models.Model):
         ('Abri', 'Abri'),
     )
     
-    # Attributs
-    gid = models.AutoField(primary_key= True, db_index = True)
-    name = models.CharField(max_length = 255)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    # Attributes
     category = models.CharField(
         max_length = 255, 
         choices = place_category_choices)
-    is_visible = models.BooleanField(default= False)
-    description = models.TextField(blank=True, null=True)
-    more = models.CharField(max_length = 255)
     created_date = models.DateTimeField(
             default=timezone.now)
     modified_date = models.DateTimeField(
@@ -334,24 +284,15 @@ class Place(models.Model):
     # Methods
     def __str__(self):
         return str(self.name)
+
 #####################################################################
-class Phenomenon(models.Model):
+class Phenomenon(GameEntity):
     '''
         Data for the several places of Vaste. These are supposed to
         be located in a GIS sytem later, hence the GID
     '''
-    # TODO 
 
-    # Variables pour les choix pré-remplis
-    
-    # Attributs
-    gid = models.AutoField(primary_key= True, db_index = True)
-    name = models.CharField(max_length = 255)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
-    is_visible = models.BooleanField(default= False)
-    description = models.TextField(blank=True, null=True)
-    more = models.CharField(max_length = 255)
+    # Attributes
     created_date = models.DateTimeField(
             default=timezone.now)
     modified_date = models.DateTimeField(

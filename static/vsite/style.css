@@ -10,6 +10,10 @@
   }
 }
 
+html{
+  background: url('/static/vsite/mobile_bg.jpg');
+}
+
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
 @media(max-resolution: 1dppx){
   :root {
@@ -33,6 +37,16 @@
   max-width: 120px;
 }
 
+html { 
+  background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-color: #0e1316; /*last used : 0e1316*/ 
+  overflow-y: scroll;
+}
+
 /* NATIVE CSS -----------------------------------------------------*/
 * {
     color : white;
@@ -48,15 +62,7 @@ a:hover{
   border-radius: 10px;
 }
 
-html { 
-  background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-color: #0e1316; /*last used : 0e1316*/ 
-  overflow-y: scroll;
-}
+
 
 h1, h4{
   text-align: center;

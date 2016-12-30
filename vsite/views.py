@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item, Creature, Place, Phenomenon
+from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item, Creature, Place, Phenomenon, GameEntity
 from .forms import PjNoteForm
 
 #####################################################################
@@ -34,7 +34,7 @@ def PjView(request, character_uid):
 #####################################################################
 def Account(request):
     if request.user.is_authenticated():
-        pj_note_qs = PjNote.objects.filter(poster_id = request.user.id).order_by('pnj_id')
+        pj_note_qs = PjNote.objects.filter(poster_id = request.user.id).order_by('note_target')
         pnj_list = Pnj.objects.all()
         try:
             pj_note_content = []
@@ -230,6 +230,12 @@ def EntityView(request, obj_to_display, obj_pk):
                     )
                 )
 
+    # Different templates depending on the content
+    if obj_to_display in [Place, Phenomenon]:
+        template_file = 'place_view.html'
+    else:
+        template_file = 'entity_view.html'
+
     # Filling the context passed to the template
     context = {
         # Generic data
@@ -241,7 +247,7 @@ def EntityView(request, obj_to_display, obj_pk):
         'public_notes': public_notes_formatted,
         'form': PjNoteForm(),
         }
-    template = loader.get_template('entity_view.html')
+    template = loader.get_template(template_file)
 
     if request.method == 'GET': 
         return HttpResponse(template.render(context , request ))
@@ -251,7 +257,7 @@ def EntityView(request, obj_to_display, obj_pk):
         if form.is_valid():
             note_to_create = form.cleaned_data['note']
             poster_id = PjCharacter.objects.get(owner_id= request.user.id).uid
-            note_target = obj_pk
+            note_target = GameEntity.objects.get(pk= int(obj_pk))
             post = PjNote.objects.create(
                 poster_id= poster_id , note_target= note_target , note= note_to_create)
-        return HttpResponseRedirect(note_target)
+        return HttpResponseRedirect(note_target.uid)

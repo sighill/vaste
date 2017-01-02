@@ -128,7 +128,6 @@ class PjCharacter(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
-    stuff = models.CharField(blank = True, max_length = 1200)
     
     # Methods
     def __str__(self):
@@ -153,7 +152,6 @@ class Pnj(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
-    stuff = models.CharField(blank = True, max_length = 1200)
     
     # Methods
     def __str__(self):
@@ -176,7 +174,6 @@ class Creature(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
-    stuff = models.CharField(blank = True, max_length = 1200)
     
     # Methods
     def __str__(self):
@@ -302,6 +299,30 @@ class Phenomenon(GameEntity):
     # geometry
     geom = gismodels.PolygonField(blank=True, null=True)
 
+    # Methods
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
+class IgCreature(GameEntity):
+    '''
+        Active and living creatures in the world. The Creature model
+        acts like a blueprint for these entities that are unique.
+    '''
+
+    # Attributes
+    location= models.ForeignKey(
+        Place , related_name = 'Place_uid')
+    puissance = models.PositiveIntegerField()
+    vigueur = models.PositiveIntegerField()
+    dexterite = models.PositiveIntegerField()
+    perception = models.PositiveIntegerField()
+    charisme = models.PositiveIntegerField()
+    astuce = models.PositiveIntegerField()
+    volonte = models.PositiveIntegerField()
+    intelligence = models.PositiveIntegerField()
+    essence = models.PositiveIntegerField()
+    
     # Methods
     def __str__(self):
         return str(self.name)

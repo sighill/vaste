@@ -6,7 +6,6 @@ from .forms import PjNoteForm
 #####################################################################
 def Home(request):
     context = {
-        'style': 'vsite/style.css',
         'home_items': HomeItems.objects.filter().exclude(name='Accueil').order_by('order_position'),
     }
     template = loader.get_template('home.html')
@@ -15,13 +14,10 @@ def Home(request):
 #####################################################################
 def PjView(request, character_uid):
     character = PjCharacter.objects.get(uid= character_uid)
-    char_stuff = [item for item in Item.objects.filter(owner_id= character_uid)]
-
-    # Object attributes transformation for better display
-    character.stuff = character.stuff.split(',')
+    char_stuff = Item.objects.filter(
+        owner_id= character_uid, is_visible= True)
 
     context = {
-        'style': 'vsite/style.css',
         'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'character': character,
         'char_stuff': char_stuff,
@@ -34,12 +30,26 @@ def PjView(request, character_uid):
 #####################################################################
 def Account(request):
     if request.user.is_authenticated():
-        pj_note_qs = PjNote.objects.filter(poster_id = request.user.id).order_by('note_target')
-        pnj_list = Pnj.objects.all()
+        # get PjCharacter of current user
+        pj = PjCharacter.objects.get(owner_id= request.user.id)
+
+        # get his notes
+        pj_note_qs = PjNote.objects.filter(
+            poster_id = pj).order_by('note_target')
+
+        # get his stuff
+        char_stuff = [item for item in Item.objects.filter(
+            owner_id= pj.uid)]
+        
         try:
             pj_note_content = []
             for entry in pj_note_qs:
-                formatted_entry = '({}-{}-{}) à propos de {} : \n« {} »'.format(entry.created_date.day , entry.created_date.month , entry.created_date.year, entry.pnj_id , entry.note)
+                formatted_entry = '({}-{}-{}) à propos de {} : \n« {} »'.format(
+                    entry.created_date.day, 
+                    entry.created_date.month, 
+                    entry.created_date.year, 
+                    entry.note_target, 
+                    entry.note)
                 pj_note_content.append(formatted_entry)
             pj_note_content[0] # Retourne IndexError si vide
         except IndexError:
@@ -47,13 +57,13 @@ def Account(request):
 
         # Character preparation for display
         character= PjCharacter.objects.get(owner_id=request.user.id)
-        character.stuff = character.stuff.split(',')
+        char_stuff = [item for item in Item.objects.filter(
+        owner_id= request.user.id, is_visible= True)]
 
         context = {
-        'style': 'vsite/style.css',
         'pj_note_content': pj_note_content,
-        'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'character': character,
+        'char_stuff': char_stuff,
         }
         
         template = loader.get_template('account.html')
@@ -65,7 +75,6 @@ def Account(request):
 def Log(request):
 
     context = {
-        'style': 'vsite/style.css',
         'navbar_items': HomeItems.objects.all().order_by('order_position'),
         'log': GameLog.objects.all().order_by('order_position'),
     }
@@ -138,7 +147,6 @@ def EntityIndex(request, obj_to_display):
         content = obj_to_display.objects.all()
 
     context = {
-        'style': 'vsite/style.css',
         'content': content,
     }
     template = loader.get_template('generic_index.html')
@@ -155,9 +163,17 @@ def EntityView(request, obj_to_display, obj_pk):
     # Get the object instance the user wants to display
     obj = obj_to_display.objects.get(pk= obj_pk)
 
-    # If it's an NPC, get his stuff
-    if obj_to_display in [Pnj, Creature]:
-        obj.stuff = obj.stuff.split(',')
+    # Get his stuff and set title depending on the object
+    stuff_title_dict= {
+        Creature: 'Matériaux récupérables :',
+        Place: 'Ressources possibles',
+        Pnj: 'Possessions visibles',
+        Phenomenon: 'Fuse extractible',
+    }
+    obj_stuff = Item.objects.filter(
+        owner_id= obj_pk, is_visible= True)
+    if not obj_stuff:
+        obj_stuff= ['Rien apparemment...']
     
     # load notes if the user is authenticated
     if request.user.is_authenticated():
@@ -230,19 +246,13 @@ def EntityView(request, obj_to_display, obj_pk):
                     )
                 )
 
-    # Different templates depending on the content
-    if obj_to_display in [Place, Phenomenon]:
-        template_file = 'place_view.html'
-    else:
-        template_file = 'entity_view.html'
+    template_file = 'entity_view.html'
 
     # Filling the context passed to the template
     context = {
-        # Generic data
-        'style': 'vsite/style.css',
-
-        # Specific data
         'obj': obj,
+        'stuff_title': stuff_title_dict[obj_to_display],
+        'obj_stuff': obj_stuff,
         'private_notes': private_notes_formatted,
         'public_notes': public_notes_formatted,
         'form': PjNoteForm(),

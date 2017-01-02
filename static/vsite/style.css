@@ -8,10 +8,10 @@
     width: 100%;
     flex-flow: column;
   }
-}
 
-html{
-  background: url('/static/vsite/mobile_bg.jpg');
+  html{
+    background: url('/static/vsite/mobile_bg.png');
+  }
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
@@ -20,31 +20,32 @@ html{
     font-size: 14px; 
   }
 
-.container{
-  flex: row;
-  justify-content: space-between;
-  max-width: 1200px;
-  max-height: 1200px;
-}
+  .container{
+    flex: row;
+    justify-content: space-between;
+    max-width: 1200px;
+    max-height: 1200px;
+  }
 
-.large_left_block{
-  min-width: 220px;
-  max-width: 220px;
-}
+  .large_left_block{
+    min-width: 220px;
+    max-width: 220px;
+  }
 
-.medium_left_block{
-  min-width: 120px;
-  max-width: 120px;
-}
+  .medium_left_block{
+    min-width: 120px;
+    max-width: 120px;
+  }
 
-html { 
-  background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  background-color: #0e1316; /*last used : 0e1316*/ 
-  overflow-y: scroll;
+  html { 
+    background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-color: #0e1316;
+    overflow-y: scroll;
+  }
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -59,10 +60,8 @@ a{
 
 a:hover{
   background-color: rgba(255, 255, 255, 0.5); 
-  border-radius: 10px;
+  border-radius: 5px;
 }
-
-
 
 h1, h4{
   text-align: center;
@@ -77,7 +76,7 @@ h1, h2, h3, h4{
 img{
   max-width: 90%;
   height: auto;
-  border-radius: 10px;
+  border-radius: 5px;
 } 
 
 p {
@@ -111,7 +110,7 @@ input{
 .block { 
   display: flex;
   flex: 1 1 auto;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 5px;
   flex-flow: column;
   background-color: rgba(78, 88, 90, 0.6);  
@@ -121,7 +120,7 @@ input{
 .medium_left_block { 
   display: flex;
   flex: 0 0 auto;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 5px;
   flex-flow: column;
   align-items: stretch;
@@ -131,13 +130,22 @@ input{
 .large_left_block { 
   display: flex;
   flex: 0 0 auto;
-  border-radius: 10px;
+  border-radius: 5px;
   margin: 5px;
   flex-flow: column;
   align-items: stretch;
   background-color: rgba(78, 88, 90, 0.6);
 }
 
+.xlarge_img{
+  max-width: 900px;
+  max-height: 700px;
+  display: block;
+  margin: 10px auto;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+}
 
 .large_img {
   display: block;
@@ -179,7 +187,7 @@ input{
 
 #char_dropdown_content {
   display: none;
-  justify-content: center;
+  justify-content: space-around;
   position: relative;
   align-items: left;
   z-index: 1;
@@ -196,7 +204,7 @@ input{
 
 #world_dropdown_content {
   display: none;
-  justify-content: center;
+  justify-content: space-around;
   position: relative;
   align-items: left;
   z-index: 1;

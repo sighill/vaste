@@ -11,7 +11,7 @@
         <p>{{character.description | linebreaksbr}}</p>
         <h2>Possessions visibles</h2>
         <ul>
-        {% for item in character.stuff %} 
+        {% for item in char_stuff %} 
         <li>{{item}}</li>
         {% endfor %}
         </ul>

@@ -1,0 +1,83 @@
+uid;item_type;name;ia_type;ia;iaq;ib_type;ib;ibq;ic_type;ic;icq;description
+101;Morceaux de ;bois;;;;;;;;;;Petites branches et écorce.
+102;Morceaux de ;plastique;;;;;;;;;;Morceaux de plastique à fusionner.
+103;Morceaux de ;métal;;;;;;;;;;Tiges et copeaux de métal.
+104;Morceaux de ;minéral;;;;;;;;;;Argile, pierre et cristaux.
+105;Morceaux de ;fibres;;;;;;;;;;Longues fibres végétales ou poils.
+106;Morceaux de ;cuir;;;;;;;;;;Bouts de peau tannée au feu.
+107;Morceaux de ;os;;;;;;;;;;Grands et petits os extraits de créatures.
+201;Base;élémentaire;bois;101;3;;;;;;;Une base simple pour faire un manche.
+202;Base;souple;fibres;105;3;;;;;;;Une sangle solide.
+203;Base;allongée;bois;101;5;fibres;105;1;;;;Une base rallongée et renforcée.
+301;Embout de;lame longue;bois;101;10;;;;;;;Une lame longue comme le bras.
+302;Embout de;lame longue;métal;103;10;;;;;;;Une lame longue comme le bras.
+303;Embout de;lame longue;os;107;10;;;;;;;Une lame longue comme le bras.
+304;Embout de;lame courte;plastique;102;3;;;;;;;Une lame longue comme la main.
+305;Embout de;lame courte;métal;103;3;;;;;;;Une lame longue comme la main.
+306;Embout de;lame courte;minéral;104;3;;;;;;;Une lame longue comme la main.
+307;Embout de;lame courte;os;107;3;;;;;;;Une lame longue comme la main.
+308;Embout de;hache;bois;101;6;;;;;;;Un semi-disque acéré.
+309;Embout de;hache;métal;103;6;;;;;;;Un semi-disque acéré.
+310;Embout de;hache;os;107;6;;;;;;;Un semi-disque acéré.
+311;Embout de;lest;bois;101;5;;;;;;;Le plus gros volume possible qui tient en un seul morceau.
+312;Embout de;lest;métal;103;5;;;;;;;Le plus gros volume possible qui tient en un seul morceau.
+313;Embout de;lest;minéral;104;5;;;;;;;Le plus gros volume possible qui tient en un seul morceau.
+314;Embout de;pinces;métal;103;2;;;;;;;Une pièce de métal articulée.
+315;Embout de;corde et encoche;métal;103;10;;;;;;;Permet d’encocher des flèches.
+316;Embout de;corde et encoche;fibres;105;10;;;;;;;Permet d’encocher des flèches.
+317;Embout de;cordelette et poche;métal;103;5;;;;;;;Permet de loger des billes.
+318;Embout de;cordelette et poche;cuir;106;5;;;;;;;Permet de loger des billes.
+319;Embout de;plaque protectrice;bois;101;10;;;;;;;Pour se protéger des coups ou des intempéries.
+320;Embout de;plaque protectrice;plastique;102;10;;;;;;;Pour se protéger des coups ou des intempéries.
+321;Embout de;plaque protectrice;métal;103;10;;;;;;;Pour se protéger des coups ou des intempéries.
+401;Contenant;sac bandoulière;fibres;105;10;;;;;;;Contenant permettant de loger de petits objets et outils.
+402;Contenant;sac bandoulière;cuir;106;10;;;;;;;Contenant permettant de loger de petits objets et outils.
+403;Contenant;sac à dos;fibres;105;10;;;;;;;Contenant permettant de loger de petits objets et outils.
+404;Contenant;sac à dos;cuir;106;10;;;;;;;Contenant permettant de loger de petits objets et outils.
+405;Contenant;fiole;bois;101;5;;;;;;;Petit contenant pour récupérer des substances.
+406;Contenant;fiole;plastique;102;5;;;;;;;Petit contenant pour récupérer des substances.
+407;Contenant;fiole;cuir;106;5;;;;;;;Petit contenant pour récupérer des substances.
+408;Contenant;jarre;bois;101;10;;;;;;;Grand contenant pour récupérer des substances.
+409;Contenant;jarre;plastique;102;10;;;;;;;Grand contenant pour récupérer des substances.
+410;Contenant;jarre;cuir;106;10;;;;;;;Grand contenant pour récupérer des substances.
+501;Outil;couteau;plastique;304;1;bois;201;1;;;;Petite lame utile pour découper ou comme ultime moyen de défense.
+502;Outil;couteau;métal;305;1;bois;201;1;;;;Petite lame utile pour découper ou comme ultime moyen de défense.
+503;Outil;couteau;minéral;306;1;bois;201;1;;;;Petite lame utile pour découper ou comme ultime moyen de défense.
+504;Outil;couteau;os;307;1;bois;201;1;;;;Petite lame utile pour découper ou comme ultime moyen de défense.
+505;Outil;maillet;bois;310;1;bois;201;1;;;;Petit marteau pour enfoncer des objets.
+508;Outil;pinces;métal;313;1;bois;201;1;;;;Outil pour déloger des objets.
+509;Outil;mètre de corde;fibres;105;20;;;;;;;Autant d’utilités que votre imagination le permet.
+510;Outil;mètre de filin;métal;105;20;;;;;;;Autant d’utilités que votre imagination le permet.
+601;Arme;épée;bois;301;1;bois;201;1;fibres;105;1;
+602;Arme;épée;métal;302;1;bois;201;1;fibres;105;1;
+603;Arme;épée;os;303;1;bois;201;1;fibres;105;1;
+604;Arme;hache;bois;308;1;bois;201;1;fibres;105;1;
+605;Arme;hache;métal;309;1;bois;201;1;fibres;105;1;
+606;Arme;hache;os;310;1;bois;201;1;fibres;105;1;
+607;Arme;masse;bois;311;1;bois;201;1;fibres;105;1;
+608;Arme;masse;métal;312;1;bois;201;1;fibres;105;1;
+609;Arme;masse;minéral;313;1;bois;201;1;fibres;105;1;
+610;Arme;lance;métal;305;1;bois;203;1;fibres;105;1;
+611;Arme;lance;minéral;306;1;bois;203;1;fibres;105;1;
+612;Arme;lance;os;307;1;bois;203;1;fibres;105;1;
+613;Arme;bâton lesté;bois;311;1;bois;203;1;fibres;105;1;
+614;Arme;bâton lesté;métal;312;1;bois;203;1;fibres;105;1;
+615;Arme;bâton lesté;minéral;313;1;bois;203;1;fibres;105;1;
+616;Arme;arc;métal;315;1;bois;203;1;fibres;105;1;
+617;Arme;arc;fibres;316;1;bois;203;1;fibres;105;1;
+618;Arme;fronde;métal;317;1;fibres;202;1;fibres;105;1;
+619;Arme;fronde;cuir;318;1;fibres;202;1;fibres;105;1;
+701;Munition;bille;métal;103;1;;;;;;;
+702;Munition;bille;minéral;103;1;;;;;;;
+703;Munition;flèche;bois;101;2;;;;;;;
+704;Munition;flèche;plastique;102;1;bois;101;1;;;;
+705;Munition;flèche;métal;103;1;bois;101;1;;;;
+801;Survie;couverture;cuir;106;10;fibres;105;5;;;;
+802;Survie;piège simple;bois;101;4;;;;;;;
+803;Survie;piège élaboré;bois;101;10;fibres;105;3;;;;
+901;Habillage;Haillons;fibres;105;5;;;;;;;
+902;Habillage;habits simples;fibres;105;20;;;;;;;
+903;Habillage;habits solides;cuir;106;10;fibres;105;10;;;;
+904;Habillage;cape simple;fibres;105;10;;;;;;;
+905;Habillage;cape solide;cuir;106;8;fibres;105;8;;;;
+906;Habillage;paire de bottes;cuir;106;4;fibres;105;4;;;;

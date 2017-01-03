@@ -22,9 +22,11 @@ def Account(request):
             poster_id = pj).order_by('note_target')
 
         # get his stuff
-        char_stuff = [item for item in Item.objects.filter(
-            owner_id= pj.uid)]
-        
+        char_stuff_visible = [item for item in Item.objects.filter(
+            owner= pj, is_visible= True)]
+        char_stuff_not_visible = [item for item in Item.objects.filter(
+            owner= pj, is_visible= False)]
+
         try:
             pj_note_content = []
             for entry in pj_note_qs:
@@ -47,7 +49,8 @@ def Account(request):
         context = {
         'pj_note_content': pj_note_content,
         'character': character,
-        'char_stuff': char_stuff,
+        'char_stuff_visible': char_stuff_visible,
+        'char_stuff_not_visible': char_stuff_not_visible
         }
         
         template = loader.get_template('account.html')
@@ -156,7 +159,7 @@ def EntityView(request, obj_to_display, obj_pk):
         PjCharacter: 'Possessions visibles',
     }
     obj_stuff = Item.objects.filter(
-        owner_id= obj_pk, is_visible= True)
+        owner_id= obj_pk, is_visible= True).order_by('name')
     if not obj_stuff:
         obj_stuff= ['Rien apparemment...']
     

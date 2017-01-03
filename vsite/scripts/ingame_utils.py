@@ -19,13 +19,29 @@ def new_item():
     try:
         # Initiate new item and populate attributes
         item_to_create= Item()
-        item_to_create.name= input('Nom de l\'item: ')
+        item_recipe= ItemRecipes.objects.get(pk= input('Recipe: '))
+        item_to_create.recipe= item_recipe
+        item_to_create.name= str(
+            input('Nom de l\'item (defaut: {}): '.format(
+                item_recipe.__str__())) or item_recipe.__str__()
+            )
         item_to_create.owner= GameEntity.objects.get(
-            name= input('Destinataire: '))
-        item_to_create.ia_type= input('ia: ')
-        item_to_create.ib_type= input('ib: ')
-        item_to_create.ic_type= input('ic: ')
-        item_to_create.description= input('Description: ')
+            name= input('Destinataire: ')
+            )
+        item_to_create.ia_type= item_recipe.ia_type
+        item_to_create.ib_type= item_recipe.ib_type
+        item_to_create.ic_type= item_recipe.ic_type
+        item_to_create.quantity= input('Quantity: ')
+        item_to_create.description= str(
+            input('Description: (defaut: {}): '.format(
+                item_recipe.description)) or item_recipe.description
+            )
+
+        item_is_visible= input('Visible (y/n): ')
+        if item_is_visible == 'y':
+            item_to_create.is_visible= True
+        else:
+            item_to_create.is_visible= False
     # Catch exceptions
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:

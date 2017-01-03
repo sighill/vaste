@@ -13,7 +13,7 @@
         <h2>{{stuff_title}}</h2>
             <ul>
                 {% for item in obj_stuff %} 
-                <li>{{item}}</li>
+                <li>({{item.quantity}}) {{item.name}}</li>
                 {% endfor %}
             </ul>
 

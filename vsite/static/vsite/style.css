@@ -139,7 +139,7 @@ input{
 
 .xlarge_img{
   max-width: 900px;
-  max-height: 700px;
+  max-height: 500px;
   display: block;
   margin: 10px auto;
   border-width: 2px;

@@ -11,27 +11,34 @@ class ItemRecipes(models.Model):
     '''
 
     # Attributes
-    uid = models.AutoField(primary_key = True , db_index = True)
+    uid = models.AutoField(
+        primary_key = True , db_index = True)
     item_type = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
-    ia = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_a')
-    iaq = models.PositiveIntegerField(null = True, blank = True)
-    ib = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_b')
-    ibq = models.PositiveIntegerField(null = True, blank = True)
-    ic = models.ForeignKey('self', null = True, blank = True, related_name = 'self_ing_c')
-    icq = models.PositiveIntegerField(null = True, blank = True)
-    wood = models.NullBooleanField(blank = True, default = False)
-    plastic = models.NullBooleanField(blank = True, default = False)
-    metal = models.NullBooleanField(blank = True, default = False)
-    rock = models.NullBooleanField(blank = True, default = False)
-    fiber = models.NullBooleanField(blank = True, default = False)
-    leather = models.NullBooleanField(blank = True, default = False)
-    rarity = models.PositiveIntegerField(null = True, blank = True)
-    description = models.CharField(max_length = 2048, null = True, blank = True,)
+    ia_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ia = models.CharField(
+        max_length = 255, null = True, blank = True)
+    iaq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True,)
+    ib_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ib = models.CharField(
+        max_length = 255, null = True, blank = True)
+    ibq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True,)
+    ic_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ic = models.CharField(
+        max_length = 255, null = True, blank = True)
+    icq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True)
+    description = models.CharField(
+        max_length = 2048, null = True, blank = True)
 
     # Methods
     def __str__(self):
-        return str(self.name)
+        return str('{}: {} en {}'.format(self.item_type, self.name, self.ia_type))
 
 
 

@@ -48,7 +48,11 @@ urlpatterns = [
         views.EntityView, 
         {'obj_to_display': Phenomenon}, 
         name='phenomenon', ),
-    url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
+    url(r'^pj/view/(?P<obj_pk>\d+)', 
+        views.EntityView, 
+        {'obj_to_display': PjCharacter}, 
+        name='PjCharacter', ),
+    # url(r'^pj/view/(?P<character_uid>\d+)', views.PjView, name='pj'),
     url('^', include('django.contrib.auth.urls')),
     # note mechanisms spcial urls
     url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),

@@ -12,22 +12,6 @@ def Home(request):
     return HttpResponse(template.render(context, request))
 
 #####################################################################
-def PjView(request, character_uid):
-    character = PjCharacter.objects.get(uid= character_uid)
-    char_stuff = Item.objects.filter(
-        owner_id= character_uid, is_visible= True)
-
-    context = {
-        'navbar_items': HomeItems.objects.all().order_by('order_position'),
-        'character': character,
-        'char_stuff': char_stuff,
-        }
-    template = loader.get_template('pj_view.html')
-
-    return HttpResponse(template.render(context , request ))
-
-
-#####################################################################
 def Account(request):
     if request.user.is_authenticated():
         # get PjCharacter of current user
@@ -169,6 +153,7 @@ def EntityView(request, obj_to_display, obj_pk):
         Place: 'Ressources possibles',
         Pnj: 'Possessions visibles',
         Phenomenon: 'Fuse extractible',
+        PjCharacter: 'Possessions visibles',
     }
     obj_stuff = Item.objects.filter(
         owner_id= obj_pk, is_visible= True)
@@ -246,8 +231,6 @@ def EntityView(request, obj_to_display, obj_pk):
                     )
                 )
 
-    template_file = 'entity_view.html'
-
     # Filling the context passed to the template
     context = {
         'obj': obj,
@@ -257,7 +240,7 @@ def EntityView(request, obj_to_display, obj_pk):
         'public_notes': public_notes_formatted,
         'form': PjNoteForm(),
         }
-    template = loader.get_template(template_file)
+    template = loader.get_template('entity_view.html')
 
     if request.method == 'GET': 
         return HttpResponse(template.render(context , request ))

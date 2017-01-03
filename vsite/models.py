@@ -241,6 +241,7 @@ class Item(models.Model):
     owner = models.ForeignKey(
         GameEntity , related_name = 'entity_uid', blank=True, null=True)
     is_visible = models.BooleanField(default= True)
+    quantity = models.PositiveIntegerField(default= 1)
     ia_type = models.CharField(max_length = 100, null = True, blank = True)
     ib_type = models.CharField(max_length = 100, null = True, blank = True)
     ic_type = models.CharField(max_length = 100, null = True, blank = True)

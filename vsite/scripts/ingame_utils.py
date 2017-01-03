@@ -2,13 +2,13 @@
 '''
 Scripts meant to be used after being imported in manage.py's shell.
 Quick import command :
-from vsite.ingame_utils import *
+from vsite.scripts.ingame_utils import *
 
 '''
 from vsite.models import *
 from django.core.exceptions import *
 import pprint
-import copy
+from copy import deepcopy
 
 #####################################################################
 def new_item():
@@ -71,7 +71,38 @@ def del_item(owner_name):
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
     # end function
-    return True
+    return func_state
+
+#####################################################################
+def copy_item():
+    '''
+        Copies an entity's item manually.
+    '''
+    item_list= ['{}\t| {}\t\t|\t{}'.format(i.uid, i.owner, i.name) for i in Item.objects.all()]
+    for i in item_list:
+        print(i)
+    try:
+        # ask for which item to copy
+        item_to_copy= Item.objects.get(pk= 
+            input('uid de l\'objet à copier: '))
+        give_item_to= input('Nouveau possesseur: ')
+        # ask for validation
+        validation= input('Valider ? y/n : ')
+        if validation in ['Y','y']:
+            item_copied= item_to_copy
+            item_copied.uid= None
+            item_copied.owner= GameEntity.objects.get(name= give_item_to)
+            item_copied.save()
+            func_state= 'Item copié.'
+        else:
+            func_state= 'Abandon.'
+            pass
+    # raise exceptions
+    except (ValueError, TypeError, ObjectDoesNotExist,
+        PermissionDenied, FieldError, ValidationError) as e:
+        raise e
+    # end function
+    return func_state
 
 #####################################################################
 def loot():
@@ -216,10 +247,16 @@ def show_grp(entity_type):
     '''
         Show a type of game entities
     '''
-    entity_list= ['{} - {}'.format(i.uid, i.name) for i in entity_type.objects.all()]
-    for i in entity_list:
-        print(i)
+    try:
+        entity_list= ['{}\t| {}\t| {}\t| {}'.format(i.uid, i.owner, i.name, i.more[:30]+'...') for i in entity_type.objects.all()]
+        for i in entity_list:
+            print(i)
+    except AttributeError:
+        entity_list= ['{}\t| {}'.format(i.uid, i.name) for i in entity_type.objects.all()]
+        for i in entity_list:
+            print(i)
 
     func_state = 'Done'
     # end function
     return func_state
+

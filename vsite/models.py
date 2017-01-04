@@ -86,9 +86,10 @@ class Skills(models.Model):
     # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255)
-    related_job = models.ForeignKey(
-        Jobs , related_name='related_job', blank=True, null=True)
-    job_description = models.TextField(blank=True, null=True)
+    is_unique= models.BooleanField(default= False)
+    related_job = models.ManyToManyField(
+        Jobs , related_name='related_job')
+    description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 2500 , blank = True, null = True)
 
     # Methods

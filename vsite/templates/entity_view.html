@@ -10,13 +10,22 @@
     <div class="block">
         <h2>{{obj.name}}</h2>
         <p>{{obj.description | safe | linebreaksbr}}</p>
-        <h2>{{stuff_title}}</h2>
-            <ul>
-                {% for item in obj_stuff %} 
-                <li>({{item.quantity}}) {{item.name}}</li>
-                {% endfor %}
-            </ul>
+    </div> <!-- end block -->
+</div> <!-- end container -->
 
+<div class="container">
+    <div class="block">
+        <h2>{{stuff_title}}</h2>
+        <ul>
+            {% for item in obj_stuff %} 
+            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
+            {% endfor %}
+        </ul>
+    </div> <!-- end block -->
+</div> <!-- end container -->
+
+<div class="container">
+    <div class="block">
         <h2>Notes publiques</h2>
         {% for public_note in public_notes %} 
             <p>{{public_note | safe}}</p>

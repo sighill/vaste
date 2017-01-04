@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
-from .models import Pnj, PjNote, HomeItems, PjCharacter, GameLog, Item, Creature, Place, Phenomenon, GameEntity
+from .models import *
 from .forms import PjNoteForm
 
 #####################################################################
@@ -16,16 +16,24 @@ def Account(request):
     if request.user.is_authenticated():
         # get PjCharacter of current user
         pj = PjCharacter.objects.get(owner_id= request.user.id)
-
+        # get his skills
+        unique_skill= Skills.objects.get(
+            related_job__uid=pj.first_job.uid, is_unique= True
+            )
+        other_skills= Skills.objects.filter(
+            related_job__in=[pj.first_job.uid, pj.second_job.uid], 
+            is_unique= False
+            )
         # get his notes
         pj_note_qs = PjNote.objects.filter(
             poster_id = pj).order_by('note_target')
-
         # get his stuff
         char_stuff_visible = [item for item in Item.objects.filter(
             owner= pj, is_visible= True)]
         char_stuff_not_visible = [item for item in Item.objects.filter(
             owner= pj, is_visible= False)]
+
+
 
         try:
             pj_note_content = []
@@ -50,7 +58,9 @@ def Account(request):
         'pj_note_content': pj_note_content,
         'character': character,
         'char_stuff_visible': char_stuff_visible,
-        'char_stuff_not_visible': char_stuff_not_visible
+        'char_stuff_not_visible': char_stuff_not_visible,
+        'unique_skill': unique_skill,
+        'other_skills': other_skills,
         }
         
         template = loader.get_template('account.html')

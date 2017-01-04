@@ -1,5 +1,5 @@
 /* MEDIA QUERIES FOR MOBILE ---------------------------------------*/
-@media (max-width: 1200px) {
+@media (max-width: 1200px) and (max-resolution: 0.9dppx) {
   :root {
     font-size: 2em;
   }
@@ -9,13 +9,20 @@
     flex-flow: column;
   }
 
-  html{
-    background: url('/static/vsite/mobile_bg.png');
+  .left_block { 
+  display: flex;
+  flex: 1 1 auto;
+  border-radius: 10px;
+  margin: 5px;
+  flex-flow: column;
+  align-items: stretch;
+  background-color: rgba(78, 88, 90, 0.6);  
+  /*background-color: #46585a;*/
   }
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
-@media(max-resolution: 1dppx){
+@media(max-resolution: 1dppx) and (min-width: 1200px){
   :root {
     font-size: 14px; 
   }
@@ -27,25 +34,17 @@
     max-height: 1200px;
   }
 
-  .large_left_block{
-    min-width: 220px;
-    max-width: 220px;
-  }
-
-  .medium_left_block{
-    min-width: 120px;
-    max-width: 120px;
-  }
-
-  html { 
-    background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-    background-color: #0e1316;
-    overflow-y: scroll;
-  }
+  .left_block { 
+  display: flex;
+  flex: 1 1 auto;
+  border-radius: 10px;
+  margin: 5px;
+  flex-flow: column;
+  align-items: stretch;
+  background-color: rgba(78, 88, 90, 0.6);  
+  max-width: 10%;
+  /*background-color: #46585a;*/
+}
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -60,7 +59,16 @@ a{
 
 a:hover{
   background-color: rgba(255, 255, 255, 0.5); 
-  border-radius: 5px;
+  border-radius: 10px;
+}
+
+html { 
+  background: url('/static/vsite/main_img.jpg') no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-color: #0e1316; /*last used : 0e1316*/ 
 }
 
 h1, h4{
@@ -76,7 +84,7 @@ h1, h2, h3, h4{
 img{
   max-width: 90%;
   height: auto;
-  border-radius: 5px;
+  border-radius: 10px;
 } 
 
 p {
@@ -110,41 +118,12 @@ input{
 .block { 
   display: flex;
   flex: 1 1 auto;
-  border-radius: 5px;
+  border-radius: 10px;
   margin: 5px;
   flex-flow: column;
+  align-items: stretch;
   background-color: rgba(78, 88, 90, 0.6);  
   /*background-color: #46585a;*/
-}
-
-.medium_left_block { 
-  display: flex;
-  flex: 0 0 auto;
-  border-radius: 5px;
-  margin: 5px;
-  flex-flow: column;
-  align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.6);  
-}
-
-.large_left_block { 
-  display: flex;
-  flex: 0 0 auto;
-  border-radius: 5px;
-  margin: 5px;
-  flex-flow: column;
-  align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.6);
-}
-
-.xlarge_img{
-  max-width: 900px;
-  max-height: 700px;
-  display: block;
-  margin: 10px auto;
-  border-width: 2px;
-  border-style: solid;
-  border-color: black;
 }
 
 .large_img {
@@ -153,7 +132,6 @@ input{
   border-width: 2px;
   border-style: solid;
   border-color: black;
-
 }
 
 .medium_img{
@@ -165,53 +143,6 @@ input{
   height: auto;
 }
 
-.micro_img{
-  max-width: 20px;
-}
-
 .wrapper {
   margin:auto;
-}
-
-.small_legend{
-  font-style: italic;
-  text-align: center;
-  font-size: 90%;
-}
-
-
-/* Dropdown menu -----------------------------*/
-
-#char_dropdown {
-}
-
-#char_dropdown_content {
-  display: none;
-  justify-content: space-around;
-  position: relative;
-  align-items: left;
-  z-index: 1;
-}
-
-#char_dropdown:hover #char_dropdown_content {
-  display: flex; 
-  width:100%;
-  max-width: 980px;
-}
-
-#world_dropdown {
-}
-
-#world_dropdown_content {
-  display: none;
-  justify-content: space-around;
-  position: relative;
-  align-items: left;
-  z-index: 1;
-}
-
-#world_dropdown:hover #world_dropdown_content {
-  display: flex; 
-  width:100%;
-  max-width: 980px;
 }

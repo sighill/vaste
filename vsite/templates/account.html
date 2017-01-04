@@ -2,24 +2,42 @@
 
 {% block content %}
 <div class="container">
-    <div class="block">
-        <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>   
+    <div class="large_left_block">
+        <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>
+        <a class="small_legend" href="/pj/view/{{character.uid}}">Voir la fiche de personnage publique</a>
+        <a class="small_legend" href="/password_change">Changer de mot de passe</a>
+        <a class="small_legend" href="/logout">Se déconnecter</a>
     </div> <!-- end block -->
 
     <div class="block">
-        <h2>{{character.name}} : {{character.cast}}</h2>
+        <h2>{{character.name}} - {{character.first_job}} {{character.second_job}}</h2> 
         <p>{{character.description | linebreaksbr}}</p>
+    </div> <!-- end block -->
+</div> <!-- end container -->
+
+<div class="container">
+    <div class="block">
+        <h2>Compétences</h2>
+        <p><b>{{unique_skill.name}} (Compétence unique)</b> : {{unique_skill.description  | linebreaksbr}}</p>
+        {% for skill in other_skills %} 
+            <p><b>{{skill.name}}</b> : {{skill.description | linebreaksbr}}</p>
+        {% endfor %}
+    </div> <!-- end block -->
+</div> <!-- end container -->
+
+<div class="container">
+    <div class="block">
         <h2>Possessions visibles</h2>
         <ul>
         {% for item in char_stuff_visible %} 
-        <li>{{item}}</li>
+        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
         {% endfor %}
         </ul>
         <h2>Possessions cachées</h2>
         <ul>
-        {% for item in char_stuff_not_visible %} 
-        <li>{{item}}</li>
-        {% endfor %}
+            {% for item in char_stuff_not_visible %} 
+            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
+            {% endfor %}
         </ul>
     </div> <!-- end block -->
 </div> <!-- end container -->

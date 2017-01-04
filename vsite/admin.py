@@ -23,6 +23,11 @@ class AdminJobs(admin.ModelAdmin):
     ordering = ['uid']
 admin.site.register(Jobs , AdminJobs)
 
+class AdminSkills(admin.ModelAdmin):
+    list_display =['uid','name', 'is_unique']
+    ordering = ['uid']
+admin.site.register(Skills , AdminSkills)
+
 class AdminItemRecipes(admin.ModelAdmin):
     list_display =['uid', 'item_type', 'name', 'ia_type', 'ia', 'iaq', 'ib_type', 
     'ib', 'ibq', 'ic_type', 'ic', 'icq']

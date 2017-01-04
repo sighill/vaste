@@ -57,6 +57,9 @@ urlpatterns = [
     # note mechanisms spcial urls
     url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),
     url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
+    # item mechanisms special urls
+    url(r'^itembreakdownbyuser/(?P<item_uid>\d+)', views.ItemBreakdownByUser, name='item_breakdown_by_user'),
+    url(r'^itemswitchprivacy/(?P<item_uid>\d+)', views.ItemPrivacySwitch, name= 'item_switch_privacy'),
 
 ]
 

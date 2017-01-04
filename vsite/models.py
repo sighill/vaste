@@ -251,9 +251,7 @@ class Item(models.Model):
     is_visible = models.BooleanField(default= True)
     quantity = models.PositiveIntegerField(default= 1)
     ia_type = models.CharField(max_length = 100, null = True, blank = True)
-    ib_type = models.CharField(max_length = 100, null = True, blank = True)
-    ic_type = models.CharField(max_length = 100, null = True, blank = True)
-    description = models.CharField(max_length = 2048)
+    description = models.CharField(max_length = 2048, blank=True, null=True)
     created_date = models.DateTimeField(
             default=timezone.now) 
 

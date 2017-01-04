@@ -2,12 +2,13 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 from .forms import PjNoteForm
+from .scripts.ingame_utils import ItemBreakdown
 
 #####################################################################
 def Home(request):
     context = {
         'home_items': HomeItems.objects.filter().exclude(name='Accueil').order_by('order_position'),
-    }
+    } 
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
 
@@ -23,7 +24,7 @@ def Account(request):
         other_skills= Skills.objects.filter(
             related_job__in=[pj.first_job.uid, pj.second_job.uid], 
             is_unique= False
-            )
+            ).distinct()
         # get his notes
         pj_note_qs = PjNote.objects.filter(
             poster_id = pj).order_by('note_target')
@@ -112,6 +113,26 @@ def NotePrivacySwitch(request, note_uid):
     else:
         note_to_switch.is_public = True
         note_to_switch.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+#####################################################################
+def ItemPrivacySwitch(request, item_uid):
+    '''
+        This view is a simple function called to make a hide/reveal
+        an item in a character inventory.
+    '''
+
+    # Retrieve item object
+    item_to_switch = Item.objects.get(pk= item_uid)
+
+    # Now switch the wanted one :
+    if item_to_switch.is_visible == True:
+        item_to_switch.is_visible = False
+        item_to_switch.save()
+    else:
+        item_to_switch.is_visible = True
+        item_to_switch.save()
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
@@ -267,3 +288,16 @@ def EntityView(request, obj_to_display, obj_pk):
             post = PjNote.objects.create(
                 poster_id= poster_id , note_target= note_target , note= note_to_create)
         return HttpResponseRedirect(note_target.uid)
+
+
+#####################################################################
+def ItemBreakdownByUser(request, item_uid):
+    '''
+        This view is meant to call the external function ItemBreakdown
+        by an user wanting to breakdown on of his item, through
+        a button in his inventory, page account.
+    '''
+
+    ItemBreakdown(item_uid)
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))

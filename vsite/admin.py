@@ -35,7 +35,7 @@ class AdminItemRecipes(admin.ModelAdmin):
 admin.site.register(ItemRecipes , AdminItemRecipes)
 
 class AdminItem(admin.ModelAdmin):
-    list_display =['uid','owner', 'name', 'recipe', 'ia_type', 'ib_type' ]
+    list_display =['uid','owner', 'quantity', 'name', 'recipe', 'ia_type' ]
     ordering = ['owner']
 admin.site.register(Item , AdminItem)
 

@@ -11,7 +11,7 @@ import pprint
 from copy import deepcopy
 
 #####################################################################
-def new_item():
+def NewItem():
     '''
         Creates a new item for a game entity. Everything is entered
         manually.
@@ -46,6 +46,7 @@ def new_item():
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
+        func_state = 'fail'
     # Ask for validation and commit if Y or y
     validation= input('Valider ? y/n : ')
     if validation in ['Y','y']:
@@ -58,7 +59,7 @@ def new_item():
     return func_state
 
 #####################################################################
-def del_item(owner_name):
+def DelItem(owner_name):
     '''
         Deletes an entity's item manually.
     '''
@@ -86,11 +87,12 @@ def del_item(owner_name):
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
+        func_state = 'fail'
     # end function
     return func_state
 
 #####################################################################
-def copy_item():
+def CopyItem():
     '''
         Copies an entity's item manually.
     '''
@@ -117,11 +119,12 @@ def copy_item():
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
+        func_state = 'fail'
     # end function
     return func_state
 
 #####################################################################
-def loot():
+def Loot():
     '''
         Allows to loot an entity by the PC. For a given entity, you
         can manually change the owner. Items can be kept at their 
@@ -155,11 +158,12 @@ def loot():
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
+        func_state = 'fail'
     # end function
     return 'loot fini.'
 
 #####################################################################
-def new_crea():
+def NewCrea():
     '''
         Create a new IgCreature based on a Creature. It inherits its
         attributes, but does NOT do it dynamically. 
@@ -217,11 +221,12 @@ def new_crea():
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
+        func_state = 'fail'
     # end function
     return func_state
 
 #####################################################################
-def kill_crea():
+def KillCrea():
     '''
         Kills a creature (changes its name to carcass of xxx)
     '''
@@ -240,11 +245,11 @@ def kill_crea():
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
-    # end function
+        func_state = 'fail'
     return func_state
 
 #####################################################################
-def show_ent():
+def ShowEnt():
     '''
         Quick summary of an entity.
     '''
@@ -259,7 +264,7 @@ def show_ent():
     return func_state
 
 #####################################################################
-def show_grp(entity_type):
+def Showgrp(entity_type):
     '''
         Show a type of game entities
     '''
@@ -276,3 +281,61 @@ def show_grp(entity_type):
     # end function
     return func_state
 
+#####################################################################
+def ItemBreakdown(item_uid):
+    '''
+        Allows a player to break down an item into its elementary
+        pieces specified in its recipe.
+    '''
+    # import item to breakdown
+    item_to_bd = Item.objects.get(pk= item_uid)
+    # get its recipe for quick access
+    item_recipe= item_to_bd.recipe
+    # get the ingredients recipes for full new item building
+    ing_recipes= [i for i in ItemRecipes.objects.filter(
+        pk__in= [item_recipe.ia, item_recipe.ib, item_recipe.ic]
+        )]
+
+    # for each ingredient of the item to breakdown, create an item in
+    # correct quantity
+    for ingredient in ing_recipes:
+        # if a similar ingredient is owned, just add quantity
+        # if not, create a new item from the ingredient
+        try:
+            ingredient_existing= Item.objects.get(
+                owner=item_to_bd.owner, recipe=ingredient)
+            ingredient_existing.quantity += item_recipe.iaq
+            ingredient_existing.save()
+            func_state= 'Success'
+        except ObjectDoesNotExist:
+            try:
+                # try and create the ia item
+                item_resulting_dict= {}
+                item_resulting_dict['recipe']= ingredient
+                item_resulting_dict['name']= ingredient.__str__()
+                item_resulting_dict['owner']= item_to_bd.owner
+                item_resulting_dict['is_visible']= True
+                item_resulting_dict['quantity']= item_recipe.iaq
+                item_resulting_dict['ia_type']= item_recipe.ia_type
+                item_resulting_dict['description']= item_recipe.description
+                new_item= Item(**item_resulting_dict)
+                new_item.save()
+                func_state= 'Success'
+            # raise exceptions
+            except (ValueError, TypeError, ObjectDoesNotExist,
+                PermissionDenied, FieldError, ValidationError) as e:
+                raise e
+                func_state = 'fail'
+    # lower original item's quantity by one or delete it
+    if item_to_bd.quantity == 1:
+        item_to_bd.delete()
+    else:
+        item_to_bd.quantity-= 1
+        item_to_bd.save()
+    # end function
+    return func_state
+
+'''
+from vsite.scripts.ingame_utils import *
+
+'''

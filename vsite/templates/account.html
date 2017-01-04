@@ -30,13 +30,13 @@
         <h2>Possessions visibles</h2>
         <ul>
         {% for item in char_stuff_visible %} 
-        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
+        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Démonter</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
         {% endfor %}
         </ul>
         <h2>Possessions cachées</h2>
         <ul>
             {% for item in char_stuff_not_visible %} 
-            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
+            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Démonter</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Rendre visible</a> ]</li>
             {% endfor %}
         </ul>
     </div> <!-- end block -->

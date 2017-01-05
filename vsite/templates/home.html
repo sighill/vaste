@@ -23,7 +23,9 @@
             <div class="container">
                 <div class="medium_left_block">
                     <a href="{{item.link}}">
-                        <img class ="medium_img" src="{{item.img_id}}" alt = 'home item pic'/>
+                        {% for image in item.img_name.all %}
+                        <img class ="medium_img" src="{{image.name}}" alt = 'home item pic'/>
+                        {% endfor %}
                     </a>
                 </div>
 

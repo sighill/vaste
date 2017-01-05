@@ -3,7 +3,9 @@
 {% block content %}
 <div class="container">
     <div class="large_left_block">
-        <img class ="large_img" src="{{character.img_id}}" alt = 'profile pic'/>
+        {% for image in character.img_name.all %}
+        <img class ="large_img" src="{{image.name}}" alt = 'profile pic'/>
+        {% endfor %}
         <a class="small_legend" href="/pj/view/{{character.uid}}">Voir la fiche de personnage publique</a>
         <a class="small_legend" href="/password_change">Changer de mot de passe</a>
         <a class="small_legend" href="/logout">Se déconnecter</a>
@@ -27,16 +29,17 @@
 
 <div class="container">
     <div class="block">
-        <h2>Possessions visibles</h2>
+        <h2>Possessions</h2>
+        <h3>Visibles</h3>
         <ul>
         {% for item in char_stuff_visible %} 
-        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Démonter</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
+        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
         {% endfor %}
         </ul>
-        <h2>Possessions cachées</h2>
+        <h3>Cachées</h3>
         <ul>
             {% for item in char_stuff_not_visible %} 
-            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Démonter</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Rendre visible</a> ]</li>
+            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Rendre visible</a> ]</li>
             {% endfor %}
         </ul>
     </div> <!-- end block -->
@@ -44,7 +47,7 @@
 
 <div class="container">
     <div class="block">
-        <h2>Notes personnelles</h2>
+        <h2>Notes</h2>
             {% for entry in pj_note_content %}
                 <p class="note_quote">{{entry | linebreaksbr}}</p>
             {% endfor %}

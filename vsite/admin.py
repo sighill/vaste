@@ -9,12 +9,12 @@ class AdminPjNote(admin.ModelAdmin):
 admin.site.register(PjNote , AdminPjNote)
 
 class AdminHomeItems(admin.ModelAdmin):
-    list_display =['uid','name', 'order_position', 'description', 'img_id', 'link']
+    list_display =['uid','name', 'order_position', 'description', 'link']
     ordering = ['uid']
 admin.site.register(HomeItems , AdminHomeItems)
 
 class AdminGameLog(admin.ModelAdmin):
-    list_display =['uid','img_id', 'img_link', 'created_date']
+    list_display =['uid', 'created_date']
     ordering = ['created_date']
 admin.site.register(GameLog , AdminGameLog)
 
@@ -73,3 +73,13 @@ class AdminIgCreature(admin.ModelAdmin):
     list_display =['uid', 'name', 'more']
     ordering = ['uid']
 admin.site.register(IgCreature , AdminIgCreature)
+
+class AdminChangelog(admin.ModelAdmin):
+    list_display =['uid', 'title', 'corpus', 'created_date', 'reverted']
+    ordering = ['created_date']
+admin.site.register(Changelog , AdminChangelog)
+
+class AdminImage(admin.ModelAdmin):
+    list_display =['uid', 'name', 'internal_link', 'external_link', 'legend', 'legend_alt']
+    ordering = ['uid']
+admin.site.register(Image , AdminImage)

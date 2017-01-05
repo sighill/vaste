@@ -4,7 +4,9 @@
 <div class="container">
     
     <div class="large_left_block">
-        <a href="{{obj.img_src}}" target="_blank"><img class ="large_img" src="{{obj.img_id}}" alt = 'profile pic'/></a>
+        {% for item in img %}
+        <a href="{{item.complete_file}}"><img class ="large_img" src="{{item.name}}" alt = 'profile'/></a>
+        {% endfor %}
     </div> <!-- end block -->
 
     <div class="block">
@@ -26,11 +28,12 @@
 
 <div class="container">
     <div class="block">
-        <h2>Notes publiques</h2>
+        <h2>Notes</h2>
+        <h3>Publiques</h3>
         {% for public_note in public_notes %} 
             <p>{{public_note | safe}}</p>
         {% endfor %}
-        <h2>Notes personnelles</h2>
+        <h3>Personnelles</h3>
         {% if user.is_authenticated %}
             {% for private_note in private_notes %}
                 <p>{{private_note | safe}}</p>

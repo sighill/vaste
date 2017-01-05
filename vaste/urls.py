@@ -25,6 +25,7 @@ urlpatterns = [
     url(r'^$', views.Home),
     url(r'^account/', views.Account, name='account'),
     url(r'^log/', views.Log, name='gamelog'),
+    url(r'^changelog/', views.ChangelogView, name='changelog'),
     # game entity indexes
     url(r'^pnj/$', views.EntityIndex, {'obj_to_display': Pnj}),
     url(r'^pj/$', views.EntityIndex, {'obj_to_display': PjCharacter}),

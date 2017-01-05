@@ -1,0 +1,12 @@
+{% extends 'base_base.html' %}
+
+{% block content %}
+    {% for log in content %}
+    <div class="container">
+        <div class="block">
+        	<p class="left_small_legend">{{log.created_date}} - {{log.title}}</p>
+            <p>{{log.corpus}}</p>
+        </div> <!-- end block -->
+    </div> <!-- end container -->
+    {% endfor %}
+{% endblock %}

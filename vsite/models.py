@@ -40,7 +40,29 @@ class ItemRecipes(models.Model):
     def __str__(self):
         return str('{}: {} en {}'.format(self.item_type, self.name, self.ia_type))
 
-
+#####################################################################
+class Image(models.Model):
+    '''
+        Images are a large part of this site. This table keeps track
+        of every game image to make their use easy and flexible.
+    '''
+    uid= models.AutoField(
+        primary_key = True , db_index = True)
+    name= models.CharField(
+        max_length = 255)
+    internal_link= models.CharField(
+        max_length = 500, default= '#')
+    external_link= models.CharField(
+        max_length = 500, default= '#')
+    legend= models.CharField(
+        max_length = 500, blank=True, null=True)
+    legend_alt= models.CharField(
+        max_length = 500, blank=True, null=True)
+    complete_file= models.CharField(
+        max_length = 500, default= '#', blank=True, null=True)
+    # Methods
+    def __str__(self):
+        return str(self.name)
 
 #####################################################################
 class HomeItems(models.Model):
@@ -52,10 +74,28 @@ class HomeItems(models.Model):
     # Attributes
     uid = models.AutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255, blank=True, null=True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
+    img_name = models.ManyToManyField(
+        Image, related_name='img_name_hi', blank=True)
     order_position = models.PositiveIntegerField(blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     link = models.CharField(max_length = 255, blank=True, null=True)
+
+    # Methods
+    def __str__(self):
+        return str(self.name)
+
+#####################################################################
+class Skills(models.Model):
+    '''
+        Reference model for all the jobs in the game.
+    '''
+
+    # Attributes
+    uid = models.AutoField(primary_key = True , db_index = True)
+    name = models.CharField(max_length = 255)
+    is_unique= models.BooleanField(default= False)
+    description = models.TextField(blank=True, null=True)
+    more = models.CharField(max_length = 2500 , blank = True, null = True)
 
     # Methods
     def __str__(self):
@@ -72,29 +112,14 @@ class Jobs(models.Model):
     name = models.CharField(max_length = 255)
     job_description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 2500 , blank = True, null = True)
+    related_skills= models.ManyToManyField(
+        Skills , related_name='related_skills')
 
     # Methodes
     def __str__(self):
         return str(self.name)
 
-#####################################################################
-class Skills(models.Model):
-    '''
-        Reference model for all the jobs in the game.
-    '''
 
-    # Attributes
-    uid = models.AutoField(primary_key = True , db_index = True)
-    name = models.CharField(max_length = 255)
-    is_unique= models.BooleanField(default= False)
-    related_job = models.ManyToManyField(
-        Jobs , related_name='related_job')
-    description = models.TextField(blank=True, null=True)
-    more = models.CharField(max_length = 2500 , blank = True, null = True)
-
-    # Methods
-    def __str__(self):
-        return str(self.name)
 
 #####################################################################
 class GameEntity(models.Model):
@@ -107,8 +132,8 @@ class GameEntity(models.Model):
     uid = models.BigAutoField(primary_key = True , db_index = True)
     name = models.CharField(max_length = 255, blank=True, null=True)
     is_visible = models.BooleanField(default= True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_src =  models.CharField(max_length = 800, blank=True, null=True)
+    img_name = models.ManyToManyField(
+        Image, related_name='img_name', blank=True)
     description = models.TextField(blank=True, null=True)
     more = models.CharField(max_length = 2500 , blank = True, null = True)
 
@@ -221,9 +246,8 @@ class GameLog(models.Model):
     uid = models.AutoField(primary_key = True, db_index = True)
     campaign = models.CharField(max_length = 255, blank=True, null=True)
     chapter_date = models.CharField(max_length = 255, blank=True, null=True)
-    img_id = models.CharField(max_length = 255, blank=True, null=True)
-    img_legend = models.CharField(max_length = 255, blank=True, null=True)
-    img_link = models.CharField(max_length = 255, blank=True, null=True)
+    img_name = models.ForeignKey(
+        Image, related_name='img_name_gl', blank=True, null=True)
     corpus = models.TextField(blank = True, null = True, db_index = True)
     order_position = models.PositiveIntegerField()
     created_date = models.DateTimeField(default=timezone.now)
@@ -333,3 +357,24 @@ class IgCreature(GameEntity):
     # Methods
     def __str__(self):
         return str(self.name)
+
+#####################################################################
+class Changelog(models.Model):
+    '''
+        Logging changes to the app and blog posts.
+    '''
+    # attributes
+    uid= models.AutoField(
+        primary_key = True , db_index = True)
+    title= models.CharField(
+        max_length = 100, null = True, blank = True)
+    corpus= models.CharField(
+        max_length = 400)
+    created_date = models.DateTimeField(
+            default= timezone.now)
+    reverted= models.BooleanField(default= False)
+    # Methods
+    def __str__(self):
+        return str(self.title)
+
+

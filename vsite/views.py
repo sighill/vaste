@@ -7,7 +7,7 @@ from .scripts.ingame_utils import ItemBreakdown
 #####################################################################
 def Home(request):
     context = {
-        'home_items': HomeItems.objects.filter().exclude(name='Accueil').order_by('order_position'),
+        'home_items': HomeItems.objects.select_related().filter().exclude(name='Accueil').order_by('order_position'),
     } 
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
@@ -16,15 +16,14 @@ def Home(request):
 def Account(request):
     if request.user.is_authenticated():
         # get PjCharacter of current user
-        pj = PjCharacter.objects.get(owner_id= request.user.id)
+        pj = PjCharacter.objects.select_related().get(owner_id= request.user.id)
         # get his skills
-        unique_skill= Skills.objects.get(
-            related_job__uid=pj.first_job.uid, is_unique= True
-            )
-        other_skills= Skills.objects.filter(
-            related_job__in=[pj.first_job.uid, pj.second_job.uid], 
-            is_unique= False
-            ).distinct()
+        unique_skill= pj.first_job.related_skills.get(is_unique=True)
+        # get the skills and combine them in a list excuding duplicates
+        f_skills= [i for i in pj.first_job.related_skills.filter(is_unique=False)]
+        s_skills= [i for i in pj.second_job.related_skills.filter(is_unique=False)]
+        other_skills= list(set(f_skills + s_skills))
+
         # get his notes
         pj_note_qs = PjNote.objects.filter(
             poster_id = pj).order_by('note_target')
@@ -51,13 +50,12 @@ def Account(request):
             pj_note_content = ['Pas de note personnelle enregistrée.']
 
         # Character preparation for display
-        character= PjCharacter.objects.get(owner_id=request.user.id)
         char_stuff = [item for item in Item.objects.filter(
         owner_id= request.user.id, is_visible= True)]
 
         context = {
         'pj_note_content': pj_note_content,
-        'character': character,
+        'character': pj,
         'char_stuff_visible': char_stuff_visible,
         'char_stuff_not_visible': char_stuff_not_visible,
         'unique_skill': unique_skill,
@@ -74,7 +72,7 @@ def Log(request):
 
     context = {
         'navbar_items': HomeItems.objects.all().order_by('order_position'),
-        'log': GameLog.objects.all().order_by('order_position'),
+        'log': GameLog.objects.all().select_related().order_by('order_position'),
     }
     template = loader.get_template('game_log.html')
     return HttpResponse(template.render(context, request))
@@ -156,18 +154,17 @@ def NoteDelete(request, note_uid):
 
 #####################################################################
 def EntityIndex(request, obj_to_display):
-    
-    # Some tables have  a 'is_visible' valeu that we have to filter
+    '''
+        provides a clear index of the specified game entity.
+    '''
+    # Some tables have  a 'is_visible' value that we have to filter
     # out before filling the content.
-    if obj_to_display in [Pnj, Creature, Place, Phenomenon]:
-        content = obj_to_display.objects.filter(is_visible= True)
-    else:
-        content = obj_to_display.objects.all()
+    content = obj_to_display.objects.select_related().filter(is_visible= True)
 
     context = {
         'content': content,
     }
-    template = loader.get_template('generic_index.html')
+    template = loader.get_template('entity_index.html')
     return HttpResponse(template.render(context, request))
 
 #####################################################################
@@ -179,7 +176,8 @@ def EntityView(request, obj_to_display, obj_pk):
     '''
 
     # Get the object instance the user wants to display
-    obj = obj_to_display.objects.get(pk= obj_pk)
+    obj = obj_to_display.objects.select_related().get(pk= obj_pk)
+    img= [i for i in obj.img_name.all()]
 
     # Get his stuff and set title depending on the object
     stuff_title_dict= {
@@ -268,6 +266,7 @@ def EntityView(request, obj_to_display, obj_pk):
     # Filling the context passed to the template
     context = {
         'obj': obj,
+        'img': img,
         'stuff_title': stuff_title_dict[obj_to_display],
         'obj_stuff': obj_stuff,
         'private_notes': private_notes_formatted,
@@ -301,3 +300,12 @@ def ItemBreakdownByUser(request, item_uid):
     ItemBreakdown(item_uid)
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+#####################################################################
+def ChangelogView(request):
+    content= Changelog.objects.all().order_by('created_date').reverse()
+    context = {
+        'content': content,
+    } 
+    template = loader.get_template('changelog.html')
+    return HttpResponse(template.render(context, request))

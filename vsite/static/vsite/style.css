@@ -40,6 +40,13 @@
     align-items: left;
     z-index: 1;
   }
+
+  .announce{
+    background-color: rgba(0, 0, 0, 0.3);
+    font-size: 90%;
+    margin-left: 40px;
+    margin-right: 40px;
+}
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
@@ -104,6 +111,14 @@
     align-items: left;
     z-index: 1;
   }
+
+  .announce{
+    background-color: rgba(0, 0, 0, 0.3);
+    max-width: 60%;
+    font-size: 90%;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
 }
 
 /*WEBFONT SUPPORT -------------------------------------------------*/
@@ -154,6 +169,7 @@ h2{
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 10px;
+  background-color: rgba(56, 58, 60, 0.7);
 }
 
 h1, h2, h3, h4{
@@ -205,7 +221,7 @@ input{
   border-radius: 5px;
   margin: 5px;
   flex-flow: column;
-  background-color: rgba(78, 88, 90, 0.7);
+  background-color: rgba(76, 80, 82, 0.7);
   /*border: solid #190D0D 1px;*/
 
 }
@@ -217,7 +233,7 @@ input{
   margin: 5px;
   flex-flow: column;
   align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.7);  
+  background-color: rgba(76, 80, 82, 0.7);
 }
 
 .large_left_block { 
@@ -227,7 +243,7 @@ input{
   margin: 5px;
   flex-flow: column;
   align-items: stretch;
-  background-color: rgba(78, 88, 90, 0.7);
+  background-color: rgba(76, 80, 82, 0.7);
 }
 
 .xlarge_img{
@@ -278,6 +294,16 @@ input{
   margin-bottom: 2px;
 }
 
+.reverted{
+  color: red;
+  font-weight: bold;
+}
+
+.admin_option{
+  color: orange;
+  font-size: 90%;
+  margin-bottom: 2px;
+}
 
 /* Dropdown menu -----------------------------*/
 

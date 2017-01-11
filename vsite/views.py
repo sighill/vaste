@@ -2,12 +2,17 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
 from .forms import PjNoteForm
-from .scripts.ingame_utils import ItemBreakdown
+from .scripts.ingame_utils import *
+from copy import deepcopy
 
 #####################################################################
 def Home(request):
+    home_items= HomeItems.objects.select_related().filter().exclude(name='Accueil').order_by('order_position')
+    # get the first three changelog entries that are announces
+    announces= Changelog.objects.filter(is_announce= True).order_by('-created_date')[:3]
     context = {
-        'home_items': HomeItems.objects.select_related().filter().exclude(name='Accueil').order_by('order_position'),
+        'home_items': home_items,
+        'announces': announces,
     } 
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
@@ -32,8 +37,6 @@ def Account(request):
             owner= pj, is_visible= True)]
         char_stuff_not_visible = [item for item in Item.objects.filter(
             owner= pj, is_visible= False)]
-
-
 
         try:
             pj_note_content = []
@@ -60,6 +63,7 @@ def Account(request):
         'char_stuff_not_visible': char_stuff_not_visible,
         'unique_skill': unique_skill,
         'other_skills': other_skills,
+        'possible_craft': PossibleCrafts(pj.uid),
         }
         
         template = loader.get_template('account.html')
@@ -81,30 +85,13 @@ def Log(request):
 def NotePrivacySwitch(request, note_uid):
     '''
         This view is a simple function called to make a private
-        note on a NPC public. Only one note from an user can be made
-        public so the system makes any public note private.
-        Only private notes will have this option.
+        note on a NPC public. 
     '''
-
-    # Retrieve poster id
-    poster_id = PjCharacter.objects.get(owner_id= request.user.id)
 
     # Retrieve note object
     note_to_switch = PjNote.objects.get(pk= note_uid)
 
-    # make any other note private (only one normally)
-    notes_to_discard = PjNote.objects.filter(poster_id= poster_id, is_public= True)
-
-    # Discard public note and any other public note from 
-    # same user (bug proof amirite)
-    for public_note in notes_to_discard:
-        if public_note.is_public == True:
-            public_note.is_public = False
-            public_note.save()
-        else:
-            pass
-
-    # Now switch the wanted one :
+    # switch the wanted one :
     if note_to_switch.is_public == True:
         note_to_switch.is_public = False
         note_to_switch.save()
@@ -135,6 +122,26 @@ def ItemPrivacySwitch(request, item_uid):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 #####################################################################
+def EntityPrivacySwitch(request, entity_uid):
+    '''
+        This view is a simple function called to make a hide/reveal
+        an item in a character inventory.
+    '''
+
+    # Retrieve item object
+    entity_to_switch = GameEntity.objects.get(pk= entity_uid)
+
+    # Now switch the wanted one :
+    if entity_to_switch.is_visible == True:
+        entity_to_switch.is_visible = False
+        entity_to_switch.save()
+    else:
+        entity_to_switch.is_visible = True
+        entity_to_switch.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+#####################################################################
 def NoteDelete(request, note_uid):
     '''
         This view is a simple function called to delete a note.
@@ -158,11 +165,19 @@ def EntityIndex(request, obj_to_display):
         provides a clear index of the specified game entity.
     '''
     # Some tables have  a 'is_visible' value that we have to filter
-    # out before filling the content.
-    content = obj_to_display.objects.select_related().filter(is_visible= True)
+    # out before filling the content. 
+
+    if request.user.id== 1 :
+        content = obj_to_display.objects.select_related().all()
+        is_admin= True
+    else: 
+        content = obj_to_display.objects.select_related().filter(is_visible= True)
+        is_admin= False
 
     context = {
         'content': content,
+        'is_admin': is_admin,
+        'request user': request.user.id,
     }
     template = loader.get_template('entity_index.html')
     return HttpResponse(template.render(context, request))
@@ -187,10 +202,15 @@ def EntityView(request, obj_to_display, obj_pk):
         Phenomenon: 'Fuse extractible',
         PjCharacter: 'Possessions visibles',
     }
-    obj_stuff = Item.objects.filter(
-        owner_id= obj_pk, is_visible= True).order_by('name')
-    if not obj_stuff:
-        obj_stuff= ['Rien apparemment...']
+    if request.user.id== 1 :
+        obj_stuff = Item.objects.filter(
+            owner_id= obj_pk)
+        is_admin= True
+    else: 
+        obj_stuff = Item.objects.filter(
+            owner_id= obj_pk, is_visible= True).order_by('name')
+        is_admin= False
+
     
     # load notes if the user is authenticated
     if request.user.is_authenticated():
@@ -214,7 +234,7 @@ def EntityView(request, obj_to_display, obj_pk):
         else:
             for private_note in private_notes:
                 private_notes_formatted.append(
-                    '<p>[ <a style="font-size:70%" href="/switchprivacy/{}">O</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
+                    '[ <a style="font-size:70%" href="/switchprivacy/{}">O</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
                         private_note.uid, private_note.uid, private_note.note, private_note.poster
                         )
                     )
@@ -233,7 +253,7 @@ def EntityView(request, obj_to_display, obj_pk):
             # switch the privacy of said note
             if public_note.poster_id == current_character.uid:
                 public_notes_formatted.append(
-                    '<p>[ <a style="font-size:70%" href="/switchprivacy/{}">Ø</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
+                    '[ <a style="font-size:70%" href="/switchprivacy/{}">Ø</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
                         public_note.uid, public_note.uid, public_note.note, public_note.poster
                         )
                     )
@@ -272,6 +292,7 @@ def EntityView(request, obj_to_display, obj_pk):
         'private_notes': private_notes_formatted,
         'public_notes': public_notes_formatted,
         'form': PjNoteForm(),
+        'is_admin': is_admin,
         }
     template = loader.get_template('entity_view.html')
 
@@ -299,7 +320,19 @@ def ItemBreakdownByUser(request, item_uid):
 
     ItemBreakdown(item_uid)
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect('/account#Possessions')
+
+#####################################################################
+def ItemCraftByUser(request, recipe_id):
+    '''
+        This view is meant to call the external function CraftItem
+        by an user wanting to craft an item, through
+        a button in his inventory, page account.
+    '''
+    char_obj= PjCharacter.objects.get(owner_id= request.user.id)
+    CraftItem(char_obj, recipe_id)
+
+    return HttpResponseRedirect('/account#Artisanat')
 
 #####################################################################
 def ChangelogView(request):
@@ -309,3 +342,37 @@ def ChangelogView(request):
     } 
     template = loader.get_template('changelog.html')
     return HttpResponse(template.render(context, request))
+
+#####################################################################
+def GiveItemTo(request, item_uid, recipient_uid):
+    '''
+        Dirty way to give an item to a player. Will do better next time.
+    '''
+    # get the obj to give
+    item_to_give= Item.objects.select_related().get(pk=item_uid)
+    # get the recipient pj
+    recipient_pj= PjCharacter.objects.select_related().get(pk= recipient_uid)
+    # get the recipient inventory
+    try:
+        similar_item_in_recipient_inv= Item.objects.filter(owner= recipient_pj).filter(recipe= item_to_give.recipe)[0]
+    except IndexError:
+        similar_item_in_recipient_inv= False
+
+    if similar_item_in_recipient_inv:
+        similar_item_in_recipient_inv.quantity = similar_item_in_recipient_inv.quantity + 1
+        similar_item_in_recipient_inv.save()
+    elif similar_item_in_recipient_inv is False:
+        new_item= deepcopy(item_to_give)
+        new_item.uid= None
+        new_item.owner= recipient_pj
+        new_item.quantity= 1
+        new_item.save()
+
+    item_to_give.quantity = item_to_give.quantity -1
+    if item_to_give.quantity <= 0:
+        item_to_give.delete()
+    else:
+        item_to_give.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+

@@ -7,7 +7,7 @@
         
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="/static/vsite/style.css" />
-        <link rel="favicon" href="{%  static favicon %}">
+        <link rel="favicon" href="{{STATIC_URL}}/favicon.ico">
     </head>
 
     <body>
@@ -21,13 +21,13 @@
                     <div id="world_dropdown_content">
                             <a href="/places"><h4>Lieux</h4></a>
                             <a href="/pheno"><h4>Phénomènes</h4></a>
+                            <a href="/creatures"><h4>Créatures</h4></a>
                     </div>
                 </div>
                 <div class="block" id="char_dropdown"><a href="#"><h4>Personnages</h4></a>
                     <div id="char_dropdown_content">
                         <a href="/pj"><h4>Joueurs</h4></a>
                         <a href="/pnj"><h4>Non joueurs</h4></a>
-                        <a href="/creatures"><h4>Créatures</h4></a>
                     </div>
                 </div>
             </div> <!-- end container -->

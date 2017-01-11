@@ -4,7 +4,7 @@ from .models import *
 
 
 class AdminPjNote(admin.ModelAdmin):
-    list_display =['uid','poster_id', 'note_target','note']
+    list_display =['uid','poster_id', 'is_public', 'note_target','note']
     ordering = ['uid']
 admin.site.register(PjNote , AdminPjNote)
 
@@ -14,7 +14,7 @@ class AdminHomeItems(admin.ModelAdmin):
 admin.site.register(HomeItems , AdminHomeItems)
 
 class AdminGameLog(admin.ModelAdmin):
-    list_display =['uid', 'created_date']
+    list_display =['uid', 'order_position', 'created_date']
     ordering = ['created_date']
 admin.site.register(GameLog , AdminGameLog)
 
@@ -29,7 +29,7 @@ class AdminSkills(admin.ModelAdmin):
 admin.site.register(Skills , AdminSkills)
 
 class AdminItemRecipes(admin.ModelAdmin):
-    list_display =['uid', 'item_type', 'name', 'ia_type', 'ia', 'iaq', 'ib_type', 
+    list_display =['uid', 'identifier', 'level', 'item_type', 'name', 'ia_type', 'ia', 'iaq', 'ib_type', 
     'ib', 'ibq', 'ic_type', 'ic', 'icq']
     ordering = ['uid']
 admin.site.register(ItemRecipes , AdminItemRecipes)
@@ -76,10 +76,10 @@ admin.site.register(IgCreature , AdminIgCreature)
 
 class AdminChangelog(admin.ModelAdmin):
     list_display =['uid', 'title', 'corpus', 'created_date', 'reverted']
-    ordering = ['created_date']
+    ordering = ['-created_date']
 admin.site.register(Changelog , AdminChangelog)
 
 class AdminImage(admin.ModelAdmin):
-    list_display =['uid', 'name', 'internal_link', 'external_link', 'legend', 'legend_alt']
+    list_display =['uid', 'name', 'internal_link', 'external_link', 'complete_file', 'legend', 'legend_alt']
     ordering = ['uid']
 admin.site.register(Image , AdminImage)

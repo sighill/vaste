@@ -3,15 +3,26 @@
 {% block content %}
 <div class="container">
     
-    <div class="large_left_block">
+    <div class="medium_left_block">
         {% for item in img %}
-        <a href="{{item.complete_file}}"><img class ="large_img" src="{{item.name}}" alt = 'profile'/></a>
+        {% if item.complete_file %}
+        <a href="{{item.complete_file}}"><img class ="medium_img" src="{{item.name}}" alt = 'profile'/></a>
+        {% else %}
+        <img class ="medium_img" src="{{item.name}}" alt = 'profile'/>
+        {% endif %}
+        {% if item.external_link %}<a href="{{item.external_link}}" class="small_legend" target="_blank">Source</a>{% endif %}
         {% endfor %}
     </div> <!-- end block -->
 
     <div class="block">
         <h2>{{obj.name}}</h2>
         <p>{{obj.description | safe | linebreaksbr}}</p>
+        <h3>Notes publiques</h3>
+        <p>
+        {% for public_note in public_notes %} 
+            {{public_note | safe}} <br>
+        {% endfor %}
+        </p>
     </div> <!-- end block -->
 </div> <!-- end container -->
 
@@ -19,21 +30,25 @@
     <div class="block">
         <h2>{{stuff_title}}</h2>
         <ul>
-            {% for item in obj_stuff %} 
+        {% if not obj_stuff %}
+            <li title= "J'ai dit qu'il n'y avait rien !">Rien apparemment...</li>
+        {% else %}
+        {% for item in obj_stuff %} 
+        {% if is_admin %}
+            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} {% if item.is_visible %}<a href="/itemswitchprivacy/{{item.uid}}" class="admin_option"> Visible {% else %}<a href="/itemswitchprivacy/{{item.uid}}" class="admin_option"> Caché </a>{% endif %}</a>| <a class="admin_option" href="/giveitemto/{{item.uid}}/1061193016228543981">gt Fiole</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/3808195743949274374">gt Taurus</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/1943793931158625313">gt Dryade</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/2925594765163772086">gt Sighill</a></li>
+        {% else %}
             <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
-            {% endfor %}
+        {% endif %}
+        {% endfor %}
+        {% endif %}
         </ul>
+        <p class="left_small_legend">Une courte description est parfois disponible en laissant son curseur sur les objets.</p>
     </div> <!-- end block -->
 </div> <!-- end container -->
 
 <div class="container">
     <div class="block">
-        <h2>Notes</h2>
-        <h3>Publiques</h3>
-        {% for public_note in public_notes %} 
-            <p>{{public_note | safe}}</p>
-        {% endfor %}
-        <h3>Personnelles</h3>
+        <h2>Notes personnelles</h2>
         {% if user.is_authenticated %}
             {% for private_note in private_notes %}
                 <p>{{private_note | safe}}</p>

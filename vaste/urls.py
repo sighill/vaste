@@ -60,7 +60,11 @@ urlpatterns = [
     url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
     # item mechanisms special urls
     url(r'^itembreakdownbyuser/(?P<item_uid>\d+)', views.ItemBreakdownByUser, name='item_breakdown_by_user'),
+    url(r'^itemcraftbyuser/(?P<recipe_id>\d+)', views.ItemCraftByUser, name='item_craft_by_user'),
     url(r'^itemswitchprivacy/(?P<item_uid>\d+)', views.ItemPrivacySwitch, name= 'item_switch_privacy'),
+    url(r'^giveitemto/(?P<item_uid>\d+)/(?P<recipient_uid>\d+)', views.GiveItemTo, name= 'give_item_to'),
+    #GameEntity mechanisms special urls
+    url(r'^entityswitchprivacy/(?P<entity_uid>\d+)', views.EntityPrivacySwitch, name= 'entity_switch_privacy'),
 
 ]
 

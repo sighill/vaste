@@ -15,7 +15,19 @@
             <div class="container">
                 <div class="block">
                     <h1>VASTE.FR</h1>
-                    <h4>Résumés de parties, aides de jeu, PNJ et créatures...</h4>
+                </div> <!-- end block -->
+            </div> <!-- end container -->
+            <div class="container">
+                <div class="block">
+                    <h4>Annonces</h4>
+                    <table style="width:100%">
+                    {% for announce in announces %}
+                        <tr>
+                            <td valign="middle" align="center"><p class="announce">{{announce.title}} :: {{announce.corpus}} <span class="left_small_legend">({{announce.created_date.day}}/{{announce.created_date.month}}/{{announce.created_date.year}})</span></p></td>
+                        </tr>
+                    {% endfor %}
+                    </table>
+                    <a class="small_legend" href="/changelog">Changelog</a>
                 </div> <!-- end block -->
             </div> <!-- end container -->
 

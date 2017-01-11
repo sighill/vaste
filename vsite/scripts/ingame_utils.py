@@ -19,7 +19,10 @@ def NewItem():
     try:
         # Initiate new item and populate attributes
         item_to_create= Item()
-        item_recipe= ItemRecipes.objects.get(pk= input('Recipe: '))
+        try:
+            item_recipe= ItemRecipes.objects.get(pk= input('Recipe: '))
+        except ValueError:
+            item_recipe= None
         item_to_create.recipe= item_recipe
         item_to_create.name= str(
             input('Nom de l\'item (defaut: {}): '.format(
@@ -176,17 +179,15 @@ def NewCrea():
         for creature in creatures_avail:
             print(creature.name)
         # ask for which creature to copy
-        creature_to_copy= Creature.objects.get(
+        creature_to_copy= Creature.objects.select_related().get(
             name=input('Nom du modele de creature a copier: '))
         # copy the instance into a new object
         # dirtyyyyyyy
         new_creature= IgCreature()
-        new_creature.name= input('Nom unique: ')
+        new_creature.name= '({}) {}'.format(creature_to_copy.name,input('Nom unique: '))
         new_creature.is_visible= True
         new_creature.location= Place.objects.get(
             name= input('Endroit où elle est: '))
-        new_creature.img_id= creature_to_copy.img_id
-        new_creature.img_src= creature_to_copy.img_src
         new_creature.description= creature_to_copy.description
         new_creature.more= input('Courte description: ')
         new_creature.puissance= creature_to_copy.puissance
@@ -201,6 +202,8 @@ def NewCrea():
         # ask for validation
         validation= input('Valider ? y/n : ')
         if validation in ['Y','y']:
+            new_creature.save()
+            new_creature.img_name= creature_to_copy.img_name.all()
             new_creature.save()
             # now that the uid has been generated, get it back
             saved_creature= IgCreature.objects.get(
@@ -335,7 +338,112 @@ def ItemBreakdown(item_uid):
     # end function
     return func_state
 
+#####################################################################
+def PossibleCrafts(char_uid):
+    '''
+        Returns a list of possible items a PjCharacter can craft 
+        with all his current items.
+
+    '''
+    char_obj= PjCharacter.objects.get(pk= char_uid)
+
+    all_item_recipes= [i for i in ItemRecipes.objects.all()]
+
+    char_items= Item.objects.filter(owner= char_obj)
+
+    possible_recipes= []
+
+    for recipe in all_item_recipes:
+        
+        ia_ok, ib_ok, ic_ok= (False, False, False)
+        for item in char_items:
+            if item.recipe is not None:
+                if recipe.ia not in [None, '']:
+                    if int(recipe.ia) == item.recipe.identifier and recipe.iaq <= item.quantity:
+                        ia_ok = True
+                    else:
+                        pass
+                else:
+                    ia_ok = True
+
+                if recipe.ib not in [None, '']:
+                    if int(recipe.ib) == item.recipe.identifier and recipe.ibq <= item.quantity:
+                        ib_ok = True
+                    else:
+                        pass
+                else:
+                    ib_ok = True
+
+                if recipe.ic not in [None, '']:
+                    if int(recipe.ic) == item.recipe.identifier and recipe.icq <= item.quantity:
+                        ic_ok = True
+                    else:
+                        pass
+                else:
+                    ic_ok = True
+            else:
+                pass
+        if ia_ok and ib_ok and ic_ok:
+            possible_recipes.append(recipe)
+        else:
+            pass
+    return possible_recipes
+
+
+#####################################################################
+def CraftItem(char_obj, recipe_id):
+    recipe_item_to_craft= ItemRecipes.objects.get(identifier= int(recipe_id))
+    char_items= Item.objects.filter(owner= char_obj.uid)
+
+    try:
+        char_existing_item= Item.objects.get(recipe= recipe_item_to_craft, owner= char_obj)
+        char_existing_item.quantity += 1
+        char_existing_item.save()
+    except ObjectDoesNotExist:
+        new_item= Item()
+        new_item.uid= None
+        new_item.recipe= recipe_item_to_craft
+        new_item.name= recipe_item_to_craft.__str__()
+        new_item.owner= char_obj
+        new_item.is_visible= True
+        new_item.quantity= 1
+        new_item.ia_type= recipe_item_to_craft.ia_type
+        new_item.description= recipe_item_to_craft.description
+        new_item.save()
+
+    ia_ok, ib_ok, ic_ok= (False, False, False)
+    for item in char_items:
+        if recipe_item_to_craft.ia not in [None, '']:
+            if item.recipe.uid== int(recipe_item_to_craft.ia) and ia_ok== False:
+                item.quantity-= recipe_item_to_craft.iaq
+                ia_ok= True
+            else:
+                pass
+        else:
+                pass
+        if recipe_item_to_craft.ib not in [None, '']:
+            if item.recipe.uid== int(recipe_item_to_craft.ib) and ib_ok== False:
+                item.quantity-= recipe_item_to_craft.ibq
+            else:
+                pass
+        else:
+                pass
+        if recipe_item_to_craft.ic not in [None, '']:
+            if item.recipe.uid== int(recipe_item_to_craft.ic) and ic_ok== False:
+                item.quantity-= recipe_item_to_craft.icq
+            else:
+                pass
+        else:
+                pass
+        if item.quantity<= 0:
+            item.delete()
+        else:
+            item.save()
+    return True
+
+
 '''
 from vsite.scripts.ingame_utils import *
-
+char_obj= PjCharacter.objects.get(name='Sighill')
+foo= PossibleCrafts(char_uid)
 '''

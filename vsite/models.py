@@ -13,6 +13,8 @@ class ItemRecipes(models.Model):
     # Attributes
     uid = models.AutoField(
         primary_key = True , db_index = True)
+    identifier = models.PositiveIntegerField()
+    level = models.PositiveIntegerField()
     item_type = models.CharField(max_length = 255)
     name = models.CharField(max_length = 255)
     ia_type= models.CharField(
@@ -53,7 +55,7 @@ class Image(models.Model):
     internal_link= models.CharField(
         max_length = 500, default= '#')
     external_link= models.CharField(
-        max_length = 500, default= '#')
+        max_length = 500, blank=True, null=True)
     legend= models.CharField(
         max_length = 500, blank=True, null=True)
     legend_alt= models.CharField(
@@ -373,6 +375,7 @@ class Changelog(models.Model):
     created_date = models.DateTimeField(
             default= timezone.now)
     reverted= models.BooleanField(default= False)
+    is_announce= models.BooleanField(default= False)
     # Methods
     def __str__(self):
         return str(self.title)

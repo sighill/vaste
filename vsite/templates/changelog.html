@@ -4,7 +4,7 @@
     {% for log in content %}
     <div class="container">
         <div class="block">
-        	<p class="left_small_legend">{{log.created_date}} - {{log.title}}</p>
+        	<p class="left_small_legend">{{log.created_date}} - {{log.title}} {% if log.reverted %}<span class="reverted">- REVERTED</span>{% endif %}</p>
             <p>{{log.corpus}}</p>
         </div> <!-- end block -->
     </div> <!-- end container -->

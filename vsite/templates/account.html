@@ -1,6 +1,7 @@
 {% extends 'base_base.html' %}
 
 {% block content %}
+
 <div class="container">
     <div class="large_left_block">
         {% for image in character.img_name.all %}
@@ -29,11 +30,11 @@
 
 <div class="container">
     <div class="block">
-        <h2>Possessions</h2>
+        <h2 id="Possessions">Possessions</h2>
         <h3>Visibles</h3>
         <ul>
         {% for item in char_stuff_visible %} 
-        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
+        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} {% if item.recipe %}[ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ]{% endif %} [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
         {% endfor %}
         </ul>
         <h3>Cachées</h3>
@@ -47,10 +48,21 @@
 
 <div class="container">
     <div class="block">
-        <h2>Notes</h2>
+        <h2 id="Notes">Notes</h2>
             {% for entry in pj_note_content %}
                 <p class="note_quote">{{entry | linebreaksbr}}</p>
             {% endfor %}
+    </div>
+</div>  <!-- end container -->
+
+<div class="container">
+    <div class="block">
+        <h2 id="Artisanat">Artisanat</h2>
+            <ul>
+            {% for craft in possible_craft %}
+                <li>{{craft}} [ <a href="/itemcraftbyuser/{{craft.uid}}">Créer</a> ]</li>
+            {% endfor %}
+            </ul>
     </div>
 </div>  <!-- end container -->
 {% endblock %}

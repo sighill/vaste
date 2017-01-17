@@ -3,45 +3,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.contrib.gis.db import models as gismodels
 
-
-#####################################################################
-class ItemRecipes(models.Model):
-    '''
-        Item blueprints for reference along with the instances.
-    '''
-
-    # Attributes
-    uid = models.AutoField(
-        primary_key = True , db_index = True)
-    identifier = models.PositiveIntegerField()
-    level = models.PositiveIntegerField()
-    item_type = models.CharField(max_length = 255)
-    name = models.CharField(max_length = 255)
-    ia_type= models.CharField(
-        max_length = 255, null = True, blank = True)
-    ia = models.CharField(
-        max_length = 255, null = True, blank = True)
-    iaq = models.PositiveIntegerField(
-        default= 0, null = True, blank = True,)
-    ib_type= models.CharField(
-        max_length = 255, null = True, blank = True)
-    ib = models.CharField(
-        max_length = 255, null = True, blank = True)
-    ibq = models.PositiveIntegerField(
-        default= 0, null = True, blank = True,)
-    ic_type= models.CharField(
-        max_length = 255, null = True, blank = True)
-    ic = models.CharField(
-        max_length = 255, null = True, blank = True)
-    icq = models.PositiveIntegerField(
-        default= 0, null = True, blank = True)
-    description = models.CharField(
-        max_length = 2048, null = True, blank = True)
-
-    # Methods
-    def __str__(self):
-        return str('{}: {} en {}'.format(self.item_type, self.name, self.ia_type))
-
 #####################################################################
 class Image(models.Model):
     '''
@@ -65,6 +26,48 @@ class Image(models.Model):
     # Methods
     def __str__(self):
         return str(self.name)
+
+#####################################################################
+class ItemRecipes(models.Model):
+    '''
+        Item blueprints for reference along with the instances.
+    '''
+
+    # Attributes
+    uid = models.AutoField(
+        primary_key = True , db_index = True)
+    identifier = models.PositiveIntegerField()
+    level = models.PositiveIntegerField()
+    item_type = models.CharField(max_length = 255)
+    name = models.CharField(max_length = 255)
+    img_name = models.ForeignKey(
+        Image, related_name='img_name_ir', blank=True)
+    ia_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ia = models.CharField(
+        max_length = 255, null = True, blank = True)
+    iaq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True,)
+    ib_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ib = models.CharField(
+        max_length = 255, null = True, blank = True)
+    ibq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True,)
+    ic_type= models.CharField(
+        max_length = 255, null = True, blank = True)
+    ic = models.CharField(
+        max_length = 255, null = True, blank = True)
+    icq = models.PositiveIntegerField(
+        default= 0, null = True, blank = True)
+    is_container= models.BooleanField(default= False)
+    description = models.CharField(
+        max_length = 2048, null = True, blank = True)
+
+    # Methods
+    def __str__(self):
+        return str('{}: {} en {}'.format(self.item_type, self.name, self.ia_type))
+
 
 #####################################################################
 class HomeItems(models.Model):
@@ -275,8 +278,13 @@ class Item(models.Model):
     owner = models.ForeignKey(
         GameEntity , related_name = 'entity_uid', blank=True, null=True)
     is_visible = models.BooleanField(default= True)
+    contained_by= models.ForeignKey(
+        "self" , related_name = 'is_contained_by', blank=True, null=True)
+    is_container= models.BooleanField(default= False)
     quantity = models.PositiveIntegerField(default= 1)
     ia_type = models.CharField(max_length = 100, null = True, blank = True)
+    img_name = models.ForeignKey(
+        Image, related_name='img_name_igi', blank=True)
     description = models.CharField(max_length = 2048, blank=True, null=True)
     created_date = models.DateTimeField(
             default=timezone.now) 

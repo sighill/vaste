@@ -28,16 +28,20 @@ def Account(request):
         f_skills= [i for i in pj.first_job.related_skills.filter(is_unique=False)]
         s_skills= [i for i in pj.second_job.related_skills.filter(is_unique=False)]
         other_skills= list(set(f_skills + s_skills))
-
+        # get his metaskill levels
+        max_body= pj.puissance + pj.vigueur + pj.dexterite
+        max_instinct= pj.perception + pj.charisme + pj.astuce
+        max_spirit= pj.volonte + pj.intelligence + pj.essence
+        craft_skill= int((pj.dexterite + pj.astuce)/2)
+        # get his stuff
+        char_stuff = [item for item in Item.objects.filter(
+            owner= pj).order_by('name')]
+        # get his containers
+        containers= [i for i in char_stuff if i.is_container]
         # get his notes
         pj_note_qs = PjNote.objects.filter(
             poster_id = pj).order_by('note_target')
-        # get his stuff
-        char_stuff_visible = [item for item in Item.objects.filter(
-            owner= pj, is_visible= True)]
-        char_stuff_not_visible = [item for item in Item.objects.filter(
-            owner= pj, is_visible= False)]
-
+        # make them pretty
         try:
             pj_note_content = []
             for entry in pj_note_qs:
@@ -52,18 +56,14 @@ def Account(request):
         except IndexError:
             pj_note_content = ['Pas de note personnelle enregistrée.']
 
-        # Character preparation for display
-        char_stuff = [item for item in Item.objects.filter(
-        owner_id= request.user.id, is_visible= True)]
-
         context = {
         'pj_note_content': pj_note_content,
         'character': pj,
-        'char_stuff_visible': char_stuff_visible,
-        'char_stuff_not_visible': char_stuff_not_visible,
+        'char_stuff': char_stuff,
         'unique_skill': unique_skill,
         'other_skills': other_skills,
-        'possible_craft': PossibleCrafts(pj.uid),
+        'possible_craft': PossibleCrafts(pj.uid,craft_skill),
+        'containers': containers,
         }
         
         template = loader.get_template('account.html')
@@ -102,6 +102,26 @@ def NotePrivacySwitch(request, note_uid):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 #####################################################################
+def EntityPrivacySwitch(request, entity_uid):
+    '''
+        This view is a simple function called to make a hide/reveal
+        an item in a character inventory.
+    '''
+
+    # Retrieve item object
+    entity_to_switch = GameEntity.objects.get(pk= entity_uid)
+
+    # Now switch the wanted one :
+    if entity_to_switch.is_visible == True:
+        entity_to_switch.is_visible = False
+        entity_to_switch.save()
+    else:
+        entity_to_switch.is_visible = True
+        entity_to_switch.save()
+
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+
+#####################################################################
 def ItemPrivacySwitch(request, item_uid):
     '''
         This view is a simple function called to make a hide/reveal
@@ -122,24 +142,26 @@ def ItemPrivacySwitch(request, item_uid):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 #####################################################################
-def EntityPrivacySwitch(request, entity_uid):
+def ItemContainerChange(request, item_uid, container_uid):
     '''
-        This view is a simple function called to make a hide/reveal
-        an item in a character inventory.
+        This view allows a player to change the value of contained_by
+        of his in game items.
     '''
-
-    # Retrieve item object
-    entity_to_switch = GameEntity.objects.get(pk= entity_uid)
-
-    # Now switch the wanted one :
-    if entity_to_switch.is_visible == True:
-        entity_to_switch.is_visible = False
-        entity_to_switch.save()
+    # retrieve item object
+    entity_to_change = Item.objects.get(pk= item_uid)
+    # retrieve the container or give value None if the object is put
+    # on the belt (no container)
+    if container_uid== "0":
+        entity_to_change.contained_by= None
+        entity_to_change.is_visible= True
+        entity_to_change.save()
     else:
-        entity_to_switch.is_visible = True
-        entity_to_switch.save()
+        container= Item.objects.get(pk= container_uid)
+        entity_to_change.contained_by= container
+        entity_to_change.is_visible= False
+        entity_to_change.save()
 
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
+    return HttpResponseRedirect('/account#Possessions')
 
 #####################################################################
 def NoteDelete(request, note_uid):
@@ -166,7 +188,6 @@ def EntityIndex(request, obj_to_display):
     '''
     # Some tables have  a 'is_visible' value that we have to filter
     # out before filling the content. 
-
     if request.user.id== 1 :
         content = obj_to_display.objects.select_related().all()
         is_admin= True
@@ -174,10 +195,20 @@ def EntityIndex(request, obj_to_display):
         content = obj_to_display.objects.select_related().filter(is_visible= True)
         is_admin= False
 
+    # Choose the page title depending on which type of GameEntity is displayed
+    index_title_dict= {
+        Creature: 'Créatures',
+        Place: 'Lieux du Vaste',
+        Pnj: 'Personnages non joueurs',
+        Phenomenon: 'Phénomènes du Vaste',
+        PjCharacter: 'Personnages joueurs',
+    }
+
     context = {
         'content': content,
         'is_admin': is_admin,
         'request user': request.user.id,
+        'index_title': index_title_dict[obj_to_display],
     }
     template = loader.get_template('entity_index.html')
     return HttpResponse(template.render(context, request))
@@ -208,7 +239,7 @@ def EntityView(request, obj_to_display, obj_pk):
         is_admin= True
     else: 
         obj_stuff = Item.objects.filter(
-            owner_id= obj_pk, is_visible= True).order_by('name')
+            owner_id= obj_pk, contained_by= None).order_by('name')
         is_admin= False
 
     
@@ -332,7 +363,7 @@ def ItemCraftByUser(request, recipe_id):
     char_obj= PjCharacter.objects.get(owner_id= request.user.id)
     CraftItem(char_obj, recipe_id)
 
-    return HttpResponseRedirect('/account#Artisanat')
+    return HttpResponseRedirect('/account#Possessions')
 
 #####################################################################
 def ChangelogView(request):

@@ -34,7 +34,9 @@ def NewItem():
         item_to_create.ia_type= item_recipe.ia_type
         item_to_create.ib_type= item_recipe.ib_type
         item_to_create.ic_type= item_recipe.ic_type
+        item_to_create.img_name= item_recipe.img_name
         item_to_create.quantity= input('Quantity: ')
+        item_to_create.is_container= item_recipe.is_container
         item_to_create.description= str(
             input('Description: (defaut: {}): '.format(
                 item_recipe.description)) or item_recipe.description
@@ -288,16 +290,31 @@ def Showgrp(entity_type):
 def ItemBreakdown(item_uid):
     '''
         Allows a player to break down an item into its elementary
-        pieces specified in its recipe.
+        pieces specified in its recipe. 1st we get all the recipes and
+        place them in a dictionary, keys being their identifier.
+        We get the ingame item by its uid, and extract its recipe
+        (which is an ItemRecipes object). ItemRecipes' ingredients
+        are under the form of strings for now, so we have to get the 
+        1, 2 or 3 strings of identifiers and get the corresponding
+        ItemRecipes objects. Those objects will give information on
+        the composition, name and description of the 1, 2 or 3 items
+        to create and give to the player.
     '''
+    # all recipes
+    recipes= {}
+    for item in ItemRecipes.objects.all():
+        recipes[item.identifier]= item
     # import item to breakdown
     item_to_bd = Item.objects.get(pk= item_uid)
     # get its recipe for quick access
     item_recipe= item_to_bd.recipe
     # get the ingredients recipes for full new item building
-    ing_recipes= [i for i in ItemRecipes.objects.filter(
-        pk__in= [item_recipe.ia, item_recipe.ib, item_recipe.ic]
-        )]
+    ing_recipes= []
+    for i in [item_recipe.ia, item_recipe.ib, item_recipe.ic]:
+        if i not in [None, '']:
+            ing_recipes.append(recipes[int(i)])
+        else:
+            pass
 
     # for each ingredient of the item to breakdown, create an item in
     # correct quantity
@@ -312,7 +329,7 @@ def ItemBreakdown(item_uid):
             func_state= 'Success'
         except ObjectDoesNotExist:
             try:
-                # try and create the ia item
+                # try and create the item
                 item_resulting_dict= {}
                 item_resulting_dict['recipe']= ingredient
                 item_resulting_dict['name']= ingredient.__str__()
@@ -321,6 +338,7 @@ def ItemBreakdown(item_uid):
                 item_resulting_dict['quantity']= item_recipe.iaq
                 item_resulting_dict['ia_type']= item_recipe.ia_type
                 item_resulting_dict['description']= item_recipe.description
+                item_resulting_dict['img_name']= item_recipe.img_name
                 new_item= Item(**item_resulting_dict)
                 new_item.save()
                 func_state= 'Success'
@@ -339,7 +357,7 @@ def ItemBreakdown(item_uid):
     return func_state
 
 #####################################################################
-def PossibleCrafts(char_uid):
+def PossibleCrafts(char_uid,craft_skill):
     '''
         Returns a list of possible items a PjCharacter can craft 
         with all his current items.
@@ -347,7 +365,7 @@ def PossibleCrafts(char_uid):
     '''
     char_obj= PjCharacter.objects.get(pk= char_uid)
 
-    all_item_recipes= [i for i in ItemRecipes.objects.all()]
+    all_item_recipes= [i for i in ItemRecipes.objects.filter(level__range=[2,craft_skill])]
 
     char_items= Item.objects.filter(owner= char_obj)
 
@@ -407,6 +425,7 @@ def CraftItem(char_obj, recipe_id):
         new_item.owner= char_obj
         new_item.is_visible= True
         new_item.quantity= 1
+        new_item.img_name= recipe_item_to_craft.img_name
         new_item.ia_type= recipe_item_to_craft.ia_type
         new_item.description= recipe_item_to_craft.description
         new_item.save()

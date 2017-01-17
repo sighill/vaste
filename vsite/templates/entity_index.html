@@ -1,27 +1,25 @@
 {% extends 'base_base.html' %}
 
 {% block content %}
-    {% for item in content %}
-    <div class="container">
-        <div class="medium_left_block">
-                <a href="view/{{item.pk}}">
-                    <img class ="medium_img" src="{{item.img_name.all.0.name}}" alt = 'profile pic'/>
-                </a>
-        </div> <!-- end block -->
 
-        <div class="block">
+<div class="container">
+    <div class="block"><h1>{{index_title}}</h1></div>
+</div>
+<div class="container wrappable_container">
+    {% for item in content %}
+    <div class="block medium_block">
             <a href="view/{{item.pk}}">
-                <h2>{{item.name}}</h2>
-                <p>{{item.more}}</p>
+                <img class ="medium_img" src="{{item.img_name.all.0.name}}" alt = 'profile pic'/>
             </a>
+            <h4>{{item.name}}</h4>
             {% if is_admin %}
                 {% if item.is_visible %}
-                    <p style="color: green">Entité visible <a class="admin_option" href="/entityswitchprivacy/{{item.pk}}">Switch</a></p> {{request_user}}
+                    <p style="color: green; font-size: 80%;">Visible <a class="admin_option" href="/entityswitchprivacy/{{item.pk}}">Switch</a></p> {{request_user}}
                 {% else %}
-                    <p style="color: yellow">Entité invisible <a class="admin_option" href="/entityswitchprivacy/{{item.pk}}">Switch</a></p>{{request_user}}
+                    <p style="color: yellow; font-size: 80%;">Invisible <a class="admin_option" href="/entityswitchprivacy/{{item.pk}}">Switch</a></p>{{request_user}}
                 {% endif %}
             {% endif %}
-        </div> <!-- end block -->
-    </div> <!-- end container -->
+    </div> <!-- end block -->
     {% endfor %}
+</div>
 {% endblock %}

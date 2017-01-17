@@ -29,40 +29,72 @@
 </div> <!-- end container -->
 
 <div class="container">
-    <div class="block">
-        <h2 id="Possessions">Possessions</h2>
-        <h3>Visibles</h3>
-        <ul>
-        {% for item in char_stuff_visible %} 
-        <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} {% if item.recipe %}[ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ]{% endif %} [ <a href="/itemswitchprivacy/{{item.uid}}">Cacher</a> ]</li>
+    <div class="block"><h2 id="Possessions">Possessions</h2></div>
+</div>
+
+<div class="container">
+    <div class="block"><h3>A la ceinture :</h3></div> <!-- end block -->
+</div> <!-- end container -->
+
+<div class="container wrappable_container">
+    {% if not char_stuff %}
+        <p>Vide</p>
+    {% else %}
+        {% for item in char_stuff %}
+            {% if not item.contained_by %} 
+                {% if not item.is_container %}
+                    <div class="medium_left_block">
+                        <div class="image_under_text"><img class="micro_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
+                        <p class="item_legend">{{item.name}}</p>
+                        <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
+                        {% for container in containers %}<p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/{{container.uid}}">Vers {{container.name}}</a></p>{% endfor %}
+                    </div>
+                {% endif %}
+            {% endif %}
         {% endfor %}
-        </ul>
-        <h3>Cachées</h3>
-        <ul>
-            {% for item in char_stuff_not_visible %} 
-            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} [ <a href="/itembreakdownbyuser/{{item.uid}}">Recycler</a> ] [ <a href="/itemswitchprivacy/{{item.uid}}">Rendre visible</a> ]</li>
-            {% endfor %}
-        </ul>
-    </div> <!-- end block -->
+    {% endif %}
+</div> <!-- end container -->
+
+{% for container in containers %}
+<div class="container">
+    <div class="block"><h3>{{container.name}} :</h3></div> <!-- end block -->
+</div> <!-- end container -->
+
+    <div class="container wrappable_container">
+        {% for item in char_stuff %}
+            {% if item.contained_by.uid == container.uid %}
+            <div class="medium_left_block">
+                <div class="image_under_text"><img class="micro_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
+                <p class="item_legend">{{item.name}}</p>
+                <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
+                <p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/0">Sortir l'objet</a></p>
+            </div>
+            {% endif %}
+        {% endfor %}
+    </div> <!-- end container -->
+{% endfor %}
 </div> <!-- end container -->
 
 <div class="container">
+    <div class="block"><h2 id="Artisanat">Artisanat</h2></div>
+</div>
+
+<div class="container wrappable_container">
+{% for craft in possible_craft %}
+    <div class="medium_left_block">
+        <div class="image_under_text"><img class="micro_img" src="{{craft.img_name}}"><h4 class="text_on_img">lv.{{craft.level}}</h4></div>
+        <p class="item_legend">{{craft}}</p>
+        <p class="small_legend">{{craft.ia_type}} : {{craft.iaq}}{% if craft.ib %}, {{craft.ib_type}} : {{craft.ibq}}{% endif %}{% if craft.ic %}, {{craft.ic_type}} : {{craft.icq}}{% endif %}</p>
+        <p class="item_legend"><a class="player_action" href="/itemcraftbyuser/{{craft.uid}}">Créer</a></p>
+    </div>
+{% endfor %}
+</div>  <!-- end container -->
+<div class="container ">
     <div class="block">
         <h2 id="Notes">Notes</h2>
             {% for entry in pj_note_content %}
                 <p class="note_quote">{{entry | linebreaksbr}}</p>
             {% endfor %}
-    </div>
-</div>  <!-- end container -->
-
-<div class="container">
-    <div class="block">
-        <h2 id="Artisanat">Artisanat</h2>
-            <ul>
-            {% for craft in possible_craft %}
-                <li>{{craft}} [ <a href="/itemcraftbyuser/{{craft.uid}}">Créer</a> ]</li>
-            {% endfor %}
-            </ul>
     </div>
 </div>  <!-- end container -->
 {% endblock %}

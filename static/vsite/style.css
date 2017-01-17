@@ -46,7 +46,28 @@
     font-size: 90%;
     margin-left: 40px;
     margin-right: 40px;
-}
+  }
+
+  .text_on_img{
+    color: orange;
+    position: absolute;
+    top: 30%;
+    left:-5%;
+    width: 100%;
+  }
+
+  .medium_left_block { 
+    display: flex;
+    border-radius: 5px;
+    margin: 5px;
+    background-color: rgba(76, 80, 82, 0.7);
+  }
+
+  .image_under_text{
+    margin: 2px;
+    position: relative;  
+  }
+
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
@@ -62,14 +83,14 @@
     max-height: 1000px;
   }
 
-  .large_left_block{
-    min-width: 220px;
-    max-width: 220px;
+  .medium_left_block{
+    min-width: 150px;
+    max-width: 150px;
   }
 
-  .medium_left_block{
-    min-width: 120px;
-    max-width: 120px;
+  .medium_block{
+    min-width: 150px;
+    max-width: 150px;
   }
 
   html { 
@@ -89,7 +110,6 @@
     background-color: rgba(78, 88, 90, 1);
     
   }
-
 
   #world_dropdown:hover #world_dropdown_content {
     display: block; 
@@ -119,6 +139,34 @@
     margin-left: 40px;
     margin-right: 40px;
   }
+
+  .text_on_img{
+    background-color: black;
+    font-size: 110%;
+    color: orange;
+    position: absolute;
+    text-align: center;
+    top: 55px;
+    left: 15px;
+    width: 29px;
+  }
+
+  .image_under_text{
+    margin: 0 auto;
+    position: relative;
+    min-width: 74px;
+    max-width: 74px;
+    height: auto;
+  }
+
+  .medium_left_block { 
+    display: flex;
+    border-radius: 5px;
+    margin: 5px;
+    flex-flow: wrap;
+    align-items: stretch;
+    background-color: rgba(76, 80, 82, 0.7);
+  }
 }
 
 /*WEBFONT SUPPORT -------------------------------------------------*/
@@ -129,16 +177,6 @@
        url('/static/vsite/acherusgrotesque_regular/acherus_grotesque_-_regular-webfont.woff') format('woff'),
        url('/static/vsite/acherusgrotesque_regular/acherus_grotesque_-_regular-webfont.ttf') format('truetype'),
        url('/static/vsite/acherusgrotesque_regular/acherus_grotesque_-_regular-webfont.svg#webfont') format('svg');
-}
-
-
-@font-face{ 
-  font-family: 'corehumanistsans_regular';
-  src: url('/static/vsite/corehumanistsans_regular/CoreHumanistSans-Regular-webfont.eot');
-  src: url('/static/vsite/corehumanistsans_regular/CoreHumanistSans-Regular-webfont.eot?#iefix') format('embedded-opentype'),
-       url('/static/vsite/corehumanistsans_regular/CoreHumanistSans-Regular-webfont.woff') format('woff'),
-       url('/static/vsite/corehumanistsans_regular/CoreHumanistSans-Regular-webfont.ttf') format('truetype'),
-       url('/static/vsite/corehumanistsans_regular/CoreHumanistSans-Regular-webfont.svg#webfont') format('svg');
 }
 
 /* NATIVE CSS -----------------------------------------------------*/
@@ -207,12 +245,14 @@ input{
 .container { 
   display: flex;
   flex: 1 1 auto;
-  justify-content: space-between;
   margin: 5px auto;
-  text-align: left;
   background-color: rgba(0,0,0,0);
   margin-bottom: 15px;
+}
 
+.wrappable_container{
+  flex-wrap: wrap;
+  justify-content: flex-start;
 }
 
 .block { 
@@ -224,16 +264,6 @@ input{
   background-color: rgba(76, 80, 82, 0.7);
   /*border: solid #190D0D 1px;*/
 
-}
-
-.medium_left_block { 
-  display: flex;
-  flex: 0 0 auto;
-  border-radius: 5px;
-  margin: 5px;
-  flex-flow: column;
-  align-items: stretch;
-  background-color: rgba(76, 80, 82, 0.7);
 }
 
 .large_left_block { 
@@ -262,6 +292,7 @@ input{
   border-width: 2px;
   border-style: solid;
   border-color: black;
+  max-height: 100%;
 
 }
 
@@ -275,7 +306,13 @@ input{
 }
 
 .micro_img{
-  max-width: 20px;
+  display: block;
+  margin: 5px auto;
+  border-width: 2px;
+  border-style: solid;
+  border-color: black;
+  height: auto;
+  max-width: 70px;
 }
 
 .wrapper {
@@ -288,10 +325,19 @@ input{
   text-align: center;
   font-size: 90%;
 }
+
 .left_small_legend{
   font-style: italic;
   font-size: 90%;
   margin-bottom: 2px;
+}
+
+.item_legend{
+  text-align: center;
+  margin: 0 auto;
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: 90%;
 }
 
 .reverted{
@@ -301,8 +347,13 @@ input{
 
 .admin_option{
   color: orange;
-  font-size: 90%;
+  font-size: 80%;
   margin-bottom: 2px;
+}
+
+.player_action{
+  color: orange;
+  font-size: 90%;
 }
 
 /* Dropdown menu -----------------------------*/

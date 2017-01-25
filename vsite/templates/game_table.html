@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <meta name="ROBOTS" content="NONE" />
+        <title>:: Vaste ::</title>
+        
+        {% load staticfiles %}
+        <link rel="stylesheet" type="text/css" href="/static/vsite/style.css" />
+        <link rel="favicon" href="{{STATIC_URL}}/favicon.ico">
+    </head>
+
+    <body>
+    	<div class="vtable">
+    		<div class="container">
+    			{% for menu in left_menus %}
+    			<div class="block"><a href="{{menu.link}}">{{menu.name}}</div>
+    			{% endfor %}
+    		</div> <!-- end container -->
+    	</div> <!-- end vtable -->
+    </body>
+</html>
+
+TO LOAD
+left_menus

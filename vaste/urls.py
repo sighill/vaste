@@ -59,6 +59,7 @@ urlpatterns = [
     url(r'^switchprivacy/(?P<note_uid>\d+)', views.NotePrivacySwitch, name= 'switch_privacy'),
     url(r'^notedelete/(?P<note_uid>\d+)', views.NoteDelete, name= 'note_delete'),
     # item mechanisms special urls
+    url(r'^itemswitchprivacy/(?P<item_uid>\d+)', views.ItemSwitchPrivacy, name='item_switch_privacy'),
     url(r'^itembreakdownbyuser/(?P<item_uid>\d+)', views.ItemBreakdownByUser, name='item_breakdown_by_user'),
     url(r'^itemcraftbyuser/(?P<recipe_id>\d+)', views.ItemCraftByUser, name='item_craft_by_user'),
     url(r'^itemcontainerchange/(?P<item_uid>\d+)/(?P<container_uid>\d+)', views.ItemContainerChange, name= 'item_container_change'),

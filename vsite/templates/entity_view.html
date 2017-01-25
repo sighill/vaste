@@ -29,22 +29,47 @@
 <div class="container">
     <div class="block">
         <h2>{{stuff_title}}</h2>
-        <ul>
-        {% if not obj_stuff %}
-            <li title= "J'ai dit qu'il n'y avait rien !">Rien apparemment...</li>
-        {% else %}
-        {% for item in obj_stuff %} 
-        {% if is_admin %}
-            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}} {% if item.is_visible %}<a href="/itemswitchprivacy/{{item.uid}}" class="admin_option"> Visible {% else %}<a href="/itemswitchprivacy/{{item.uid}}" class="admin_option"> Caché </a>{% endif %}</a>| <a class="admin_option" href="/giveitemto/{{item.uid}}/1061193016228543981">gt Fiole</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/3808195743949274374">gt Taurus</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/1943793931158625313">gt Dryade</a> | <a class="admin_option" href="/giveitemto/{{item.uid}}/2925594765163772086">gt Sighill</a></li>
-        {% else %}
-            <li title= "{{item.description}}">({{item.quantity}}) {{item.name}}</li>
-        {% endif %}
-        {% endfor %}
-        {% endif %}
-        </ul>
-        <p class="left_small_legend">Une courte description est parfois disponible en laissant son curseur sur les objets.</p>
     </div> <!-- end block -->
 </div> <!-- end container -->
+
+<div class="container wrappable_container">
+    {% if not obj_stuff %}
+        <div class="block"><p>Rien apparemment...</p></div> <!-- end block -->
+    {% else %}
+        {% for item in obj_stuff %} 
+            {% if item.is_visible %} 
+                <div class="medium_left_block">
+                    <div class="image_under_text"><img class="small_img" src="{{item.img_name}}"><h4 class="text_on_img">?</h4></div>
+                    <p class="item_legend">{{item}}</p>
+                    {% if is_admin %}
+                        {% if item.is_visible %}<p class="item_legend"><a href="/itemswitchprivacy/{{item.uid}}" class="admin_option"> Visible {% else %}<a href="/itemswitchprivacy/{{item.uid}}" class="admin_option">Caché</a>{% endif %}</a></p>
+                        <p class="item_legend"><a class="admin_option" href="/giveitemto/{{item.uid}}/1061193016228543981">gt Fiole</a></p>
+                        <p class="item_legend"><a class="admin_option" href="/giveitemto/{{item.uid}}/3808195743949274374">gt Taurus</a></p>
+                        <p class="item_legend"><a class="admin_option" href="/giveitemto/{{item.uid}}/1943793931158625313">gt Dryade</a></p>
+                        <p class="item_legend"><a class="admin_option" href="/giveitemto/{{item.uid}}/2925594765163772086">gt Sighill</a></p>
+                    {% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}    
+    {% endif %}
+</div> <!-- end container -->
+
+{% if obj.close_to %}
+<div class="container">
+    <div class="block"><h2>Lieux proches</h2></div> <!-- end block -->
+</div> <!-- end container -->
+
+<div class="container wrappable_container">
+    {% for close_place in obj.close_to.all %}
+    <div class="block medium_block">
+        <a href="{{close_place.pk}}">
+            <img class ="medium_img" src="{{close_place.img_name.all.0.name}}" alt = 'profile pic'/>
+        </a>
+        <h4>{{close_place.name}}</h4>
+    </div> <!-- end block -->
+    {% endfor %}
+</div> <!-- end container -->
+{% endif %}
 
 <div class="container">
     <div class="block">
@@ -62,6 +87,5 @@
             <a href="/login"><p><u>Connectez vous pour voir ou poster une note personnelle.</u></p></a>
         {% endif %}
     </div> <!-- end block -->
-
 </div> <!-- end container -->
 {% endblock %}

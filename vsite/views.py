@@ -64,6 +64,13 @@ def Account(request):
         'other_skills': other_skills,
         'possible_craft': PossibleCrafts(pj.uid,craft_skill),
         'containers': containers,
+        'craft_skill': craft_skill,
+        'max_body': max_body,
+        'max_instinct': max_instinct,
+        'max_spirit': max_spirit,
+        'body_meter_percent': int((pj.current_body / max_body)*100),
+        'instinct_meter_percent': int((pj.current_instinct / max_instinct)*100),
+        'spirit_meter_percent': int((pj.current_spirit / max_spirit)*100),
         }
         
         template = loader.get_template('account.html')
@@ -122,7 +129,7 @@ def EntityPrivacySwitch(request, entity_uid):
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
 #####################################################################
-def ItemPrivacySwitch(request, item_uid):
+def ItemSwitchPrivacy(request, item_uid):
     '''
         This view is a simple function called to make a hide/reveal
         an item in a character inventory.

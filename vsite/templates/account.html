@@ -15,6 +15,14 @@
     <div class="block">
         <h2>{{character.name}} - {{character.first_job}} {{character.second_job}}</h2> 
         <p>{{character.description | linebreaksbr}}</p>
+        <table class="attr_table">
+            <tr><th>Corps</th><th>Instinct</th><th>Esprit</th></tr>
+            <tr><td><div class="meter body_meter"><span style="width: {{body_meter_percent}}%; font-style: italic;">{{character.current_body}}/{{max_body}}</span></td><td><div class="meter instinct_meter"><span style="width: {{instinct_meter_percent}}%; font-style: italic;">{{character.current_instinct}}/{{max_instinct}}</span></td><td><div class="meter spirit_meter"><span style="width: {{spirit_meter_percent}}%; font-style: italic;">{{character.current_spirit}}/{{max_spirit}}</span></td></tr>
+            <tr><td>Puissance : {{character.puissance}}</td><td>Perception : {{character.perception}}</td><td>Volonté : {{character.volonte}}</td></tr>
+            <tr><td>Vigueur : {{character.vigueur}}</td><td>Charisme : {{character.charisme}}</td><td>Intelligence : {{character.intelligence}}</td></tr>
+            <tr><td>Dextérité : {{character.dexterite}}</td><td>Astuce : {{character.astuce}}</td><td>Essence : {{character.essence}}</td></tr>
+        </table>
+</div>
     </div> <!-- end block -->
 </div> <!-- end container -->
 
@@ -44,7 +52,7 @@
             {% if not item.contained_by %} 
                 {% if not item.is_container %}
                     <div class="medium_left_block">
-                        <div class="image_under_text"><img class="micro_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
+                        <div class="image_under_text"><img class="small_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
                         <p class="item_legend">{{item.name}}</p>
                         <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
                         {% for container in containers %}<p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/{{container.uid}}">Vers {{container.name}}</a></p>{% endfor %}
@@ -57,14 +65,14 @@
 
 {% for container in containers %}
 <div class="container">
-    <div class="block"><h3>{{container.name}} :</h3></div> <!-- end block -->
+    <div class="block align_horiz"> <img class="micro_img" src="{{container.img_name}}"><h3>{{container.name}} :</h3></div> <!-- end block -->
 </div> <!-- end container -->
 
     <div class="container wrappable_container">
         {% for item in char_stuff %}
             {% if item.contained_by.uid == container.uid %}
             <div class="medium_left_block">
-                <div class="image_under_text"><img class="micro_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
+                <div class="image_under_text"><img class="small_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
                 <p class="item_legend">{{item.name}}</p>
                 <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
                 <p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/0">Sortir l'objet</a></p>
@@ -76,16 +84,16 @@
 </div> <!-- end container -->
 
 <div class="container">
-    <div class="block"><h2 id="Artisanat">Artisanat</h2></div>
+    <div class="block"><h2 id="Artisanat">Artisanat <span class="small_legend">(niveau : {{craft_skill}})</span></h2></div>
 </div>
 
 <div class="container wrappable_container">
 {% for craft in possible_craft %}
     <div class="medium_left_block">
-        <div class="image_under_text"><img class="micro_img" src="{{craft.img_name}}"><h4 class="text_on_img">lv.{{craft.level}}</h4></div>
+        <div class="image_under_text"><img class="small_img" src="{{craft.img_name}}"><h4 class="text_on_img">lv.{{craft.level}}</h4></div>
         <p class="item_legend">{{craft}}</p>
         <p class="small_legend">{{craft.ia_type}} : {{craft.iaq}}{% if craft.ib %}, {{craft.ib_type}} : {{craft.ibq}}{% endif %}{% if craft.ic %}, {{craft.ic_type}} : {{craft.icq}}{% endif %}</p>
-        <p class="item_legend"><a class="player_action" href="/itemcraftbyuser/{{craft.uid}}">Créer</a></p>
+        <p class="item_legend"><a class="player_action" href="/itemcraftbyuser/{{craft.uid}}">Fabriquer</a></p>
     </div>
 {% endfor %}
 </div>  <!-- end container -->

@@ -166,6 +166,9 @@ class PjCharacter(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
+    current_body= models.PositiveIntegerField()
+    current_instinct= models.PositiveIntegerField()
+    current_spirit= models.PositiveIntegerField()
     
     # Methods
     def __str__(self):
@@ -318,8 +321,8 @@ class Place(GameEntity):
             default=timezone.now)
     modified_date = models.DateTimeField(
             auto_now=True)
-    # geometry
-    geom = gismodels.PolygonField(blank=True, null=True)
+    close_to= models.ManyToManyField(
+        'self' , related_name = 'is_close_to', blank=True)
 
     # Methods
     def __str__(self):

@@ -60,6 +60,7 @@
     display: flex;
     border-radius: 5px;
     margin: 5px;
+    align-items: stretch;
     background-color: rgba(76, 80, 82, 0.7);
   }
 
@@ -71,7 +72,7 @@
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
-@media(max-resolution: 1dppx){
+@media(min-width: 1000px) , (max-resolution: 1dppx){
   :root {
     font-size: 14px; 
   }
@@ -164,8 +165,23 @@
     border-radius: 5px;
     margin: 5px;
     flex-flow: wrap;
-    align-items: stretch;
     background-color: rgba(76, 80, 82, 0.7);
+  }
+
+  .attr_table{
+    border-collapse: collapse;
+    margin-left: 40px;
+    margin-right: 40px;
+    width: 60%;
+  }
+
+  .attr_table td, th{
+    text-align: center;
+    border-bottom: solid white 1px;
+    border-top: solid white 1px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    background-color: rgba(56, 58, 60, 0.7);
   }
 }
 
@@ -181,7 +197,7 @@
 
 /* NATIVE CSS -----------------------------------------------------*/
 * {
-    color : white;
+    color : #d6d6d6;
     font-family: Helvetica, Arial, sans-serif;
 }
 
@@ -241,6 +257,10 @@ input{
   color:black;
 }
 
+b{
+  color: #7b9fbd;
+}
+
 /* CUSTOM CLASSES -------------------------------------------------*/
 .container { 
   display: flex;
@@ -261,7 +281,7 @@ input{
   border-radius: 5px;
   margin: 5px;
   flex-flow: column;
-  background-color: rgba(76, 80, 82, 0.7);
+  background-color: rgba(76, 80, 82, 0.9);
   /*border: solid #190D0D 1px;*/
 
 }
@@ -305,7 +325,7 @@ input{
   height: auto;
 }
 
-.micro_img{
+.small_img{
   display: block;
   margin: 5px auto;
   border-width: 2px;
@@ -313,6 +333,16 @@ input{
   border-color: black;
   height: auto;
   max-width: 70px;
+}
+
+.micro_img{
+  display: block;
+  margin: 1px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+  max-height: 40px;
+  width: auto;
 }
 
 .wrapper {
@@ -356,5 +386,68 @@ input{
   font-size: 90%;
 }
 
-/* Dropdown menu -----------------------------*/
+.align_horiz{
+  flex-flow: row;
+  align-items: center
+}
 
+.attr_table{
+  display: table;
+  width: 90%;
+  margin: 10px auto;
+  border-collapse: collapse;
+}
+
+.attr_table td, th{
+  border-bottom: solid white 1px;
+  border-top: solid white 1px;
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 10px;
+  padding-right: 10px;
+  background-color: rgba(56, 58, 60, 0.7);
+}
+
+/* Attribute meters -----------------------------*/
+.meter { 
+  height: 18px;  /* Can be anything */
+  position: relative;
+  background: #555;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  padding: 2px;
+  box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
+}
+
+.meter > span {
+  display: block;
+  height: 100%;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+  background-color: red;
+  background-image: linear-gradient(
+    center bottom,
+    rgb(43,194,83) 37%,
+    rgb(84,240,84) 69%
+  );
+  box-shadow: 
+    inset 0 2px 9px  rgba(255,255,255,0.3),
+    inset 0 -2px 6px rgba(0,0,0,0.4);
+  position: relative;
+  overflow: hidden;
+}
+
+.body_meter > span {
+  background-color: #be0000;
+}
+
+.instinct_meter > span {
+  background-color: #ff8400;
+}
+
+.spirit_meter > span {
+  background-color: #4887bc;
+}

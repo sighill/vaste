@@ -365,7 +365,7 @@ def PossibleCrafts(char_uid,craft_skill):
     '''
     char_obj= PjCharacter.objects.get(pk= char_uid)
 
-    all_item_recipes= [i for i in ItemRecipes.objects.filter(level__range=[2,craft_skill])]
+    all_item_recipes= [i for i in ItemRecipes.objects.filter(level__range=[2,craft_skill]).order_by('name')]
 
     char_items= Item.objects.filter(owner= char_obj)
 
@@ -405,6 +405,7 @@ def PossibleCrafts(char_uid,craft_skill):
             possible_recipes.append(recipe)
         else:
             pass
+    # sort results alphabetically
     return possible_recipes
 
 

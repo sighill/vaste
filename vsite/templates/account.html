@@ -17,12 +17,11 @@
         <p>{{character.description | linebreaksbr}}</p>
         <table class="attr_table">
             <tr><th>Corps</th><th>Instinct</th><th>Esprit</th></tr>
-            <tr><td><div class="meter body_meter"><span style="width: {{body_meter_percent}}%; font-style: italic;">{{character.current_body}}/{{max_body}}</span></td><td><div class="meter instinct_meter"><span style="width: {{instinct_meter_percent}}%; font-style: italic;">{{character.current_instinct}}/{{max_instinct}}</span></td><td><div class="meter spirit_meter"><span style="width: {{spirit_meter_percent}}%; font-style: italic;">{{character.current_spirit}}/{{max_spirit}}</span></td></tr>
+            <tr><td><div class="meter body_meter"><span style="width: {{body_meter_percent}}%; font-style: italic;">{{character.current_body}}/{{character.max_body}}</span></td><td><div class="meter instinct_meter"><span style="width: {{instinct_meter_percent}}%; font-style: italic;">{{character.current_instinct}}/{{character.max_instinct}}</span></td><td><div class="meter spirit_meter"><span style="width: {{spirit_meter_percent}}%; font-style: italic;">{{character.current_spirit}}/{{character.max_spirit}}</span></td></tr>
             <tr><td>Puissance : {{character.puissance}}</td><td>Perception : {{character.perception}}</td><td>Volonté : {{character.volonte}}</td></tr>
             <tr><td>Vigueur : {{character.vigueur}}</td><td>Charisme : {{character.charisme}}</td><td>Intelligence : {{character.intelligence}}</td></tr>
             <tr><td>Dextérité : {{character.dexterite}}</td><td>Astuce : {{character.astuce}}</td><td>Essence : {{character.essence}}</td></tr>
         </table>
-</div>
     </div> <!-- end block -->
 </div> <!-- end container -->
 
@@ -54,7 +53,7 @@
                     <div class="medium_left_block">
                         <div class="image_under_text"><img class="small_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
                         <p class="item_legend">{{item.name}}</p>
-                        <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
+                        {% if item.recipe and item.recipe.identifier > 200 %}<p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>{% endif %}
                         {% for container in containers %}<p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/{{container.uid}}">Vers {{container.name}}</a></p>{% endfor %}
                     </div>
                 {% endif %}
@@ -74,14 +73,12 @@
             <div class="medium_left_block">
                 <div class="image_under_text"><img class="small_img" src="{{item.img_name}}"><h4 class="text_on_img">{{item.quantity}}</h4></div>
                 <p class="item_legend">{{item.name}}</p>
-                <p class="item_legend"><a class="player_action" href="/itembreakdownbyuser/{{item.uid}}">Recycler</a></p>
                 <p class="item_legend"><a class="player_action" href="/itemcontainerchange/{{item.uid}}/0">Sortir l'objet</a></p>
             </div>
             {% endif %}
         {% endfor %}
     </div> <!-- end container -->
 {% endfor %}
-</div> <!-- end container -->
 
 <div class="container">
     <div class="block"><h2 id="Artisanat">Artisanat <span class="small_legend">(niveau : {{craft_skill}})</span></h2></div>
@@ -93,16 +90,16 @@
         <div class="image_under_text"><img class="small_img" src="{{craft.img_name}}"><h4 class="text_on_img">lv.{{craft.level}}</h4></div>
         <p class="item_legend">{{craft}}</p>
         <p class="small_legend">{{craft.ia_type}} : {{craft.iaq}}{% if craft.ib %}, {{craft.ib_type}} : {{craft.ibq}}{% endif %}{% if craft.ic %}, {{craft.ic_type}} : {{craft.icq}}{% endif %}</p>
-        <p class="item_legend"><a class="player_action" href="/itemcraftbyuser/{{craft.uid}}">Fabriquer</a></p>
+        <p class="item_legend"><a class="player_action" href="/itemcraftbyuser/{{craft.identifier}}">Fabriquer</a></p>
     </div>
 {% endfor %}
 </div>  <!-- end container -->
-<div class="container ">
+<!-- <div class="container ">
     <div class="block">
         <h2 id="Notes">Notes</h2>
             {% for entry in pj_note_content %}
                 <p class="note_quote">{{entry | linebreaksbr}}</p>
             {% endfor %}
     </div>
-</div>  <!-- end container -->
+</div>  --> <!-- end container -->
 {% endblock %}

@@ -11,6 +11,36 @@ import pprint
 from copy import deepcopy
 
 #####################################################################
+def GiveItem(item_to_give, item_recipient):
+    '''
+        Dirty way to give an item to a player. Will do better next time.
+    '''
+    # get the recipient inventory
+    try:
+        # try and get 
+        similar_item_in_recipient_inv= Item.objects.filter(owner= item_recipient).filter(recipe= item_to_give.recipe)[0]
+    except IndexError:
+        similar_item_in_recipient_inv= False
+    # check if a similar item is present in entity's inventory
+    # if it exists, add item's quantity to recipient item's quantity.
+    # if not, create a new item.
+    if similar_item_in_recipient_inv:
+        similar_item_in_recipient_inv.quantity += item_to_give.quantity
+        similar_item_in_recipient_inv.save()
+    else:
+        new_item= deepcopy(item_to_give)
+        new_item.uid= None
+        new_item.owner= item_recipient
+        new_item.quantity= 1
+        new_item.save()
+
+    # as loot give the whole quantity of items, we can safely delete
+    # the looted item.
+    item_to_give.delete()
+
+    return True
+
+#####################################################################
 def NewItem():
     '''
         Creates a new item for a game entity. Everything is entered
@@ -145,27 +175,23 @@ def Loot():
         for item in items_avail:
             print('{} - {}'.format(item.uid, item.name))
         # for each item ask who is the recipient
-        for item in items_avail:
-            item_recipient = input(
-                'Destinataire de {}: '.format(item.name)
+        for item_to_give in items_avail:
+            # get the recipient of the item (who will have it, for 
+            # now it's only PJ who can loot)
+            item_recipient = PjCharacter.objects.get(
+                name=input('Destinataire de {}: '.format(item.name))
                 )
-            item.owner_id= GameEntity.objects.get(
-                name= item_recipient)
-            # ask for validation
-            validation= input('Valider ? y/n : ')
-            if validation in ['Y','y']:
-                item.save()
-                print('Item donné.')
-            else:
-                print('Item laissé.')
-                pass
+            # call function GiveItem declared earlier.
+            GiveItem(item_to_give, item_recipient)
+        # declare func_state to confirm function end
+        func_state= 'Success'
     # raise exceptions
     except (ValueError, TypeError, ObjectDoesNotExist,
         PermissionDenied, FieldError, ValidationError) as e:
         raise e
         func_state = 'fail'
     # end function
-    return 'loot fini.'
+    return func_state
 
 #####################################################################
 def NewCrea():
@@ -186,7 +212,7 @@ def NewCrea():
         # copy the instance into a new object
         # dirtyyyyyyy
         new_creature= IgCreature()
-        new_creature.name= '({}) {}'.format(creature_to_copy.name,input('Nom unique: '))
+        new_creature.name= '{}'.format(creature_to_copy.name,input('Nom unique: '))
         new_creature.is_visible= True
         new_creature.location= Place.objects.get(
             name= input('Endroit où elle est: '))
@@ -201,6 +227,9 @@ def NewCrea():
         new_creature.volonte= creature_to_copy.volonte
         new_creature.intelligence= creature_to_copy.intelligence
         new_creature.essence= creature_to_copy.essence
+        new_creature.current_body= creature_to_copy.puissance+ creature_to_copy.vigueur+ creature_to_copy.dexterite
+        new_creature.current_instinct= creature_to_copy.perception+ creature_to_copy.charisme+ creature_to_copy.astuce
+        new_creature.current_spirit= creature_to_copy.volonte+ creature_to_copy.intelligence+ creature_to_copy.essence
         # ask for validation
         validation= input('Valider ? y/n : ')
         if validation in ['Y','y']:
@@ -215,7 +244,8 @@ def NewCrea():
                 owner_id= creature_to_copy.uid)
             # copy each item and give it to the new creature
             for item in copied_creature_items:
-                new_item= copy.copy(item)
+                new_item= deepcopy(item)
+                new_item.uid= None
                 new_item.owner_id= saved_creature.uid
                 new_item.save()
             func_state= 'Créature unique et ses items créee.'
@@ -408,10 +438,9 @@ def PossibleCrafts(char_uid,craft_skill):
     # sort results alphabetically
     return possible_recipes
 
-
 #####################################################################
-def CraftItem(char_obj, recipe_id):
-    recipe_item_to_craft= ItemRecipes.objects.get(identifier= int(recipe_id))
+def CraftItem(char_obj, recipe_identifier):
+    recipe_item_to_craft= ItemRecipes.objects.get(identifier= int(recipe_identifier))
     char_items= Item.objects.filter(owner= char_obj.uid)
 
     try:

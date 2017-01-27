@@ -30,7 +30,17 @@
                     <a class="small_legend" href="/changelog">Changelog</a>
                 </div> <!-- end block -->
             </div> <!-- end container -->
-
+            <div class="container"> 
+            {% if game_ongoing %}
+                <div class="block" style="background: #ed8500;">
+                    <a href="/gametable"><h1>Rejoindre la partie en cours !</h1></a>
+                </div>
+            {% else %}
+                <div class="block">
+                    <h1>Prochaine partie : {{scheduled_game}}</h1>
+                </div>
+            {% endif %}
+            </div>
             {% for item in home_items %}
             <div class="container">
                 <div class="medium_left_block">

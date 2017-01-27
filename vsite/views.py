@@ -1,18 +1,30 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.template import loader
 from .models import *
-from .forms import PjNoteForm
+from .forms import PjNoteForm, ScribeEntry
 from .scripts.ingame_utils import *
 from copy import deepcopy
+from random import randint
+
+current_place= Place.objects.get(name='Alentours du Havre de la cascade')
+game_ongoing= True
+scheduled_game= '27 janvier - 21h15'
+current_gamelog_uid= 15
 
 #####################################################################
 def Home(request):
+    '''
+        Defines the necessary elements to display on the front page.
+    '''
+
     home_items= HomeItems.objects.select_related().filter().exclude(name='Accueil').order_by('order_position')
     # get the first three changelog entries that are announces
     announces= Changelog.objects.filter(is_announce= True).order_by('-created_date')[:3]
     context = {
         'home_items': home_items,
         'announces': announces,
+        'game_ongoing': game_ongoing,
+        'scheduled_game': scheduled_game
     } 
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
@@ -28,10 +40,6 @@ def Account(request):
         f_skills= [i for i in pj.first_job.related_skills.filter(is_unique=False)]
         s_skills= [i for i in pj.second_job.related_skills.filter(is_unique=False)]
         other_skills= list(set(f_skills + s_skills))
-        # get his metaskill levels
-        max_body= pj.puissance + pj.vigueur + pj.dexterite
-        max_instinct= pj.perception + pj.charisme + pj.astuce
-        max_spirit= pj.volonte + pj.intelligence + pj.essence
         craft_skill= int((pj.dexterite + pj.astuce)/2)
         # get his stuff
         char_stuff = [item for item in Item.objects.filter(
@@ -65,12 +73,9 @@ def Account(request):
         'possible_craft': PossibleCrafts(pj.uid,craft_skill),
         'containers': containers,
         'craft_skill': craft_skill,
-        'max_body': max_body,
-        'max_instinct': max_instinct,
-        'max_spirit': max_spirit,
-        'body_meter_percent': int((pj.current_body / max_body)*100),
-        'instinct_meter_percent': int((pj.current_instinct / max_instinct)*100),
-        'spirit_meter_percent': int((pj.current_spirit / max_spirit)*100),
+        'body_meter_percent': int((pj.current_body / pj.max_body())*100),
+        'instinct_meter_percent': int((pj.current_instinct / pj.max_instinct())*100),
+        'spirit_meter_percent': int((pj.current_spirit / pj.max_spirit())*100),
         }
         
         template = loader.get_template('account.html')
@@ -256,55 +261,45 @@ def EntityView(request, obj_to_display, obj_pk):
         # Get the PjCharacter of current user
         current_character = PjCharacter.objects.get(
             owner_id= request.user.id)
-
         # get all his PRIVATE notes ---------------------------------
         private_notes = [i for i in PjNote.objects.filter(
         note_target= obj_pk, poster_id= current_character, is_public= False)]
-        
         # initiate the list
         private_notes_formatted = []
-
         # check if there's no private note
         if len(private_notes) == 0:
             private_notes_formatted = ['Pas de note personnelle enregistrée.']
-
         # if there are notes in the list of queried elements, we format them
         else:
             for private_note in private_notes:
                 private_notes_formatted.append(
                     '[ <a style="font-size:70%" href="/switchprivacy/{}">O</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
                         private_note.uid, private_note.uid, private_note.note, private_note.poster
-                        )
                     )
-
+                )
         # get all the PUBLIC notes ----------------------------------
         public_notes = [i for i in PjNote.objects.filter(
         note_target= obj_pk, is_public= True)]
-
         # initiate the list
         public_notes_formatted = []
-
         # for each public note, format the content in a string
         for public_note in public_notes:
-
             # if the note belongs to the current character, add the option to
             # switch the privacy of said note
             if public_note.poster_id == current_character.uid:
                 public_notes_formatted.append(
                     '[ <a style="font-size:70%" href="/switchprivacy/{}">Ø</a> | <a style="font-size:70%" href="/notedelete/{}">X</a> ] <i>« {} »</i> - {}'.format(
                         public_note.uid, public_note.uid, public_note.note, public_note.poster
-                        )
                     )
-
+                )
             # if the note does not belong to current character, don't give
             # the privacy swith option
             else:
                 public_notes_formatted.append(
                     '<i>« {} »</i> - {}'.format(
                         public_note.note, public_note.poster
-                        )
                     )
-
+                )
     # if user is not authenticated
     else:
         # generic message leading to login page.
@@ -318,9 +313,8 @@ def EntityView(request, obj_to_display, obj_pk):
             public_notes_formatted.append(
                 '<i>« {} »</i> - {}'.format(
                     public_note.note, public_note.poster
-                    )
                 )
-
+            )
     # Filling the context passed to the template
     context = {
         'obj': obj,
@@ -347,7 +341,6 @@ def EntityView(request, obj_to_display, obj_pk):
                 poster_id= poster_id , note_target= note_target , note= note_to_create)
         return HttpResponseRedirect(note_target.uid)
 
-
 #####################################################################
 def ItemBreakdownByUser(request, item_uid):
     '''
@@ -361,14 +354,14 @@ def ItemBreakdownByUser(request, item_uid):
     return HttpResponseRedirect('/account#Possessions')
 
 #####################################################################
-def ItemCraftByUser(request, recipe_id):
+def ItemCraftByUser(request, recipe_identifier):
     '''
         This view is meant to call the external function CraftItem
         by an user wanting to craft an item, through
         a button in his inventory, page account.
     '''
     char_obj= PjCharacter.objects.get(owner_id= request.user.id)
-    CraftItem(char_obj, recipe_id)
+    CraftItem(char_obj, recipe_identifier)
 
     return HttpResponseRedirect('/account#Possessions')
 
@@ -395,7 +388,7 @@ def GiveItemTo(request, item_uid, recipient_uid):
         similar_item_in_recipient_inv= Item.objects.filter(owner= recipient_pj).filter(recipe= item_to_give.recipe)[0]
     except IndexError:
         similar_item_in_recipient_inv= False
-
+    #
     if similar_item_in_recipient_inv:
         similar_item_in_recipient_inv.quantity = similar_item_in_recipient_inv.quantity + 1
         similar_item_in_recipient_inv.save()
@@ -414,3 +407,93 @@ def GiveItemTo(request, item_uid, recipient_uid):
 
     return HttpResponseRedirect(request.META.get('HTTP_REFERER', '/'))
 
+#####################################################################
+def GameTable(request):
+    '''
+        Main page for the game. Every current event, NPC and PC are
+        on the same window for quick display. Every item links to more
+        detailed views.
+    '''
+    if request.method== 'GET':
+        if request.user.is_authenticated():
+            pj_active= PjCharacter.objects.get(owner_id= request.user.id)
+            # unlock admin options
+            if request.user.id== 1:
+                is_scribe= True
+                is_admin= True
+            elif request.user.id== 2:
+                is_scribe= True
+                is_admin= False
+            else:
+                is_scribe= False
+                is_admin= False
+            # To pass all objects in a clean way with additional information
+            # for the template, we give properties to each object.
+            all_pj= PjCharacter.objects.select_related().filter(is_visible=True)
+            for pj in all_pj:
+                pj.body_meter_percent= int((pj.current_body / pj.max_body())*100)
+                pj.instinct_meter_percent= int((pj.current_instinct / pj.max_instinct())*100)
+                pj.spirit_meter_percent= int((pj.current_spirit / pj.max_spirit())*100)
+                pj.visible_items= [i for i in Item.objects.filter(owner=pj, is_visible= True)]
+            # Idem for all creatures present
+            creatures_present= IgCreature.objects.filter(location=current_place)
+            for c in creatures_present:
+                c.body_meter_percent= int((c.current_body / c.max_body())*100)
+                c.instinct_meter_percent= int((c.current_instinct / c.max_instinct())*100)
+                c.spirit_meter_percent= int((c.current_spirit / c.max_spirit())*100)
+                c.visible_items= [i for i in Item.objects.filter(owner=c, is_visible= True)]
+
+            # Idem for all NPC present
+            npc_present= Pnj.objects.filter(location=current_place, is_visible=True)
+            for n in npc_present:
+                n.body_meter_percent= int((n.current_body / n.max_body())*100)
+                n.instinct_meter_percent= int((n.current_instinct / n.max_instinct())*100)
+                n.spirit_meter_percent= int((n.current_spirit / n.max_spirit())*100)
+                n.visible_items= [i for i in Item.objects.filter(owner=n, is_visible= True)]
+
+            context = {
+                'all_pj': all_pj,
+                'current_place': current_place,
+                'creatures_present': creatures_present,
+                'npc_present': npc_present,
+                'pj_active': pj_active.pk,
+                'table_log': TableLog.objects.all().order_by('created_date').reverse()[:10],
+                'is_admin': is_admin,
+                'is_scribe': is_scribe,
+                'form': ScribeEntry(),
+            } 
+            template = loader.get_template('game_table.html')
+            return HttpResponse(template.render(context, request))
+        else:
+            return HttpResponseRedirect('/login')
+    # if request.method== 'POST'
+    else: 
+        form = ScribeEntry(request.POST)
+        if form.is_valid():
+            log_receiving_entry= GameLog.objects.get(pk=current_gamelog_uid)
+            log_receiving_entry.corpus+= ' {}'.format(form.cleaned_data['entry'])
+            log_receiving_entry.save()
+        return HttpResponseRedirect('/gametable')
+
+#####################################################################
+def RollDice(request, entity_rolling_pk):
+    '''
+        Roll a D100 on the gametable.
+    '''
+    # entity rolling the die
+    entity_rolling= GameEntity.objects.get(pk= entity_rolling_pk)
+    # Get the dice result
+    result= randint(0,100)
+    if result > 90:
+        roll_log= 'a fait un résultat de <b>{}</b> sur 1D100 - ECHEC CRITIQUE !'.format(result)
+    elif result < 10:
+        roll_log= 'a fait un résultat de <b>{}</b> sur 1D100 - REUSSITE CRITIQUE !'.format(result)
+    else:
+        roll_log= 'a fait un résultat de <b>{}</b> sur 1D100.'.format(result)
+    # Create a new log line with the new entry
+    log= TableLog()
+    log.title= roll_log
+    log.source_entity= entity_rolling
+    log.save()
+
+    return HttpResponseRedirect('/gametable')

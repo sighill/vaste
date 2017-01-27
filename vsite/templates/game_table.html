@@ -8,18 +8,122 @@
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="/static/vsite/style.css" />
         <link rel="favicon" href="{{STATIC_URL}}/favicon.ico">
+        <script>
+            function refreshPage () {
+                var page_y = $( document ).scrollTop();
+                window.location.href = window.location.href + '?page_y=' + page_y;
+            }
+            window.onload = function () {
+                setTimeout(refreshPage, 5000);
+                if ( window.location.href.indexOf('page_y') != -1 ) {
+                    var match = window.location.href.split('?')[1].split("&")[0].split("=");
+                    $('html, body').scrollTop( match[1] );
+                }
+            }
+        </script>
     </head>
 
     <body>
-    	<div class="vtable">
-    		<div class="container">
-    			{% for menu in left_menus %}
-    			<div class="block"><a href="{{menu.link}}">{{menu.name}}</div>
-    			{% endfor %}
-    		</div> <!-- end container -->
-    	</div> <!-- end vtable -->
+        <div class="left_game_table">
+            <div class="container">
+
+                <div class="block"><a href="/"><h4>Accueil</h4></a></div>
+                <div class="block"><a href="/account"><h4>Fiche de personnage</h4></a></div>
+                <div class="block"><a href="/log"><h4>Résumé de parties</h4></a></div>
+                <div class="block " id="world_dropdown"><a href="#"><h4>Monde du vaste</h4></a>
+                    <div id="world_dropdown_content">
+                            <a href="/places"><h4>Lieux</h4></a>
+                            <a href="/pheno"><h4>Phénomènes</h4></a>
+                            <a href="/creatures"><h4>Créatures</h4></a>
+                    </div>
+                </div>
+                <div class="block" id="char_dropdown"><a href="#"><h4>Personnages</h4></a>
+                    <div id="char_dropdown_content">
+                        <a href="/pj"><h4>Joueurs</h4></a>
+                        <a href="/pnj"><h4>Non joueurs</h4></a>
+                    </div>
+                </div>
+            </div> <!-- end container -->
+
+            <div class="container wrappable_container">
+                {% for pj in all_pj %}
+                <div class="block align_horiz">
+                    <a href="/pj/view/{{pj.pk}}"><img class="medium_img" src="{{pj.img_name.all.0.name}}"></a>
+                    <div class="medium_block">
+                        <h4>{{pj.name}}</h4>
+                        <div class="meter body_meter"><span class="meter_text" style="width: {{pj.body_meter_percent}}%;">{{pj.current_body}}/{{pj.max_body}}</span></div>
+                        <div class="meter instinct_meter"><span class="meter_text"  style="width: {{pj.instinct_meter_percent}}%;">{{pj.current_instinct}}/{{pj.max_instinct}}</span></div>
+                        <div class="meter spirit_meter"><span class="meter_text"  style="width: {{pj.spirit_meter_percent}}%;">{{pj.current_spirit}}/{{pj.max_spirit}}</span></div>
+                        <div class="container wrappable_container">
+                        {% for item in pj.visible_items %}
+                            <div class="img_under_text"><img title="{{item.quantity}} {{item.name}}" class="micro_img" src="{{item.img_name}}"></div>
+                        {% endfor %}
+                        </div>
+                        {% if pj.pk == pj_active %}<a href="/rolldice/{{pj.pk}}"><img class="micro_img" src="/static/vsite/d10.png"></a>{% endif %}
+                    </div> <!-- end medium_block -->
+                </div> <!-- end block align horiz -->
+                {% endfor %}
+            </div> <!-- end container -->
+            {% if is_scribe %}
+            <form method='post'>
+            {% csrf_token %}{{ form }} <input type='submit' value='Submit' />
+            </form>
+            {% endif %}
+
+            <div class="container"> 
+                <div class="block">
+                    <a href="/places/view/{{current_place.pk}}" target="_blank"><img class="xlarge_img" src="{{current_place.img_name.all.0.complete_file}}"></a>
+                    <h4>{{current_place.name}}</h4>
+                </div>
+            </div>
+
+            <div class="container wrappable_container">
+                {% for creature in creatures_present %}
+                <div class="block align_horiz third_block">
+                    <a href="#"><img class="medium_img" src="{{creature.img_name.all.0.name}}"></a>
+                    <div class="medium_block">
+                        <h4>{{creature.name}}</h4>
+                        <div class="meter body_meter"><span class="meter_text" style="width: {{creature.body_meter_percent}}%;"></span></div>
+                        <div class="meter instinct_meter"><span class="meter_text"  style="width: {{creature.instinct_meter_percent}}%;"></span></div>
+                        <div class="meter spirit_meter"><span class="meter_text"  style="width: {{creature.spirit_meter_percent}}%;"></span></div>
+                        <div class="container wrappable_container">
+                        {% for item in creature.visible_items %}
+                        <div class="img_under_text"><img title="{{item.name}}" class="micro_img" src="{{item.img_name}}"></div>
+                        {% endfor %}
+                        </div>
+                    {% if is_admin %}<a href="/rolldice/{{creature.pk}}"><img class="micro_img" src="/static/vsite/d10.png"></a>{% endif %}
+                    </div> <!-- end medium_block -->
+                </div> <!-- end block align horiz -->
+                {% endfor %}
+
+                {% for npc in npc_present %}
+                <div class="block align_horiz third_block">
+                    <a href="/pnj/view/{{npc.pk}}"><img class="medium_img" src="{{npc.img_name.all.0.name}}"></a>
+                    <div class="medium_block">
+                        <h4>{{npc.name}}</h4>
+                        <div class="meter body_meter"><span class="meter_text" style="width: {{npc.body_meter_percent}}%;"></span></div>
+                        <div class="meter instinct_meter"><span class="meter_text"  style="width: {{npc.instinct_meter_percent}}%;"></span></div>
+                        <div class="meter spirit_meter"><span class="meter_text"  style="width: {{npc.spirit_meter_percent}}%;"></span></div>
+                        <div class="container wrappable_container">
+                        {% for item in npc.visible_items %}
+                        <div class="img_under_text"><img title="{{item.name}}" class="micro_img" src="{{item.img_name}}"></div>
+                        {% endfor %}
+                        </div>
+                    {% if is_admin %}<a href="/rolldice/{{npc.pk}}"><img class="micro_img" src="/static/vsite/d10.png"></a>{% endif %}
+                    </div> <!-- end medium_block -->
+                </div> <!-- end block align horiz -->
+                {% endfor %}
+            </div> <!-- end container -->
+        </div> <!-- end left_wrapper -->
+        
+        <div class="right_game_table">
+            {% for log in table_log %}
+            <div class="container">
+                <div class="block">
+                    <p>({{log.created_date.hour}}h {{log.created_date.minute}}) <b style="color: orange;">{{log.source_entity}}</b> {{log.title | safe}}</p>
+                </div>
+            </div>
+            {% endfor %}   
+        </div> <!-- end right_wrapper -->
     </body>
 </html>
-
-TO LOAD
-left_menus

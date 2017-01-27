@@ -68,7 +68,6 @@ class ItemRecipes(models.Model):
     def __str__(self):
         return str('{}: {} en {}'.format(self.item_type, self.name, self.ia_type))
 
-
 #####################################################################
 class HomeItems(models.Model):
     '''
@@ -124,8 +123,6 @@ class Jobs(models.Model):
     def __str__(self):
         return str(self.name)
 
-
-
 #####################################################################
 class GameEntity(models.Model):
     '''
@@ -174,6 +171,15 @@ class PjCharacter(GameEntity):
     def __str__(self):
         return str(self.name)
 
+    def max_body(self):
+        return self.puissance+ self.vigueur+ self.dexterite
+
+    def max_instinct(self):
+        return self.perception + self.charisme + self.astuce
+
+    def max_spirit(self):
+        return self.volonte + self.intelligence + self.essence
+
 #####################################################################
 class Pnj(GameEntity):
     '''
@@ -182,6 +188,8 @@ class Pnj(GameEntity):
     '''
 
     # Attributes
+    location= models.ForeignKey(
+        'Place' , related_name = 'pnj_location')
     first_job = models.ForeignKey(Jobs, related_name='pnj_fjob', blank=True, null=True)
     second_job = models.ForeignKey(Jobs, related_name='pnj_sjob', blank=True, null=True)
     puissance = models.PositiveIntegerField()
@@ -193,6 +201,22 @@ class Pnj(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
+    current_body= models.PositiveIntegerField()
+    current_instinct= models.PositiveIntegerField()
+    current_spirit= models.PositiveIntegerField()
+    
+    # Methods
+    def __str__(self):
+        return str(self.name)
+
+    def max_body(self):
+        return self.puissance+ self.vigueur+ self.dexterite
+
+    def max_instinct(self):
+        return self.perception + self.charisme + self.astuce
+
+    def max_spirit(self):
+        return self.volonte + self.intelligence + self.essence
     
     # Methods
     def __str__(self):
@@ -296,7 +320,6 @@ class Item(models.Model):
     def __str__(self):
         return str(self.name)
 
-
 #####################################################################
 class Place(GameEntity):
     '''
@@ -366,10 +389,22 @@ class IgCreature(GameEntity):
     volonte = models.PositiveIntegerField()
     intelligence = models.PositiveIntegerField()
     essence = models.PositiveIntegerField()
+    current_body= models.PositiveIntegerField()
+    current_instinct= models.PositiveIntegerField()
+    current_spirit= models.PositiveIntegerField()
     
     # Methods
     def __str__(self):
         return str(self.name)
+
+    def max_body(self):
+        return self.puissance+ self.vigueur+ self.dexterite
+
+    def max_instinct(self):
+        return self.perception + self.charisme + self.astuce
+
+    def max_spirit(self):
+        return self.volonte + self.intelligence + self.essence
 
 #####################################################################
 class Changelog(models.Model):
@@ -391,4 +426,23 @@ class Changelog(models.Model):
     def __str__(self):
         return str(self.title)
 
-
+#####################################################################
+class TableLog(models.Model):
+    '''
+        Log of the actions of the game table for display on view
+        gametable.
+        Field source_entity is the entity who fired the event of 
+        creating a new entry.
+    '''
+    # attributes
+    uid= models.AutoField(
+        primary_key = True , db_index = True)
+    title= models.CharField(
+        max_length = 100, null = True, blank = True)
+    source_entity= models.ForeignKey(
+        GameEntity, related_name='source_entity', blank=True, null=True )
+    created_date = models.DateTimeField(
+            default= timezone.now)
+    # Methods
+    def __str__(self):
+        return str(self.title)

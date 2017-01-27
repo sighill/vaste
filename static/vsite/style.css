@@ -72,7 +72,7 @@
 }
 
 /* MEDIA QUERIES FOR DESKTOP --------------------------------------*/
-@media(max-resolution: 1dppx){
+@media(min-width: 1000px) , (max-resolution: 1dppx){
   :root {
     font-size: 14px; 
   }
@@ -201,6 +201,12 @@
     font-family: Helvetica, Arial, sans-serif;
 }
 
+body{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+}
+
 a{
   text-decoration: none;
   margin-top: 5px;
@@ -283,7 +289,6 @@ b{
   flex-flow: column;
   background-color: rgba(76, 80, 82, 0.9);
   /*border: solid #190D0D 1px;*/
-
 }
 
 .large_left_block { 
@@ -345,9 +350,16 @@ b{
   width: auto;
 }
 
-.wrapper {
-  margin:auto;
-  display: inline-block;
+#wrapper {
+  margin: 0 auto;
+}
+
+.left_game_table{
+  min-width: 1000px;
+}
+
+.right_game_table{
+
 }
 
 .small_legend{
@@ -408,6 +420,16 @@ b{
   background-color: rgba(56, 58, 60, 0.7);
 }
 
+.third_block{
+  max-width: 33%;
+}
+
+#id_entry{
+  width: 92%;
+  height: 18px;
+  font-size: 110%;
+  font-family: 'acherusgrotesque_regular', Arial, sans-serif;
+}
 /* Attribute meters -----------------------------*/
 .meter { 
   height: 18px;  /* Can be anything */
@@ -441,13 +463,17 @@ b{
 }
 
 .body_meter > span {
-  background-color: #be0000;
+  background-color: #a10b0b;
 }
 
 .instinct_meter > span {
-  background-color: #ff8400;
+  background-color: #6aa84f;
 }
 
 .spirit_meter > span {
-  background-color: #4887bc;
+  background-color: #4a86e8;
+}
+
+.meter_text{
+  font-style: italic;
 }

@@ -14,7 +14,7 @@ class AdminHomeItems(admin.ModelAdmin):
 admin.site.register(HomeItems , AdminHomeItems)
 
 class AdminGameLog(admin.ModelAdmin):
-    list_display =['uid', 'order_position', 'created_date']
+    list_display =['uid', 'chapter_date', 'order_position', 'created_date']
     ordering = ['created_date']
 admin.site.register(GameLog , AdminGameLog)
 
@@ -83,3 +83,8 @@ class AdminImage(admin.ModelAdmin):
     list_display =['uid', 'name', 'internal_link', 'external_link', 'complete_file', 'legend', 'legend_alt']
     ordering = ['uid']
 admin.site.register(Image , AdminImage)
+
+class AdminTableLog(admin.ModelAdmin):
+    list_display =['uid', 'source_entity', 'title']
+    ordering = ['uid']
+admin.site.register(TableLog , AdminTableLog)

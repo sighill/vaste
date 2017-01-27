@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^account/', views.Account, name='account'),
     url(r'^log/', views.Log, name='gamelog'),
     url(r'^changelog/', views.ChangelogView, name='changelog'),
+    url(r'^gametable/', views.GameTable, name='gametable'),
     # game entity indexes
     url(r'^pnj/$', views.EntityIndex, {'obj_to_display': Pnj}),
     url(r'^pj/$', views.EntityIndex, {'obj_to_display': PjCharacter}),
@@ -61,11 +62,13 @@ urlpatterns = [
     # item mechanisms special urls
     url(r'^itemswitchprivacy/(?P<item_uid>\d+)', views.ItemSwitchPrivacy, name='item_switch_privacy'),
     url(r'^itembreakdownbyuser/(?P<item_uid>\d+)', views.ItemBreakdownByUser, name='item_breakdown_by_user'),
-    url(r'^itemcraftbyuser/(?P<recipe_id>\d+)', views.ItemCraftByUser, name='item_craft_by_user'),
+    url(r'^itemcraftbyuser/(?P<recipe_identifier>\d+)', views.ItemCraftByUser, name='item_craft_by_user'),
     url(r'^itemcontainerchange/(?P<item_uid>\d+)/(?P<container_uid>\d+)', views.ItemContainerChange, name= 'item_container_change'),
     url(r'^giveitemto/(?P<item_uid>\d+)/(?P<recipient_uid>\d+)', views.GiveItemTo, name= 'give_item_to'),
     #GameEntity mechanisms special urls
     url(r'^entityswitchprivacy/(?P<entity_uid>\d+)', views.EntityPrivacySwitch, name= 'entity_switch_privacy'),
+    #GameTable mechanisms
+    url(r'^rolldice/(?P<entity_rolling_pk>\d+)', views.RollDice, name='roll_dice'),
 
 ]
 

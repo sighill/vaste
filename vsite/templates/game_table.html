@@ -8,22 +8,9 @@
         {% load staticfiles %}
         <link rel="stylesheet" type="text/css" href="/static/vsite/style.css" />
         <link rel="favicon" href="{{STATIC_URL}}/favicon.ico">
-        <script>
-            function refreshPage () {
-                var page_y = $( document ).scrollTop();
-                window.location.href = window.location.href + '?page_y=' + page_y;
-            }
-            window.onload = function () {
-                setTimeout(refreshPage, 5000);
-                if ( window.location.href.indexOf('page_y') != -1 ) {
-                    var match = window.location.href.split('?')[1].split("&")[0].split("=");
-                    $('html, body').scrollTop( match[1] );
-                }
-            }
-        </script>
     </head>
 
-    <body>
+    <body id="body">
         <div class="left_game_table">
             <div class="container">
 
@@ -98,7 +85,9 @@
 
                 {% for npc in npc_present %}
                 <div class="block align_horiz third_block">
-                    <a href="/pnj/view/{{npc.pk}}"><img class="medium_img" src="{{npc.img_name.all.0.name}}"></a>
+                    {% if npc.is_visible %}<a href="/pnj/view/{{npc.pk}}"><img class="medium_img" src="{{npc.img_name.all.0.name}}"></a>
+                    {% else %}<a href="#"><img class="medium_img" src="{{npc.img_name.all.0.name}}"></a>
+                    {% endif %}
                     <div class="medium_block">
                         <h4>{{npc.name}}</h4>
                         <div class="meter body_meter"><span class="meter_text" style="width: {{npc.body_meter_percent}}%;"></span></div>
@@ -116,7 +105,7 @@
             </div> <!-- end container -->
         </div> <!-- end left_wrapper -->
         
-        <div class="right_game_table">
+        <div id="dice_results" class="right_game_table">
             {% for log in table_log %}
             <div class="container">
                 <div class="block">

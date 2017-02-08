@@ -82,3 +82,10 @@ urlpatterns = [
 ^reset/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$ [name='password_reset_confirm']
 ^reset/done/$ [name='password_reset_complete']
 '''
+
+from wiki.urls import get_pattern as get_wiki_pattern
+from django_nyt.urls import get_pattern as get_nyt_pattern
+urlpatterns += [
+    url(r'^wiki/notifications/', get_nyt_pattern()),
+    url(r'^wiki/', get_wiki_pattern())
+]

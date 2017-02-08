@@ -88,3 +88,8 @@ class AdminTableLog(admin.ModelAdmin):
     list_display =['uid', 'source_entity', 'title']
     ordering = ['uid']
 admin.site.register(TableLog , AdminTableLog)
+
+class AdminGameGlobal(admin.ModelAdmin):
+    list_display =['uid']
+    ordering = ['uid']
+admin.site.register(GameGlobal , AdminGameGlobal)

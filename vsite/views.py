@@ -6,10 +6,7 @@ from .scripts.ingame_utils import *
 from copy import deepcopy
 from random import randint
 
-current_place= Place.objects.get(name='Alentours du Havre de la cascade')
-game_ongoing= True
-scheduled_game= '27 janvier - 21h15'
-current_gamelog_uid= 15
+current_gamelog_uid= 19
 
 #####################################################################
 def Home(request):
@@ -23,8 +20,7 @@ def Home(request):
     context = {
         'home_items': home_items,
         'announces': announces,
-        'game_ongoing': game_ongoing,
-        'scheduled_game': scheduled_game
+        'glob_var': GameGlobal.objects.get(pk=2),
     } 
     template = loader.get_template('home.html')
     return HttpResponse(template.render(context, request))
@@ -414,12 +410,16 @@ def GameTable(request):
         on the same window for quick display. Every item links to more
         detailed views.
     '''
+
     if request.method== 'GET':
+        # get game globals
+        game_global= GameGlobal.objects.get(pk= 2)
+        # then
         if request.user.is_authenticated():
             pj_active= PjCharacter.objects.get(owner_id= request.user.id)
             # unlock admin options
             if request.user.id== 1:
-                is_scribe= True
+                is_scribe= False
                 is_admin= True
             elif request.user.id== 2:
                 is_scribe= True
@@ -429,14 +429,14 @@ def GameTable(request):
                 is_admin= False
             # To pass all objects in a clean way with additional information
             # for the template, we give properties to each object.
-            all_pj= PjCharacter.objects.select_related().filter(is_visible=True)
+            all_pj= PjCharacter.objects.select_related().filter(is_visible=True).order_by('uid')
             for pj in all_pj:
                 pj.body_meter_percent= int((pj.current_body / pj.max_body())*100)
                 pj.instinct_meter_percent= int((pj.current_instinct / pj.max_instinct())*100)
                 pj.spirit_meter_percent= int((pj.current_spirit / pj.max_spirit())*100)
                 pj.visible_items= [i for i in Item.objects.filter(owner=pj, is_visible= True)]
             # Idem for all creatures present
-            creatures_present= IgCreature.objects.filter(location=current_place)
+            creatures_present= IgCreature.objects.filter(location=game_global.current_place)
             for c in creatures_present:
                 c.body_meter_percent= int((c.current_body / c.max_body())*100)
                 c.instinct_meter_percent= int((c.current_instinct / c.max_instinct())*100)
@@ -444,7 +444,7 @@ def GameTable(request):
                 c.visible_items= [i for i in Item.objects.filter(owner=c, is_visible= True)]
 
             # Idem for all NPC present
-            npc_present= Pnj.objects.filter(location=current_place, is_visible=True)
+            npc_present= Pnj.objects.filter(location=game_global.current_place, is_visible=True)
             for n in npc_present:
                 n.body_meter_percent= int((n.current_body / n.max_body())*100)
                 n.instinct_meter_percent= int((n.current_instinct / n.max_instinct())*100)
@@ -453,7 +453,7 @@ def GameTable(request):
 
             context = {
                 'all_pj': all_pj,
-                'current_place': current_place,
+                'current_place': game_global.current_place,
                 'creatures_present': creatures_present,
                 'npc_present': npc_present,
                 'pj_active': pj_active.pk,
@@ -468,9 +468,10 @@ def GameTable(request):
             return HttpResponseRedirect('/login')
     # if request.method== 'POST'
     else: 
+        game_global= GameGlobal.objects.get(pk= 2)
         form = ScribeEntry(request.POST)
         if form.is_valid():
-            log_receiving_entry= GameLog.objects.get(pk=current_gamelog_uid)
+            log_receiving_entry= game_global.current_gamelog
             log_receiving_entry.corpus+= ' {}'.format(form.cleaned_data['entry'])
             log_receiving_entry.save()
         return HttpResponseRedirect('/gametable')

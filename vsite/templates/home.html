@@ -31,13 +31,13 @@
                 </div> <!-- end block -->
             </div> <!-- end container -->
             <div class="container"> 
-            {% if game_ongoing %}
-                <div class="block" style="background: #ed8500;">
+            {% if glob_var.game_is_on %}
+                <div class="block" style="background: #7b9fbd;">
                     <a href="/gametable"><h1>Rejoindre la partie en cours !</h1></a>
                 </div>
             {% else %}
                 <div class="block">
-                    <h1>Prochaine partie : {{scheduled_game}}</h1>
+                    <h1>Prochaine partie : {{glob_var.date_display}}</h1>
                 </div>
             {% endif %}
             </div>

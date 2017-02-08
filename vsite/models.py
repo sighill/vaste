@@ -4,6 +4,40 @@ from django.utils import timezone
 from django.contrib.gis.db import models as gismodels
 
 #####################################################################
+class GameGlobal(models.Model):
+    '''
+        To keep its dynamic features, the gametable needs to pick
+        values in this table to know what are the current events.
+        What is the current place, when is the next game, etc.
+        Views pick values from this table to know what to display
+        and at what time.
+    '''
+    # Attributes
+    uid= models.AutoField(
+        primary_key = True , db_index = True)
+    current_place= models.ForeignKey('Place', 
+        related_name= 'current_place_id', blank=True, null=True)
+    next_game= models.DateTimeField(default=timezone.now)
+    game_is_on= models.BooleanField(default= False)
+    current_entities= models.ManyToManyField(
+        'GameEntity', related_name= 'current_game_entities', 
+        blank=True)
+    current_gamelog= models.ForeignKey('GameLog', 
+        related_name= 'current_game_log', blank=True, null=True)
+    # Methods
+    def __str__(self):
+        return str(self.uid)
+    def date_display(self):
+        month_dict= {
+        1: 'Janvier', 2: 'Février', 3: 'Mars', 
+        4: 'Avril', 5: 'Mai', 6: 'Juin', 7: 'Juillet', 8: 'Août', 
+        9: 'Septembre', 10: 'octobre', 11: 'Novembre', 12: 'Décembre'
+        }
+        return '{} {} - {}h{}'.format(self.next_game.day, 
+            month_dict[self.next_game.month], self.next_game.hour, 
+            self.next_game.minute
+            )
+#####################################################################
 class Image(models.Model):
     '''
         Images are a large part of this site. This table keeps track
